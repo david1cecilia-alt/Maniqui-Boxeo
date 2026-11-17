@@ -1,0 +1,27 @@
+CHOQUES: ropa v1 -> ropa v2 (máximo en cm de toda la acción; 0 = sin choque > 0,2 cm)
+Los guantes cruzados en la guardia y los golpes son de la animación: no se ha tocado la postura.
+
+acción                   |   guante-guante |   guante-cabeza |   guante-cuerpo |        pantalón |           botas |           hueco
+------------------------------------------------------------------------------------------------------------------------------------
+bloqueo                  |   7.6 ->   0.0   |   0.0 ->   0.0   |   1.3 ->   1.1   |   0.5 ->   0.9   |   0.8 ->   0.0   |   0.0 ->   0.0  
+crochet_adelantado       |   3.5 ->   0.0   |   3.5 ->   0.3   |   0.8 ->   0.9   |   0.5 ->   0.0   |   0.8 ->   0.0   |   0.0 ->   0.0  
+crochet_trasero          |   0.0 ->   0.0   |   0.0 ->   0.0   |   0.0 ->   0.0   |   0.5 ->   3.5   |   0.8 ->   0.0   |   0.0 ->   0.0  
+crochet_trasero_cuerpo   |   3.8 ->   0.0   |   0.0 ->   0.0   |   4.4 ->   0.5   |   0.5 ->   1.5   |   0.8 ->   0.0   |   0.0 ->   0.0  
+esquiva_avanzando        |   3.1 ->   0.0   |   0.0 ->   0.0   |   6.9 ->   2.0   |   0.5 ->   2.6   |   0.8 ->   0.0   |   0.0 ->   0.0  
+esquiva_retrocediendo    |   4.3 ->   0.0   |   0.0 ->   0.0   |   5.0 ->   1.9   |   0.5 ->   2.7   |   0.8 ->   0.0   |   0.0 ->   0.0  
+flexion                  |   7.2 ->   0.0   |   0.0 ->   0.0   |   0.0 ->   0.0   |   0.5 ->   0.0   |   0.8 ->   0.0   |   0.0 ->   0.0  
+gancho_adelantado_cuerpo |   7.8 ->   0.0   |   4.1 ->   0.6   |   2.5 ->   0.6   |   0.5 ->   0.0   |   0.8 ->   0.0   |   0.0 ->   0.0  
+gancho_trasero_cuerpo    |   8.8 ->   0.0   |   0.0 ->   0.0   |   6.3 ->   1.1   |   0.5 ->   1.5   |   0.8 ->   0.0   |   0.0 ->   0.0  
+guardia                  |   9.0 ->   2.9   |   1.8 ->   0.0   |   0.0 ->   0.0   |   0.5 ->   0.0   |   0.8 ->   0.0   |   0.0 ->   0.0  
+guardia_alt              |   1.9 ->   0.0   |   0.0 ->   0.0   |   0.0 ->   0.7   |   0.0 ->   0.0   |   0.8 ->   0.0   |   0.0 ->   0.0  
+jab                      |   3.6 ->   0.0   |   3.5 ->   0.4   |   7.1 ->   2.3   |   0.5 ->   0.0   |   0.8 ->   0.0   |   0.0 ->   0.0  
+paso_atras               |   7.2 ->   0.0   |   0.0 ->   0.0   |   0.0 ->   0.0   |   0.5 ->   0.0   |   0.8 ->   0.0   |   0.0 ->   0.0  
+recto                    |   8.5 ->   0.0   |   0.9 ->   0.0   |   6.6 ->   1.9   |   0.5 ->   1.4   |   0.8 ->   0.0   |   0.0 ->   0.0  
+rueda                    |   7.2 ->   0.0   |   0.0 ->   0.0   |   0.0 ->   0.0   |   0.5 ->   0.0   |   0.8 ->   0.0   |   0.0 ->   0.0  
+
+  peor guante-guante  :  9.0 cm ->  2.9 cm
+  peor guante-cabeza  :  4.1 cm ->  0.6 cm
+  peor guante-cuerpo  :  7.1 cm ->  2.3 cm
+  peor pantalón       :  0.5 cm ->  3.5 cm
+  peor botas          :  0.8 cm ->  0.0 cm
+  peor hueco          :  0.0 cm ->  0.0 cm

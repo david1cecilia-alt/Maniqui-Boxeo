@@ -16,7 +16,7 @@ import sys
 import bpy
 import numpy as np
 from mathutils import Vector
-from mathutils.kdtree import KDTree
+from mathutils.bvhtree import BVHTree
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import comun as C  # noqa: E402
@@ -30,7 +30,7 @@ VISTAS = {"frente": Vector((0, -1, 0)), "lado": Vector((1, 0, 0))}  # lado = des
 GOLPES = {
     "jab": "lejos", "recto": "lejos", "crochet_trasero_cuerpo": "lejos",
     "crochet_adelantado": "velocidad", "crochet_trasero": "velocidad",
-    "gancho_adelantado": "velocidad", "gancho_trasero": "velocidad",
+    "gancho_adelantado_cuerpo": "velocidad", "gancho_trasero_cuerpo": "velocidad",
 }
 OTRAS = ["bloqueo", "esquiva_avanzando", "esquiva_retrocediendo"]
 UMBRAL_CM = 0.2   # por debajo no se cuenta
@@ -121,11 +121,18 @@ for v in cuerpo.data.vertices:
         n = vg_nombre[e.group]
         if n in ("LeftHand", "RightHand"):
             peso_mano[v.index] = max(peso_mano[v.index], e.weight)
-        if n != "ocultar_manos" and e.weight > mejor:
+        if not n.startswith("ocultar") and e.weight > mejor:
             mejor, nombre = e.weight, n
     dominante.append(nombre or "")
 dominante = np.array(dominante)
-oculto = peso_mano > 0.5   # lo que esconde el Mask
+# lo que esconde el Mask (manos y, con la ropa v2, también los pies dentro de las botas)
+g_mask = cuerpo.vertex_groups[mod_mask.vertex_group].index
+peso_mask = np.zeros(len(cuerpo.data.vertices))
+for v in cuerpo.data.vertices:
+    for e in v.groups:
+        if e.group == g_mask:
+            peso_mask[v.index] = e.weight
+oculto = peso_mask > mod_mask.threshold
 CABEZA = np.isin(dominante, ["Head", "Neck", "HeadTop_End"]) & ~oculto
 region_cuerpo = {lado: ~np.isin(dominante, ["Head", "Neck", "HeadTop_End", "LeftHand", "RightHand",
                                             lado + "ForeArm"]) & ~oculto
@@ -135,23 +142,55 @@ borde = {"Left": set(), "Right": set()}
 for e in cuerpo.data.edges:
     a, b = e.vertices
     if oculto[a] != oculto[b]:
-        vis = a if not oculto[a] else b
-        lado = "Left" if dominante[b if vis == a else a] == "LeftHand" else "Right"
-        borde[lado].add(vis)
+        vis, osc = (a, b) if not oculto[a] else (b, a)
+        if dominante[osc] in ("LeftHand", "RightHand"):   # solo el borde de las manos (guantes)
+            borde["Left" if dominante[osc] == "LeftHand" else "Right"].add(vis)
 borde = {k: np.array(sorted(v)) for k, v in borde.items()}
 
-# ropa: vértice de la prenda -> vértice del cuerpo (son copias exactas en reposo)
-kd = KDTree(len(cuerpo.data.vertices))
-for v in cuerpo.data.vertices:
-    kd.insert(v.co, v.index)
-kd.balance()
-mapa_ropa = []
-for o in prendas:
-    m = np.array([kd.find(v.co)[1] for v in o.data.vertices])
-    mapa_ropa.append(m)
-# suela de la bota (z < 1,5 cm en reposo): se mide aparte; ahí hay vértices con la normal
-# invertida y el Displace mete la bota hacia dentro también en reposo (defecto fijo de malla)
-SUELA = np.array([cuerpo.data.vertices[i].co.z < 0.015 for i in mapa_ropa[1]])
+
+# ropa: vértices VISIBLES del cuerpo que en reposo quedan dentro de cada prenda; en cada
+# fotograma se mide si salen por fuera de la superficie de la prenda (sin Solidify)
+def bvh_prenda(o):
+    """Superficie de la prenda; del pantalón solo las perneras (material 0): el borde de la
+    cinturilla, al ser la superficie más cercana a la ingle, daba falsos 'fuera'."""
+    dg = bpy.context.evaluated_depsgraph_get()
+    oe = o.evaluated_get(dg)
+    me = oe.to_mesh()
+    M = oe.matrix_world
+    polys = [p.vertices[:] for p in me.polygons if o.name != "Pantalon" or p.material_index == 0]
+    t = BVHTree.FromPolygons([M @ v.co for v in me.vertices], polys)
+    oe.to_mesh_clear()
+    return t
+
+
+def fuera_de_prenda(pts, arbol, maxd=0.06):
+    """Distancia (m) a la que cada punto queda FUERA de la prenda (0 si está dentro o lejos)."""
+    res = np.zeros(len(pts))
+    for i, p in enumerate(pts):
+        loc, nor, _, dist = arbol.find_nearest(Vector(p), maxd)
+        if loc is not None and (Vector(p) - loc).dot(nor) > 0:
+            res[i] = dist
+    return res
+
+
+mod_mask.show_viewport = False
+for m in [next(m for m in o.modifiers if m.type == "SOLIDIFY") for o in prendas]:
+    m.show_viewport = False
+arm.data.pose_position = "REST"
+bpy.context.view_layer.update()
+_cu_rest = np.array([cuerpo.matrix_world @ v.co for v in cuerpo.data.vertices])
+DENTRO_ROPA = []
+Z_PRENDA = [(0.735, 0.975), (-1.0, 0.29)]   # pantalón (entre el bajo y la cinturilla), botas (caña)
+for o, (z0, z1) in zip(prendas, Z_PRENDA):
+    arbol = bvh_prenda(o)
+    idx = []
+    for i in np.where(~oculto & (_cu_rest[:, 2] >= z0) & (_cu_rest[:, 2] <= z1))[0]:
+        loc, nor, _, dist = arbol.find_nearest(Vector(_cu_rest[i]), 0.08)
+        if loc is not None and (Vector(_cu_rest[i]) - loc).dot(nor) < 0:
+            idx.append(i)
+    DENTRO_ROPA.append(np.array(idx, dtype=int))
+arm.data.pose_position = "POSE"
+bpy.context.view_layer.update()
 
 
 # guantes: piezas convexas (puño y manga) -> test de semiplanos
@@ -228,7 +267,7 @@ def penetra_zonas(idx, cu, pl):
 
 
 # ---------------------------------------------------------------- 1. choques por acción
-CHOQUES = ["pantalon_cuerpo", "botas_cuerpo", "botas_suela", "guante_cabeza", "guante_cuerpo",
+CHOQUES = ["pantalon_cuerpo", "botas_cuerpo", "guante_cabeza", "guante_cuerpo",
            "guante_guante", "hueco_guante_antebrazo"]
 datos, zonas = {}, {}
 IDX_CUERPO = {l: np.where(region_cuerpo[l])[0] for l in guantes}
@@ -240,14 +279,10 @@ for accion in ACCIONES:
     for f in range(f0, f1 + 1):
         poner(accion, f)
         cu, _ = coords_eval(cuerpo)
-        # ropa: el cuerpo no debe salir por fuera de la cara interior de la prenda
-        for o, m, k in zip(prendas, mapa_ropa, ("pantalon_cuerpo", "botas_cuerpo")):
-            ro, nr = coords_eval(o, normales=True)
-            s = ((cu[m] - ro) * nr).sum(axis=1)
-            if k == "botas_cuerpo":
-                reg["botas_suela"][f] = max(0.0, float(s[SUELA].max()))
-                s = s[~SUELA]
-            reg[k][f] = max(0.0, float(s.max()))
+        # ropa: el cuerpo que en reposo queda dentro no debe salir por fuera de la prenda
+        for o, idx, k in zip(prendas, DENTRO_ROPA, ("pantalon_cuerpo", "botas_cuerpo")):
+            s = fuera_de_prenda(cu[idx], bvh_prenda(o)) if len(idx) else np.zeros(1)
+            reg[k][f] = float(s.max())
         pl = {lado: planos(lado) for lado in guantes}
         reg["guante_cabeza"][f] = max(penetra(cu[CABEZA], pl[l]) for l in guantes)
         res = [(penetra_zonas(IDX_CUERPO[l], cu, pl[l]), l) for l in guantes]
@@ -266,13 +301,12 @@ for accion in ACCIONES:
 modo_analisis(False)
 
 p("=== 1. CHOQUES POR ACCIÓN (cm; solo > %.1f cm) ===" % UMBRAL_CM)
-p("pantalon/botas_cuerpo = cuánto sale el cuerpo por fuera de la prenda; botas_suela = lo mismo")
-p("en la suela (defecto fijo de malla: normales invertidas, también en reposo, no se ve);")
-p("guante_* = profundidad de penetración (exacta: puño y manga son piezas convexas);")
+p("pantalon/botas_cuerpo = cuánto sale por fuera de la prenda el cuerpo visible que en reposo")
+p("queda dentro; guante_* = profundidad de penetración (exacta: el guante son piezas convexas);")
 p("hueco = cuánto queda fuera del guante el borde de la mano oculta por el Mask (agujero visible).")
 filas = []
 GRAV = {  # (alta, media) en cm
-    "pantalon_cuerpo": (1.0, 0.3), "botas_cuerpo": (1.0, 0.3), "botas_suela": (99, 99),
+    "pantalon_cuerpo": (1.0, 0.3), "botas_cuerpo": (1.0, 0.3),
     "guante_cabeza": (2.0, 0.5), "guante_cuerpo": (3.0, 1.0),
     "guante_guante": (3.0, 1.0), "hueco_guante_antebrazo": (1.0, 0.3),
 }
