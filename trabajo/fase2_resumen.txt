@@ -1,0 +1,46 @@
+=== 1. ACCIONES EN boxeador.blend ===
+  bloqueo                  fot. 1-104  fake_user=True
+  crochet_adelantado       fot. 1-61  fake_user=True
+  crochet_trasero          fot. 1-31  fake_user=True
+  crochet_trasero_cuerpo   fot. 1-66  fake_user=True
+  esquiva_avanzando        fot. 1-71  fake_user=True
+  esquiva_retrocediendo    fot. 1-68  fake_user=True
+  gancho_adelantado        fot. 1-67  fake_user=True
+  gancho_trasero           fot. 1-67  fake_user=True
+  guardia                  fot. 1-67  fake_user=True
+  guardia_alt              fot. 1-90  fake_user=True
+  jab                      fot. 1-53  fake_user=True
+  recto                    fot. 1-65  fake_user=True
+Objetos: ['Boxeador', 'Cuerpo', 'Eyebrows', 'Eyes']
+
+=== 2. ESQUIVAS EN EL SITIO (cadera, mundo) ===
+  esquiva_avanzando: antes X[-0.155,+0.092] Y[-0.915,+0.051] -> después X[+0.091,+0.091] Y[+0.018,+0.018] | Z[0.713,0.943] (sin cambios)
+  esquiva_retrocediendo: antes X[-0.300,-0.034] Y[+0.034,+0.556] -> después X[-0.034,-0.034] Y[+0.034,+0.034] | Z[0.697,0.970] (sin cambios)
+
+=== 3. ROPA Y GUANTES ===
+  Pantalon: 1018 vért, z en [0.24, 1.05] m, Displace 0.006 m, Solidify 0.004 m
+  Botas: 1032 vért, z en [-1.0, 0.27] m, Displace 0.012 m, Solidify 0.006 m
+  Guante_Left: hueso mixamorig:LeftHand, mano 0.130x0.231x0.117 m, cubre desde 0.08 m antes de la muñeca, sin pesos
+  Guante_Right: hueso mixamorig:RightHand, mano 0.130x0.230x0.117 m, cubre desde 0.08 m antes de la muñeca, sin pesos
+  Cuerpo: Mask 'Ocultar manos' (peso Hand > 0.5), modificadores: ['MASK', 'ARMATURE']
+
+=== 4. GUANTES EN LA GUARDIA: ¿SE METEN UNO EN EL OTRO? ===
+  guardia: SÍ se tocan/cruzan en 67 de 67 fotogramas (1-67); penetración máx. 7.2 cm en el fot. 66
+  guardia_alt: SÍ se tocan/cruzan en 16 de 90 fotogramas (24-86); penetración máx. 1.9 cm en el fot. 28
+  (Postura de guardia SIN corregir, como se pidió.)
+
+=== 5. ANIMACIONES NUEVAS (IK temporal en piernas, horneadas a Bezier) ===
+  flexion: 31 fot. (1.00 s), punto bajo fot. 16 (cadera 0.713 m)
+     desplazamiento final (+0.000, +0.000, +0.000) | fot. 1 vs guardia fot. 1: 0.0 mm | pose final vs inicial (quitando desplazamiento): 0.0 mm
+     pies vs objetivo IK tras hornear: 0.0 mm máx. | rodilla más estirada: 138° (180° = recta)  -> REVISAR CON ENTRENADOR
+  paso_atras: 25 fot. (0.80 s), punto bajo fot. 11 (cadera 0.863 m)
+     desplazamiento final (+0.000, +0.280, +0.000) | fot. 1 vs guardia fot. 1: 0.0 mm | pose final vs inicial (quitando desplazamiento): 0.0 mm
+     pies vs objetivo IK tras hornear: 0.0 mm máx. | rodilla más estirada: 163° (180° = recta)  -> REVISAR CON ENTRENADOR
+  rueda: 37 fot. (1.20 s), punto bajo fot. 19 (cadera 0.693 m)
+     desplazamiento final (+0.000, +0.000, +0.000) | fot. 1 vs guardia fot. 1: 0.0 mm | pose final vs inicial (quitando desplazamiento): 0.0 mm
+     pies vs objetivo IK tras hornear: 0.0 mm máx. | rodilla más estirada: 142° (180° = recta)  -> REVISAR CON ENTRENADOR
+
+Acciones finales: ['bloqueo', 'crochet_adelantado', 'crochet_trasero', 'crochet_trasero_cuerpo', 'esquiva_avanzando', 'esquiva_retrocediendo', 'flexion', 'gancho_adelantado', 'gancho_trasero', 'guardia', 'guardia_alt', 'jab', 'paso_atras', 'recto', 'rueda']
+Puntos bajos: {'flexion': 16, 'paso_atras': 11, 'rueda': 19}
+Objetos finales: ['Botas(MESH)', 'Boxeador(ARMATURE)', 'Cuerpo(MESH)', 'Eyebrows(MESH)', 'Eyes(MESH)', 'Guante_Left(MESH)', 'Guante_Right(MESH)', 'Pantalon(MESH)']
+GUARDADO trabajo\boxeador.blend
