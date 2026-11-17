@@ -48,8 +48,8 @@ Tres capas por encima de cada acción de Mixamo, sin tocar las acciones original
      | recto | der. | 14 | 21 | 42 |
      | crochet_adelantado | izq. | 9 | 16 | 37 |
      | crochet_trasero | der. | 3 | 11 | 28 |
-     | gancho_adelantado | izq. | 12 | 20 | 54 |
-     | gancho_trasero | der. | 12 | 19 | 44 |
+     | gancho_adelantado_cuerpo | izq. | 12 | 20 | 54 |
+     | gancho_trasero_cuerpo | der. | 12 | 19 | 44 |
      | crochet_trasero_cuerpo | der. | 13 | 25 | 44 |
 
 3. **Cómo se calcula la corrección de los brazos.** Recomiendo **no** usar una rotación fija sacada
@@ -82,8 +82,8 @@ Tres capas por encima de cada acción de Mixamo, sin tocar las acciones original
 | recto | fot. 21 | der. | 0 cm | 23 cm | fija en guardia nueva |
 | crochet_adelantado | fot. 16 | izq. | 0 cm | 10 cm | fija en guardia nueva |
 | crochet_trasero | fot. 11 | der. | 0 cm | 36 cm | fija en guardia nueva |
-| gancho_adelantado | fot. 20 | izq. | 0 cm | 22 cm | fija en guardia nueva |
-| gancho_trasero | fot. 19 | der. | 0 cm | 21 cm | fija en guardia nueva |
+| gancho_adelantado_cuerpo | fot. 20 | izq. | 0 cm | 22 cm | fija en guardia nueva |
+| gancho_trasero_cuerpo | fot. 19 | der. | 0 cm | 21 cm | fija en guardia nueva |
 | crochet_trasero_cuerpo | fot. 25 | der. | 0 cm | 34 cm | fija en guardia nueva |
 
 En crochet_trasero y crochet_trasero_cuerpo la mano de guardia se mueve mucho en el original
@@ -115,5 +115,5 @@ En crochet_trasero y crochet_trasero_cuerpo la mano de guardia se mueve mucho en
   (0,8 cm, no se ve). Se arregla recalculando normales antes del Displace.
 - **Pantalón:** el cuerpo asoma hasta 0,5 cm en muslos y rodillas cuando se doblan. Se arregla
   subiendo el Displace a unos 8 mm.
-- **Guantes contra el cuerpo durante el movimiento** (esquivas, gancho_trasero contra el muslo,
+- **Guantes contra el cuerpo durante el movimiento** (esquivas, gancho_trasero_cuerpo contra el muslo,
   crochet_trasero_cuerpo): son de la animación de Mixamo, pensada para manos sin guantes.

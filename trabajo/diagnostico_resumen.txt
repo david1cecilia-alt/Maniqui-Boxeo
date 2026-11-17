@@ -20,22 +20,22 @@ jab                      Armature|mixamo.com|Layer0       30   53   1.73  SÍ (n
 recto                    Armature|mixamo.com|Layer0       30   65   2.13  SÍ (nombres=True, jerarquía=True, dif.reposo=0.0)  0v; 646v; 556v; 7281v
 crochet_adelantado       Armature|mixamo.com|Layer0       30   61   2.00  SÍ (nombres=True, jerarquía=True, dif.reposo=0.0)  0v; 646v; 556v; 7281v
 crochet_trasero          Armature|mixamo.com|Layer0       30   31   1.00  SÍ (nombres=True, jerarquía=True, dif.reposo=0.0)  0v; 646v; 556v; 7281v
-gancho_adelantado        Armature|mixamo.com|Layer0       30   67   2.20  SÍ (nombres=True, jerarquía=True, dif.reposo=0.0)  0v; 646v; 556v; 7281v
-gancho_trasero           Armature|mixamo.com|Layer0       30   67   2.20  SÍ (nombres=True, jerarquía=True, dif.reposo=0.0)  0v; 646v; 556v; 7281v
+gancho_adelantado_cuerpo Armature|mixamo.com|Layer0       30   67   2.20  SÍ (nombres=True, jerarquía=True, dif.reposo=0.0)  0v; 646v; 556v; 7281v
+gancho_trasero_cuerpo    Armature|mixamo.com|Layer0       30   67   2.20  SÍ (nombres=True, jerarquía=True, dif.reposo=0.0)  0v; 646v; 556v; 7281v
 crochet_cuerpo           Armature|mixamo.com|Layer0       30   66   2.17  SÍ (nombres=True, jerarquía=True, dif.reposo=0.0)  0v; 646v; 556v; 7281v
 bloqueo                  Armature|mixamo.com|Layer0       30  104   3.43  SÍ (nombres=True, jerarquía=True, dif.reposo=0.0)  0v; 646v; 556v; 7281v
 esquiva_avanzando        Armature|mixamo.com|Layer0       30   71   2.33  SÍ (nombres=True, jerarquía=True, dif.reposo=0.0)  0v; 646v; 556v; 7281v
 esquiva_retrocediendo    Armature|mixamo.com|Layer0       30   68   2.23  SÍ (nombres=True, jerarquía=True, dif.reposo=0.0)  0v; 646v; 556v; 7281v
-Nº de acciones en cada FBX: {'figura': 0, 'guardia': 1, 'guardia_alt': 1, 'jab': 1, 'recto': 1, 'crochet_adelantado': 1, 'crochet_trasero': 1, 'gancho_adelantado': 1, 'gancho_trasero': 1, 'crochet_cuerpo': 1, 'bloqueo': 1, 'esquiva_avanzando': 1, 'esquiva_retrocediendo': 1}
+Nº de acciones en cada FBX: {'figura': 0, 'guardia': 1, 'guardia_alt': 1, 'jab': 1, 'recto': 1, 'crochet_adelantado': 1, 'crochet_trasero': 1, 'gancho_adelantado_cuerpo': 1, 'gancho_trasero_cuerpo': 1, 'crochet_cuerpo': 1, 'bloqueo': 1, 'esquiva_avanzando': 1, 'esquiva_retrocediendo': 1}
 
 Orientación: mira hacia -Y (Z arriba)
 
-=== 3. GANCHO ADELANTADO vs GANCHO TRASERO ===
+=== 3. GANCHO ADELANTADO AL CUERPO vs GANCHO TRASERO AL CUERPO ===
 Diferencia máxima de rotaciones locales (cuaternión): 0.80251 => distintas
 Error medio posiciones directo: 0.1508 m | con espejo: 0.3164 m
   guardia: pie delantero = izquierdo
-  gancho_adelantado: pie delantero = izquierdo, golpea con IZQ (máx fot. 28, 0.71 m)
-  gancho_trasero: pie delantero = izquierdo, golpea con DER (máx fot. 22, 0.90 m)
+  gancho_adelantado_cuerpo: pie delantero = izquierdo, golpea con IZQ (máx fot. 28, 0.71 m)
+  gancho_trasero_cuerpo: pie delantero = izquierdo, golpea con DER (máx fot. 22, 0.90 m)
 
 === 4. ESQUIVA RETROCEDIENDO como 'paso atrás' ===
 -- esquiva_retrocediendo (68 fot.) pie delantero al inicio: izquierdo
@@ -74,8 +74,8 @@ Error medio posiciones directo: 0.1508 m | con espejo: 0.3164 m
   recto                    fot.  21  mano RightHand  1.191 m  pie delantero: izquierdo
   crochet_adelantado       fot.  16  mano LeftHand   0.566 m  pie delantero: izquierdo
   crochet_trasero          fot.  17  mano RightHand  0.667 m  pie delantero: izquierdo
-  gancho_adelantado        fot.  28  mano LeftHand   0.715 m  pie delantero: izquierdo
-  gancho_trasero           fot.  22  mano RightHand  0.899 m  pie delantero: izquierdo
+  gancho_adelantado_cuerpo fot.  28  mano LeftHand   0.715 m  pie delantero: izquierdo
+  gancho_trasero_cuerpo    fot.  22  mano RightHand  0.899 m  pie delantero: izquierdo
   crochet_cuerpo           fot.  24  mano RightHand  0.913 m  pie delantero: izquierdo
   bloqueo                  fot.  39  mano LeftHand   0.383 m  pie delantero: izquierdo
   esquiva_avanzando        fot.  54  mano RightHand  1.037 m  pie delantero: izquierdo

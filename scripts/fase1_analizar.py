@@ -81,8 +81,8 @@ def lateral(v):
 
 
 # ---------- 3. 5 vs 6 ----------
-p("\n=== 3. GANCHO ADELANTADO vs GANCHO TRASERO ===")
-A, Bd = D["gancho_adelantado"], D["gancho_trasero"]
+p("\n=== 3. GANCHO ADELANTADO AL CUERPO vs GANCHO TRASERO AL CUERPO ===")
+A, Bd = D["gancho_adelantado_cuerpo"], D["gancho_trasero_cuerpo"]
 dif_rot = max(abs(x - y) for b in A["rot_local"] for fa, fb in zip(A["rot_local"][b], Bd["rot_local"][b]) for x, y in zip(fa, fb))
 p("Diferencia máxima de rotaciones locales (cuaternión):", round(dif_rot, 5),
   "=> IDÉNTICAS" if dif_rot < 1e-3 else "=> distintas")
@@ -122,7 +122,7 @@ def mano_golpe(d):
     return k, best[k], dist(d["pistas"][k][best[k]], h0[k])
 
 
-for n in ("guardia", "gancho_adelantado", "gancho_trasero"):
+for n in ("guardia", "gancho_adelantado_cuerpo", "gancho_trasero_cuerpo"):
     d = D[n]
     extra = ""
     if n != "guardia":

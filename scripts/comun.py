@@ -19,8 +19,8 @@ FBX = {
     "recto": os.path.join(FBX_DIR, "2_recto.fbx"),
     "crochet_adelantado": os.path.join(FBX_DIR, "3_crochet_adelantado.fbx"),
     "crochet_trasero": os.path.join(FBX_DIR, "4_crochet_trasero.fbx"),
-    "gancho_adelantado": os.path.join(FBX_DIR, "5_gancho_adelantado.fbx"),
-    "gancho_trasero": os.path.join(FBX_DIR, "6_gancho_trasero.fbx"),
+    "gancho_adelantado_cuerpo": os.path.join(FBX_DIR, "11_gancho_adelantado_cuerpo.fbx"),
+    "gancho_trasero_cuerpo": os.path.join(FBX_DIR, "12_gancho_trasero_cuerpo.fbx"),
     "crochet_cuerpo": os.path.join(FBX_DIR, "10_crochet_cuerpo.fbx"),
     "bloqueo": os.path.join(FBX_DIR, "bloqueo.fbx"),
     "esquiva_avanzando": os.path.join(FBX_DIR, "esquiva_avanzando_REVISAR.fbx"),
@@ -28,7 +28,7 @@ FBX = {
 }
 
 GOLPES = ["jab", "recto", "crochet_adelantado", "crochet_trasero",
-          "gancho_adelantado", "gancho_trasero", "crochet_cuerpo"]
+          "gancho_adelantado_cuerpo", "gancho_trasero_cuerpo", "crochet_cuerpo"]
 
 
 def escena_vacia():

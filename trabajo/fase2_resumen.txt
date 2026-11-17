@@ -5,8 +5,8 @@
   crochet_trasero_cuerpo   fot. 1-66  fake_user=True
   esquiva_avanzando        fot. 1-71  fake_user=True
   esquiva_retrocediendo    fot. 1-68  fake_user=True
-  gancho_adelantado        fot. 1-67  fake_user=True
-  gancho_trasero           fot. 1-67  fake_user=True
+  gancho_adelantado_cuerpo fot. 1-67  fake_user=True
+  gancho_trasero_cuerpo    fot. 1-67  fake_user=True
   guardia                  fot. 1-67  fake_user=True
   guardia_alt              fot. 1-90  fake_user=True
   jab                      fot. 1-53  fake_user=True
@@ -40,7 +40,7 @@ Objetos: ['Boxeador', 'Cuerpo', 'Eyebrows', 'Eyes']
      desplazamiento final (+0.000, +0.000, +0.000) | fot. 1 vs guardia fot. 1: 0.0 mm | pose final vs inicial (quitando desplazamiento): 0.0 mm
      pies vs objetivo IK tras hornear: 0.0 mm máx. | rodilla más estirada: 142° (180° = recta)  -> REVISAR CON ENTRENADOR
 
-Acciones finales: ['bloqueo', 'crochet_adelantado', 'crochet_trasero', 'crochet_trasero_cuerpo', 'esquiva_avanzando', 'esquiva_retrocediendo', 'flexion', 'gancho_adelantado', 'gancho_trasero', 'guardia', 'guardia_alt', 'jab', 'paso_atras', 'recto', 'rueda']
+Acciones finales: ['bloqueo', 'crochet_adelantado', 'crochet_trasero', 'crochet_trasero_cuerpo', 'esquiva_avanzando', 'esquiva_retrocediendo', 'flexion', 'gancho_adelantado_cuerpo', 'gancho_trasero_cuerpo', 'guardia', 'guardia_alt', 'jab', 'paso_atras', 'recto', 'rueda']
 Puntos bajos: {'flexion': 16, 'paso_atras': 11, 'rueda': 19}
 Objetos finales: ['Botas(MESH)', 'Boxeador(ARMATURE)', 'Cuerpo(MESH)', 'Eyebrows(MESH)', 'Eyes(MESH)', 'Guante_Left(MESH)', 'Guante_Right(MESH)', 'Pantalon(MESH)']
 GUARDADO trabajo\boxeador.blend
