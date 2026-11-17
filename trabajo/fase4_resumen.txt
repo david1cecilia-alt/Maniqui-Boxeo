@@ -8,14 +8,18 @@
   crochet_adelantado_v2       61  L 5-30                                            2.2 cm                 3.4 cm
   crochet_trasero_v2          31  R 1-29                                            2.3 cm                 2.3 cm
   crochet_trasero_cuerpo_v2   66  R 7-35                                            2.1 cm                 3.9 cm
-  esquiva_avanzando_v2        71  ninguno (guardia todo el tiempo)                  2.3 cm                 3.1 cm
-  esquiva_retrocediendo_v2    68  ninguno (guardia todo el tiempo)                  2.3 cm                 3.2 cm
-  gancho_adelantado_cuerpo_v2  67  L 7-36                                            1.1 cm                 3.4 cm
+  futuro_esquiva_avanzando_v2  71  ninguno (guardia todo el tiempo)                  2.3 cm                 3.1 cm
+  futuro_esquiva_retrocediendo_v2  68  ninguno (guardia todo el tiempo)                  2.3 cm                 3.2 cm
+  gancho_adelantado_mixamo_v2  67  L 7-36                                            1.1 cm                 3.4 cm
   gancho_trasero_cuerpo_v2    67  R 8-34                                            1.0 cm                 2.9 cm
   guardia_v2                  67  ninguno (guardia todo el tiempo)                  2.2 cm                 1.0 cm
   guardia_alt_v2              90  ninguno (guardia todo el tiempo)                  2.2 cm                 0.8 cm
   jab_v2                      53  L 7-26                                            2.3 cm                 3.8 cm
-  paso_atras_v2               25  ninguno (guardia todo el tiempo)                  2.8 cm                 0.7 cm
+  paso_atras_v2               27  ninguno (guardia todo el tiempo)                  2.2 cm                 1.3 cm
+  paso_atras_mano_v2          25  ninguno (guardia todo el tiempo)                  2.8 cm                 0.7 cm
+  pivote_v2                  136  ninguno (guardia todo el tiempo)                  2.6 cm                 5.2 cm
+  pivote_der_v2               38  ninguno (guardia todo el tiempo)                  2.4 cm                 1.1 cm
+  pivote_izq_v2               39  ninguno (guardia todo el tiempo)                  2.2 cm                 1.3 cm
   recto_v2                    65  R 7-29                                            1.0 cm                 3.0 cm
 
-  12 acciones _v2 nuevas (las originales se conservan). GUARDADO trabajo\boxeador.blend
+  16 acciones _v2 nuevas (las originales se conservan). GUARDADO trabajo\boxeador.blend

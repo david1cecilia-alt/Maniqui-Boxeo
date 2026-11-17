@@ -23,8 +23,16 @@ FBX = {
     "gancho_trasero_cuerpo": os.path.join(FBX_DIR, "12_gancho_trasero_cuerpo.fbx"),
     "crochet_cuerpo": os.path.join(FBX_DIR, "10_crochet_cuerpo.fbx"),
     "bloqueo": os.path.join(FBX_DIR, "bloqueo.fbx"),
-    "esquiva_avanzando": os.path.join(FBX_DIR, "esquiva_avanzando_REVISAR.fbx"),
-    "esquiva_retrocediendo": os.path.join(FBX_DIR, "esquiva_retrocediendo_REVISAR.fbx"),
+    "esquiva_avanzando": os.path.join(FBX_DIR, "extra", "futuros", "esquiva_avanzando_REVISAR.fbx"),
+    "esquiva_retrocediendo": os.path.join(FBX_DIR, "extra", "futuros", "esquiva_retrocediendo_REVISAR.fbx"),
+}
+
+# FBX de Mixamo que se añaden directamente al modelo B (b_mixamo_nuevas.py): acción -> FBX
+FBX_B = {
+    "pivote": os.path.join(FBX_DIR, "pivote.fbx"),            # pivote de ida y vuelta
+    "pivote_der": os.path.join(FBX_DIR, "pivote_der.fbx"),
+    "pivote_izq": os.path.join(FBX_DIR, "pivote_izq.fbx"),
+    "paso_atras": os.path.join(FBX_DIR, "paso_atras.fbx"),
 }
 
 GOLPES = ["jab", "recto", "crochet_adelantado", "crochet_trasero",

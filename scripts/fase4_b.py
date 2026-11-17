@@ -47,12 +47,13 @@ FLEX_MAX = 140.0                   # flexión máxima del codo en el IK (grados)
 LADOS = {"Left": 1.0, "Right": -1.0}   # +X en reposo = izquierda del boxeador
 # qué brazos se pueden soltar: golpes -> solo el que golpea; bloqueo -> los dos; el resto -> ninguno
 GOLPES = {"jab", "recto", "crochet_adelantado", "crochet_trasero", "crochet_trasero_cuerpo",
-          "gancho_adelantado_cuerpo", "gancho_trasero_cuerpo"}
+          "gancho_adelantado_mixamo", "gancho_trasero_cuerpo"}
 SUELTA_LIBRE = {"bloqueo"}
-DESPLAZA = {"paso_atras"}          # acaban desplazadas: la cadera no vuelve al sitio
+DESPLAZA = {"paso_atras", "paso_atras_mano", "pivote"}   # acaban desplazadas: la cadera no vuelve al sitio
+SIN_RAMPA = {"pivote_der", "pivote_izq"}   # acaban girados: no se fuerza que el último fot. sea el primero
 # sin _v2: la reacción a un golpe de Mixamo, la rueda antigua, la flexión (David prefiere la original:
 # la _v2 separa demasiado las manos) y las acciones hechas a mano (fase5_b.py)
-SIN_V2 = {"bloqueo", "reaccion_golpe", "rueda", "flexion", "jab_cuerpo", "recto_cuerpo", "crochet_adelantado_cuerpo", "gancho_adelantado", "gancho_trasero", "esquiva_der", "esquiva_izq", "ballesteo", "parada", "pivote"}
+SIN_V2 = {"bloqueo", "reaccion_golpe", "rueda", "flexion", "jab_cuerpo", "recto_cuerpo", "crochet_adelantado_cuerpo", "gancho_adelantado", "gancho_trasero", "esquiva_der", "esquiva_izq", "ballesteo", "parada", "pivote_mano", "gancho_adelantado_cuerpo"}
 
 out = []
 
@@ -384,6 +385,8 @@ for nombre in ORIGINALES:
     for fc in a2.fcurves:
         por_hueso.setdefault(fc.data_path, []).append(fc)
     for ruta, fcs in por_hueso.items():
+        if nombre in SIN_RAMPA:
+            continue
         if nombre in DESPLAZA and ruta.endswith('Hips"].location'):
             continue
         fcs.sort(key=lambda c: c.array_index)

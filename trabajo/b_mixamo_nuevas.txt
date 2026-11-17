@@ -1,0 +1,10 @@
+=== ANIMACIONES NUEVAS DE MIXAMO Y RENOMBRES (modelo B) ===
+  paso_atras -> paso_atras_mano
+  gancho_adelantado_cuerpo -> gancho_adelantado_mixamo
+  esquiva_avanzando -> futuro_esquiva_avanzando
+  esquiva_retrocediendo -> futuro_esquiva_retrocediendo
+  pivote      <- fbx\pivote.fbx: fot. 1-136 (4.5 s), traslación x0.0001, 60 curvas de huesos que B no tiene (dedos) quitadas, suelo corregido +0.2/+2.4 cm | cadera del primer al último fot.: -0, -0 cm
+  pivote_der  <- fbx\pivote_der.fbx: fot. 1-38 (1.2 s), traslación x0.0001, 60 curvas de huesos que B no tiene (dedos) quitadas, suelo corregido +1.0/+2.5 cm | cadera del primer al último fot.: -35, -47 cm
+  pivote_izq  <- fbx\pivote_izq.fbx: fot. 1-39 (1.3 s), traslación x0.0001, 60 curvas de huesos que B no tiene (dedos) quitadas, suelo corregido +1.3/+2.5 cm | cadera del primer al último fot.: +52, -31 cm
+  paso_atras  <- fbx\paso_atras.fbx: fot. 1-27 (0.9 s), traslación x0.0001, 60 curvas de huesos que B no tiene (dedos) quitadas, suelo corregido +0.7/+1.7 cm | cadera del primer al último fot.: -0, +48 cm
+  GUARDADO trabajo\boxeador.blend

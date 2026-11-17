@@ -27,7 +27,7 @@ P = "mixamorig:"
 RES, ALTO = 800, 2.0
 VISTAS = {"frente": Vector((0, -1, 0)), "lado": Vector((1, 0, 0))}
 GOLPES = ["jab", "recto", "crochet_adelantado", "crochet_trasero", "crochet_trasero_cuerpo",
-          "gancho_adelantado_cuerpo", "gancho_trasero_cuerpo"]
+          "gancho_adelantado_mixamo", "gancho_trasero_cuerpo"]
 TMP = os.path.join(C.CAPTURAS, "_paneles")
 os.makedirs(TMP, exist_ok=True)
 txt = open(os.path.join(C.TRABAJO, "fase3_resumen.txt"), encoding="utf-8").read()

@@ -40,9 +40,9 @@ VISTAS = {"frente": Vector((0, -1, 0)), "lado": Vector((1, 0, 0))}  # lado = des
 GOLPES = {
     "jab": "lejos", "recto": "lejos", "crochet_trasero_cuerpo": "lejos",
     "crochet_adelantado": "velocidad", "crochet_trasero": "velocidad",
-    "gancho_adelantado_cuerpo": "velocidad", "gancho_trasero_cuerpo": "velocidad",
+    "gancho_adelantado_mixamo": "velocidad", "gancho_trasero_cuerpo": "velocidad",
 }
-OTRAS = ["bloqueo_cerrado", "esquiva_avanzando_v2", "esquiva_retrocediendo_v2"]
+OTRAS = ["bloqueo_cerrado", "pivote_v2", "paso_atras_v2"]
 UMBRAL_CM = 0.2   # por debajo no se cuenta
 
 bpy.ops.wm.open_mainfile(filepath=BLEND)

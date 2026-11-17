@@ -4,8 +4,7 @@ trabajo/capturas/ (fila de arriba de frente, abajo de lado desde su izquierda):
   fase5_paso_atras_v2.png              inicio, punto clave (pie de atrás ya apoyado) y final
   fase5_bloqueos.png                   los 5 bloqueos en su punto clave (fot. 14)
   fase5_bloqueos_cerca.png             los mismos, de cerca (cabeza y tronco)
-  fase5_esquiva_retrocediendo_v2.png   5 fotogramas
-  fase5_esquiva_avanzando_v2.png       5 fotogramas
+  fase5_futuro_esquiva_*_v2.png        esquivas de Mixamo (para más adelante), 5 fotogramas
   fase5_rueda_der.png / fase5_rueda_izq.png   5 fotogramas de la "U"
   fase5_paso_adelante.png, fase5_paso_lateral_izq.png, fase5_paso_lateral_der.png   5 fotogramas
   fase5_<acción>.png   golpes 5-9, esquiva_der/izq, ballesteo, parada y pivote (con el fotograma clave)
@@ -144,7 +143,7 @@ lamina("paso_atras_v2", [("paso_atras_v2", 1, "inicio"), ("paso_atras_v2", 13, "
 BLQ = ["bloqueo_cerrado", "bloqueo_alto_izq", "bloqueo_alto_der", "bloqueo_bajo_izq", "bloqueo_bajo_der"]
 lamina("bloqueos", [("guardia_v2", 1, "")] + [(b, 14, "") for b in BLQ])
 lamina("bloqueos_cerca", [("guardia_v2", 1, "")] + [(b, 14, "") for b in BLQ], alto=0.9, cerca=True)
-for e in ("esquiva_retrocediendo_v2", "esquiva_avanzando_v2"):
+for e in ("futuro_esquiva_retrocediendo_v2", "futuro_esquiva_avanzando_v2"):
     n = ultimo(e)
     lamina(e, [(e, f, "") for f in (1, 10, 28, 46, n)], alto=2.2)
 for pa in ("paso_adelante", "paso_lateral_izq", "paso_lateral_der"):
@@ -153,9 +152,10 @@ for pa in ("paso_adelante", "paso_lateral_izq", "paso_lateral_der"):
 for r in ("rueda_der", "rueda_izq"):
     lamina(r, [(r, f, "") for f in (1, 8, 19, 30, 37)])
 for ac in ("jab_cuerpo", "recto_cuerpo", "crochet_adelantado_cuerpo", "gancho_adelantado", "gancho_trasero",
-           "esquiva_der", "esquiva_izq", "ballesteo", "parada", "pivote"):
+           "esquiva_der", "esquiva_izq", "ballesteo", "parada", "pivote_mano", "gancho_adelantado_cuerpo",
+           "pivote_v2", "pivote_der_v2", "pivote_izq_v2", "paso_atras_mano_v2"):
     n = ultimo(ac)
-    k = int(bpy.data.actions[ac].get("clave", n // 2))
+    k = int(bpy.data.actions[ac].get("clave", (1 + n) // 2))
     fotos = sorted({1, max(2, (1 + k) // 2), k, min(n - 1, (k + n) // 2), n})
     lamina(ac, [(ac, f, "clave" if f == k else "") for f in fotos], alto=2.2)
 print("FIN RENDERS FASE 5")
