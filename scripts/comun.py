@@ -10,6 +10,9 @@ FBX_DIR = os.path.join(RAIZ, "fbx")
 TRABAJO = os.path.join(RAIZ, "trabajo")
 CAPTURAS = os.path.join(TRABAJO, "capturas")
 
+# sin copias .blend1 al guardar (boxeador.blend es el taller; lo antiguo está en archivo/)
+bpy.context.preferences.filepaths.save_version = 0
+
 # nombre lógico -> ruta del FBX (originales de Mixamo, no incluidos en el repo)
 FBX = {
     "figura": os.path.join(FBX_DIR, "extra", "BoxeoFigura.fbx"),

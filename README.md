@@ -3,11 +3,23 @@
 Muñeco 3D de boxeo (Blender) para la app de boxeo: un esqueleto, una malla
 de cuerpo y cada golpe/movimiento como una acción con nombre.
 
+## Cuál es el bueno
+
+| Qué | Dónde |
+|---|---|
+| **Muñeco con las acciones de la app** (solo las buenas, nombres limpios: `jab`, `recto`…) | `trabajo/boxeador_final.blend` |
+| **Una lámina por acción** (numerada como en la app) | `trabajo/capturas/app/NN_<acción>.png` |
+| Lista de acciones con su fotograma clave | `trabajo/final_resumen.txt` |
+| Taller (originales de Mixamo, `_v2` e intermedias; los scripts trabajan aquí, no usar en la app) | `trabajo/boxeador.blend` |
+| Modelo anterior, del que sale el taller (no tocar) | `trabajo/boxeador_v2.blend` |
+| Todo lo antiguo (versiones viejas, variante C, renders y resúmenes de fases anteriores) | `archivo/` |
+
 ## Contenido
 
 - `scripts/`: scripts de Blender en Python, que se pueden repetir.
-- `trabajo/capturas/`: renders de comprobación (PNG).
-- `trabajo/*.txt`: resúmenes y comprobaciones de cada fase.
+- `trabajo/capturas/app/`: láminas de las acciones de la app (PNG).
+- `trabajo/*.txt`: resúmenes y comprobaciones de las fases actuales.
+- `archivo/`: lo antiguo (ver `archivo/LEEME.md`).
 
 ## Créditos y licencias
 
@@ -42,8 +54,7 @@ rig), `boxeador_b_rig.fbx` (la misma malla rigeada en Mixamo, 25 huesos sin dedo
 
 Con **Blender 4.5**, en modo background y desde la raíz del repo (los scripts usan la API
 de acciones de Blender 4.5, `action.fcurves`, que Blender 5.x ya no tiene). Los scripts de
-Python normal (`fase1_analizar.py`, `comparar_choques.py`) sirven con el `python.exe` que
-trae Blender en `4.5/python/bin/`.
+Python normal (en `archivo/scripts/`) sirven con el `python.exe` que trae Blender en `4.5/python/bin/`.
 
 ### Flujo por defecto: modelo principal (B) → `trabajo/boxeador.blend`
 
@@ -55,34 +66,22 @@ blender.exe --background --python scripts/b_brazo.py             # brazo (hombro
 blender.exe --background --python scripts/b_mixamo_nuevas.py     # pivotes y paso atrás de Mixamo, renombres
 blender.exe --background --python scripts/fase4_b.py             # guardia corregida: acciones _v2
 blender.exe --background --python scripts/fase5_b.py             # acciones a mano y correcciones (después de fase4)
+blender.exe --background --python scripts/final_b.py            # -> trabajo/boxeador_final.blend (lo bueno)
+blender.exe --background --python scripts/final_render.py        # láminas -> trabajo/capturas/app/
+blender.exe --background --python scripts/final_render.py -- jab rueda_der   # solo esas
 blender.exe --background --python scripts/fase3_comprobar.py -- --sin-renders   # choques -> fase3_resumen.txt
-blender.exe --background --python scripts/b_codo_diag.py         # codo -> b_codo_diag.txt
-blender.exe --background --python scripts/fase4_render.py        # renders de la Fase 4
-blender.exe --background --python scripts/fase5_render.py        # renders de la Fase 5
-python scripts/comparar_choques.py                               # tablas de choques
 ```
+
+Cada vez que cambia una acción: el script que la hace (`fase5_b.py`…), `final_b.py` y `final_render.py`.
 
 ## Modelo v2 (anterior) → `trabajo/boxeador_v2.blend`
 
 ```
-blender.exe --background --python scripts/fase1_extraer_datos.py
-python scripts/fase1_analizar.py
-blender.exe --background --python scripts/fase1_render.py
 blender.exe --background --python scripts/fase2_montar.py        # monta boxeador_v2.blend
-blender.exe --background --python scripts/fase2_render.py
 blender.exe --background --python scripts/ropa_v2.py             # ropa v2
-blender.exe --background --python scripts/ropa_v2_render.py      # comparativas con referencias/ (no incluida)
-blender.exe --background --python scripts/fase3_comprobar.py -- v2   # -> fase3_resumen_v2.txt
 ```
 
-### Variante C y comparativa de modelos
-
-```
-blender.exe --background --python scripts/b_analizar.py          # análisis del modelo de Creazilla
-blender.exe --background --python scripts/c_montar.py            # trabajo/boxeador_c.blend
-blender.exe --background --python scripts/fase3_comprobar.py -- c --sin-renders
-blender.exe --background --python scripts/comparativa_render.py  # comparativa_v2_b_c.png e impactos
-```
+(La Fase 1, la variante C y las comparativas están en `archivo/scripts/`.)
 
 ## Modelo principal (B): qué hay en `trabajo/boxeador.blend`
 
@@ -105,7 +104,7 @@ blender.exe --background --python scripts/comparativa_render.py  # comparativa_v
   (0,205 -> 0,266 m). Se estira la malla del brazo y el antebrazo, la mano y el guante se desplazan.
   Con el brazo nuevo casi desaparecen los roces guante-cuerpo de las `_v2` (guardia 1,5 -> 0,6 cm).
 
-### Fase 4 (acciones `_v2`), ver `trabajo/fase4_propuesta.md` y `trabajo/fase4_resumen.txt`
+### Fase 4 (acciones `_v2`), ver `trabajo/fase4_resumen.txt` (y `archivo/trabajo/fase4_propuesta.md`)
 
 - Barbilla al pecho (Neck +6°, Head +10°) en todos los fotogramas.
 - Guardia: un guante a cada lado de la cara, 13 cm por delante, con ~2,5 cm de aire,
@@ -115,46 +114,56 @@ blender.exe --background --python scripts/comparativa_render.py  # comparativa_v
   fotogramas); en el impacto el brazo es el de Mixamo. Bloqueo: se sueltan los dos brazos.
   Esquivas, flexion, paso_atras, rueda y guardias: guardia todo el tiempo.
 - Si un guante se acerca a la cabeza, se aparta y se recalcula. Primer y último fotograma iguales.
-- Resultado (`trabajo/fase4_choques_antes_despues.txt`): guante-cabeza 0 cm en todas las `_v2`
+- Resultado (`archivo/trabajo/fase4_choques_antes_despues.txt`): guante-cabeza 0 cm en todas las `_v2`
   (antes hasta 4,3 cm), guante-guante hasta 1,5 cm (antes 3,5).
-- Renders: `trabajo/capturas/fase4_guardia_v2.png`, `fase4_impacto_<golpe>.png`, `fase4_codo_cerca.png`.
 
 ### Acciones para la app (todas: REVISAR CON ENTRENADOR)
 
-Nombre de la acción en `trabajo/boxeador.blend` que usa la app. "Mixamo" = animación de Mixamo
-con la guardia corregida (`_v2`, Fase 4); "a mano" = creada en `fase5_b.py`.
+En `trabajo/boxeador_final.blend` (sale de `final_b.py`); lámina de cada una en
+`trabajo/capturas/app/NN_<acción>.png`. "Mixamo" = animación de Mixamo con la guardia corregida
+(`_v2`, Fase 4); "a mano" = creada en `fase5_b.py`. Cada acción lleva las propiedades `app`,
+`origen` y `clave` (fotograma de impacto / punto máximo). 30 fot./s.
 
-| Nº | Acción de la app | Acción en el .blend | Origen |
-|---|---|---|---|
-| 1 | Jab | `jab_v2` | Mixamo |
-| 2 | Recto | `recto_v2` | Mixamo |
-| 3 | Crochet adelantado | `crochet_adelantado_v2` | Mixamo |
-| 4 | Crochet trasero | `crochet_trasero_v2` | Mixamo + transición desde/hacia la guardia |
-| 5 | Gancho adelantado (cara) | `gancho_adelantado` | Mixamo (`gancho_adelantado_mixamo_v2` tal cual) |
-| 6 | Gancho trasero (cara) | `gancho_trasero` | a mano (de cero) |
-| 7 | Jab al cuerpo | `jab_cuerpo` | jab_v2 + bajada con las piernas |
-| 8 | Recto al cuerpo | `recto_cuerpo` | recto_v2 + bajada con las piernas |
-| 9 | Crochet adelantado al cuerpo | `crochet_adelantado_cuerpo` | crochet_adelantado_v2 + bajada |
-| 10 | Crochet trasero al cuerpo | `crochet_trasero_cuerpo_v2` | Mixamo |
-| 11 | Gancho adelantado al cuerpo | `gancho_adelantado_cuerpo` | gancho_adelantado_mixamo_v2 + agachado, de abajo arriba |
-| 12 | Gancho trasero al cuerpo | `gancho_trasero_cuerpo_v2` | Mixamo |
-| 13 | Guardia | `guardia_v2` (y `guardia_alt_v2`) | Mixamo |
-| 14 | Bloqueo cerrado | `bloqueo_cerrado` | a mano |
-| 15 | Bloqueo alto | `bloqueo_alto_izq` / `bloqueo_alto_der` | a mano |
-| 16 | Bloqueo bajo | `bloqueo_bajo_izq` / `bloqueo_bajo_der` | a mano |
-| 17 | Parada | `parada` | a mano |
-| 18 | Esquiva lateral | `esquiva_der` / `esquiva_izq` | a mano |
-| 19 | Flexión | `flexion` | a mano (Fase 2, la original) |
-| 20 | Rueda | `rueda_der` / `rueda_izq` | a mano |
-| 21 | Ballesteo | `ballesteo` | a mano |
-| 22 | Paso adelante | `paso_adelante` | a mano |
-| 23 | Paso atrás | `paso_atras_v2` | Mixamo (el hecho a mano: `paso_atras_mano_v2`) |
-| 24 | Pasos laterales | `paso_lateral_izq` / `paso_lateral_der` | a mano |
-| 25 | Pivote | `pivote_v2` (ida y vuelta) | Mixamo; `pivote_der_v2` / `pivote_izq_v2` para Aprende; el hecho a mano: `pivote_mano` |
+| Nº | Acción de la app | Acción final | Sale de (taller) | Fot. | Clave | Origen |
+|---|---|---|---|---|---|---|
+| 1 | Jab | `jab` | `jab_v2` | 53 | 16 | Mixamo |
+| 2 | Recto | `recto` | `recto_v2` | 65 | 21 | Mixamo |
+| 3 | Crochet adelantado | `crochet_adelantado` | `crochet_adelantado_v2` | 61 | 16 | Mixamo |
+| 4 | Crochet trasero | `crochet_trasero` | `crochet_trasero_v2` | 47 | 19 | Mixamo + transición desde/hacia la guardia |
+| 5 | Gancho adelantado | `gancho_adelantado` | `gancho_adelantado` | 67 | 20 | Mixamo (gancho_adelantado_mixamo_v2 tal cual) |
+| 6 | Gancho trasero | `gancho_trasero` | `gancho_trasero` | 30 | 13 | a mano (de cero) |
+| 7 | Jab al cuerpo | `jab_cuerpo` | `jab_cuerpo` | 53 | 16 | jab_v2 + bajada con las piernas |
+| 8 | Recto al cuerpo | `recto_cuerpo` | `recto_cuerpo` | 65 | 21 | recto_v2 + bajada con las piernas |
+| 9 | Crochet adelantado al cuerpo | `crochet_adelantado_cuerpo` | `crochet_adelantado_cuerpo` | 61 | 16 | crochet_adelantado_v2 + bajada |
+| 10 | Crochet trasero al cuerpo | `crochet_trasero_cuerpo` | `crochet_trasero_cuerpo_v2` | 66 | 24 | Mixamo |
+| 11 | Gancho adelantado al cuerpo | `gancho_adelantado_cuerpo` | `gancho_adelantado_cuerpo` | 67 | 20 | gancho_adelantado_mixamo_v2 + agachado, de abajo arriba |
+| 12 | Gancho trasero al cuerpo | `gancho_trasero_cuerpo` | `gancho_trasero_cuerpo_v2` | 67 | 19 | Mixamo |
+| 13 | Guardia | `guardia` | `guardia_v2` | 67 | 34 | Mixamo |
+| 13 | Guardia (alternativa) | `guardia_alt` | `guardia_alt_v2` | 90 | 45 | Mixamo |
+| 14 | Bloqueo cerrado | `bloqueo_cerrado` | `bloqueo_cerrado` | 28 | 14 | a mano |
+| 15 | Bloqueo alto izquierdo | `bloqueo_alto_izq` | `bloqueo_alto_izq` | 28 | 14 | a mano |
+| 15 | Bloqueo alto derecho | `bloqueo_alto_der` | `bloqueo_alto_der` | 28 | 14 | a mano |
+| 16 | Bloqueo bajo izquierdo | `bloqueo_bajo_izq` | `bloqueo_bajo_izq` | 28 | 14 | a mano |
+| 16 | Bloqueo bajo derecho | `bloqueo_bajo_der` | `bloqueo_bajo_der` | 28 | 14 | a mano |
+| 17 | Parada | `parada` | `parada` | 18 | 7 | a mano |
+| 18 | Esquiva lateral derecha | `esquiva_der` | `esquiva_der` | 25 | 12 | a mano |
+| 18 | Esquiva lateral izquierda | `esquiva_izq` | `esquiva_izq` | 25 | 12 | a mano |
+| 19 | Flexión | `flexion` | `flexion` | 31 | 16 | a mano (Fase 2, la original) |
+| 20 | Rueda derecha | `rueda_der` | `rueda_der` | 37 | 19 | a mano |
+| 20 | Rueda izquierda | `rueda_izq` | `rueda_izq` | 37 | 19 | a mano |
+| 21 | Ballesteo | `ballesteo` | `ballesteo` | 28 | 14 | a mano |
+| 22 | Paso adelante | `paso_adelante` | `paso_adelante` | 25 | 13 | a mano |
+| 23 | Paso atrás | `paso_atras` | `paso_atras_v2` | 27 | 14 | Mixamo |
+| 24 | Paso lateral izquierdo | `paso_lateral_izq` | `paso_lateral_izq` | 25 | 13 | a mano |
+| 24 | Paso lateral derecho | `paso_lateral_der` | `paso_lateral_der` | 25 | 13 | a mano |
+| 25 | Pivote (ida y vuelta) | `pivote` | `pivote_v2` | 136 | 68 | Mixamo |
+| 25 | Pivote derecha | `pivote_der` | `pivote_der_v2` | 38 | 19 | Mixamo (para Aprende) |
+| 25 | Pivote izquierda | `pivote_izq` | `pivote_izq_v2` | 39 | 20 | Mixamo (para Aprende) |
 
-Fuera de la app: `reaccion_golpe` (el antiguo "bloqueo" de Mixamo) y, para más adelante,
-`futuro_esquiva_avanzando(_v2)` / `futuro_esquiva_retrocediendo(_v2)` (la cadera se rompe con el
-pantalón; sus FBX están en `fbx/extra/futuros/`).
+Solo en el taller (no van a la app): las originales de Mixamo sin corregir, `reaccion_golpe` (el antiguo
+"bloqueo" de Mixamo), `paso_atras_mano_v2` y `pivote_mano` (los hechos a mano, sustituidos por los de
+Mixamo) y, para más adelante, `futuro_esquiva_avanzando(_v2)` / `futuro_esquiva_retrocediendo(_v2)` (la
+cadera se rompe con el pantalón; sus FBX están en `fbx/extra/futuros/`).
 
 ### Fase 5 (acciones a mano y correcciones), ver `trabajo/fase5_resumen.txt`
 
@@ -191,22 +200,11 @@ pantalón; sus FBX están en `fbx/extra/futuros/`).
 - **crochet_trasero_v2:** la de Mixamo empezaba a mitad del golpe; ahora tiene 8 fotogramas de
   transición desde la guardia y de vuelta a ella.
 - **Esquivas de Mixamo** (`futuro_`): pies fijos en el suelo con IK y paso real; quedan para más adelante.
-- Renders: `trabajo/capturas/fase5_<acción>.png` (inicio, punto clave y final, de frente y de lado).
 
 ## Modelo v2 (anterior): `trabajo/boxeador_v2.blend`
 
-- Esqueleto `Boxeador`, `Cuerpo`, `Eyes`, `Eyebrows` y la ropa v2 (`ropa_v2.py`): `Pantalon`,
-  `Botas` y `Guante_*` (piezas convexas en el hueso Hand; manos y pies ocultos con el Mask).
-- 15 acciones con Fake User: guardia, guardia_alt, jab, recto, crochet_adelantado,
-  crochet_trasero, gancho_adelantado_cuerpo (nº 11), gancho_trasero_cuerpo (nº 12),
-  crochet_trasero_cuerpo, bloqueo, esquiva_avanzando, esquiva_retrocediendo, flexion,
-  paso_atras y rueda. Los ganchos de Mixamo son ganchos AL CUERPO.
-- Copia de la ropa v1: `trabajo/boxeador_v1.blend`. Resultados en `trabajo/fase2_resumen.txt`.
-
-## Variante C: `trabajo/boxeador_c.blend`
-
-Cuerpo y botas rojas de la v2 + pantalón y guantes del modelo de Creazilla (guantes rígidos en
-el hueso Hand; pantalón con Shrinkwrap, pesos del cuerpo y la piel de debajo oculta con el Mask).
+- Esqueleto `Boxeador`, `Cuerpo`, `Eyes`, `Eyebrows` y la ropa v2 (`ropa_v2.py`). 15 acciones de Mixamo con
+  Fake User, de donde `b_montar.py` copia las del taller. La ropa v1 y la variante C están en `archivo/blend/`.
 
 ## Pendientes y defectos conocidos
 
@@ -215,21 +213,17 @@ el hueso Hand; pantalón con Shrinkwrap, pesos del cuerpo y la piel de debajo oc
   acciones originales (estiramiento máx. de las aristas 1,44-1,65, casi igual que sin la shape
   key). **Queda:** en las `_v2` la guardia cerrada dobla el codo hasta 140° y la malla del pliegue
   se sigue estirando (x1,7 en guardia_v2, x1,95 en jab_v2): es la malla de poca resolución del
-  modelo con sus pesos de Mixamo. Ver `trabajo/b_codo_diag.txt` y `fase4_codo_cerca.png`.
+  modelo con sus pesos de Mixamo. Ver `archivo/trabajo/b_codo_diag.txt` y `archivo/capturas/fase4_codo_cerca.png`.
 - **Guantes (B):** son los del modelo y siguen siendo grandes. En las acciones originales aún se
   meten en la cara (hasta 4,3 cm) y uno en otro (3,5 cm): por eso hay que usar las `_v2`. En las
   `_v2` el puño del guante roza el pecho/hombro (Spine2) hasta 1,5 cm en la guardia (codos
   cerrados) y guante-guante llega a 1,5 cm en el bloqueo. Guante-cuerpo en jab y recto (2-2,4 cm)
   es de la animación.
-- **Logo de los guantes:** tapado con una etiqueta gris lisa (`b_textura_logo.py` lo rehace en los
-  `.blend` sin volver a montarlos). Quedan unos píxeles amarillos en el margen de la textura, fuera
-  de las UV (no se ven en el modelo). Los renders de `trabajo/capturas/` se hicieron con una
-  primera versión que dejaba un trazo amarillo pequeño en el puño.
+- **Logo de los guantes:** tapado con una etiqueta gris lisa. Quedan unos píxeles amarillos en el margen
+  de la textura, fuera de las UV (no se ven en el modelo).
 - **Todas las acciones de la app: REVISAR CON ENTRENADOR**.
 - **Pivotes de Mixamo:** al girar, la pierna se deforma un poco (pesos de Mixamo de la rodilla con la malla
   de poca resolución). No se han tocado los pesos de la rodilla para no romper el resto de acciones.
 - **Gancho trasero (6):** con el codo a ~90° el puño solo queda ~7 cm por delante de la cara (se pedían
   30-40 cm); los ganchos de Mixamo (5 y al cuerpo) llevan el tronco muy inclinado.
 - **Esquivas de Mixamo:** la cadera se rompe con el pantalón (`futuro_*`, fuera de la app).
-- **C:** el pantalón hace un pico en el bajo trasero en el jab; la medida del pantalón de C da un
-  falso positivo fijo (4,3 cm) en la franja visible sobre el bajo.

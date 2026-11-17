@@ -1,0 +1,56 @@
+{
+ "clave": {
+  "jab": {
+   "fotograma": 16,
+   "mano": "LeftHand",
+   "desplazamiento_m": 0.969
+  },
+  "recto": {
+   "fotograma": 21,
+   "mano": "RightHand",
+   "desplazamiento_m": 1.191
+  },
+  "crochet_adelantado": {
+   "fotograma": 16,
+   "mano": "LeftHand",
+   "desplazamiento_m": 0.566
+  },
+  "crochet_trasero": {
+   "fotograma": 17,
+   "mano": "RightHand",
+   "desplazamiento_m": 0.667
+  },
+  "gancho_adelantado_cuerpo": {
+   "fotograma": 28,
+   "mano": "LeftHand",
+   "desplazamiento_m": 0.715
+  },
+  "gancho_trasero_cuerpo": {
+   "fotograma": 22,
+   "mano": "RightHand",
+   "desplazamiento_m": 0.899
+  },
+  "crochet_cuerpo": {
+   "fotograma": 24,
+   "mano": "RightHand",
+   "desplazamiento_m": 0.913
+  },
+  "bloqueo": {
+   "fotograma": 39,
+   "mano": "LeftHand",
+   "desplazamiento_m": 0.383
+  },
+  "esquiva_avanzando": {
+   "fotograma": 54,
+   "mano": "RightHand",
+   "desplazamiento_m": 1.037
+  },
+  "esquiva_retrocediendo": {
+   "fotograma": 58,
+   "mano": "RightHand",
+   "desplazamiento_m": 0.735
+  }
+ },
+ "eje_frente": 1,
+ "signo": -1
+}

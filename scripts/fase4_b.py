@@ -1,6 +1,6 @@
 """Fase 4 sobre el modelo principal (B): guardia corregida en todas las acciones -> <acción>_v2.
 
-Ver trabajo/fase4_propuesta.md. Las acciones originales no se tocan.
+Ver archivo/trabajo/fase4_propuesta.md. Las acciones originales no se tocan.
 - Barbilla al pecho: Neck +NECK_DEG y Head +HEAD_DEG de flexión (hacia la cara) en todos los fotogramas.
 - Guardia: cada guante a un lado de la cara (sin taparla ni cruzarse), por delante de los
   pómulos; objetivos PEGADOS A LA CABEZA (siguen a la cabeza aunque se mueva). La distancia
