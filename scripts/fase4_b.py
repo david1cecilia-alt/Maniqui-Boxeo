@@ -69,7 +69,7 @@ assert arm.matrix_world == Matrix(), "se espera el esqueleto con las transformac
 for a in [a for a in bpy.data.actions if a.name.endswith("_v2")]:
     bpy.data.actions.remove(a)
 ORIGINALES = sorted(a.name for a in bpy.data.actions
-                    if a.name not in SIN_V2 and not a.name.startswith(("bloqueo_", "rueda_")))
+                    if a.name not in SIN_V2 and not a.name.startswith(("bloqueo_", "rueda_", "paso_adelante", "paso_lateral_")))
 pb = {n.split(":")[-1]: b for n, b in arm.pose.bones.items()}
 REST = {n.split(":")[-1]: b.matrix_local.copy() for n, b in arm.data.bones.items()}
 REST_INV = {k: m.inverted() for k, m in REST.items()}

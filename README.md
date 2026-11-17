@@ -81,6 +81,11 @@ python scripts/comparar_choques.py                               # tablas de cho
   se adelanta 12 cm (paso en los fot. 1-7 y vuelta en los 31-37), rodillas flexionadas (la cadera
   baja hasta 15 cm en el fondo de la U; en la flexión, 18), el abdomen se contrae (el torso baja) y los
   guantes van 3,5 cm más arriba que en la guardia para cubrir los golpes altos.
+- **Pasos (nuevos):** `paso_adelante`, `paso_lateral_izq` y `paso_lateral_der` (25 fot., 0,8 s), hechos
+  a mano desde la guardia como paso_atras_v2: sale primero el pie del lado hacia el que se va
+  (adelante y a la izquierda, el izquierdo; a la derecha, el derecho) y le sigue el otro; la cadera
+  acompaña y baja 2 cm a mitad. Acaban desplazados 25 cm y en guardia: solo la pose coincide con el
+  primer fotograma. Pies con IK apoyados en Z=0, sin choques.
 - **Esquivas `_v2`:** los pies resbalaban bajo una cadera fija (parecía que flotaba). Ahora los pies
   están fijos en el suelo con IK (suela en Z=0) y dan un paso real de 22 cm: el derecho hacia atrás
   (retrocediendo) o el izquierdo hacia delante (avanzando), y vuelven al final. La postura de partida
@@ -122,7 +127,7 @@ blender.exe --background --python scripts/comparativa_render.py  # comparativa_v
   corte). Un solo material con textura (sin el logo de la marca).
 - Acciones originales (copiadas de la v2, traslación escalada por la altura de la cadera; `bloqueo`
   pasa a llamarse `reaccion_golpe` y `rueda` se sustituye), 13 versiones `_v2` de la Fase 4 y 7 acciones
-  hechas a mano en la Fase 5 (5 bloqueos y 2 ruedas). Todas con Fake User.
+  hechas a mano en la Fase 5 (5 bloqueos, 2 ruedas y 3 pasos). Todas con Fake User.
 - Pies: rotación rehecha para que giren respecto a su reposo igual que en la v2 (la copia
   directa los dejaba hasta 15° girados) y cadera corregida en cada fotograma para que la
   suela apoye en Z=0 (antes se hundían hasta 9 cm).

@@ -219,6 +219,14 @@ hueco = cuánto queda fuera del guante el borde de la mano oculta por el Mask (a
    guante_guante            OK
    hueco_guante_antebrazo   OK
 
+-- paso_adelante (25 fot.)
+   pantalon_cuerpo          OK
+   botas_cuerpo             OK
+   guante_cabeza            OK
+   guante_cuerpo            OK
+   guante_guante            OK
+   hueco_guante_antebrazo   OK
+
 -- paso_atras (25 fot.)
    pantalon_cuerpo          OK
    botas_cuerpo             OK
@@ -228,6 +236,22 @@ hueco = cuánto queda fuera del guante el borde de la mano oculta por el Mask (a
    hueco_guante_antebrazo   OK
 
 -- paso_atras_v2 (25 fot.)
+   pantalon_cuerpo          OK
+   botas_cuerpo             OK
+   guante_cabeza            OK
+   guante_cuerpo            OK
+   guante_guante            OK
+   hueco_guante_antebrazo   OK
+
+-- paso_lateral_der (25 fot.)
+   pantalon_cuerpo          OK
+   botas_cuerpo             OK
+   guante_cabeza            OK
+   guante_cuerpo            OK
+   guante_guante            OK
+   hueco_guante_antebrazo   OK
+
+-- paso_lateral_izq (25 fot.)
    pantalon_cuerpo          OK
    botas_cuerpo             OK
    guante_cabeza            OK
@@ -319,8 +343,11 @@ hueco = cuánto queda fuera del guante el borde de la mano oculta por el Mask (a
      guardia_v2                11.9 cm
      jab                        8.5 cm
      jab_v2                    10.9 cm
+     paso_adelante             11.9 cm
      paso_atras                 0.0 cm
      paso_atras_v2             11.9 cm
+     paso_lateral_der          11.9 cm
+     paso_lateral_izq          11.9 cm
      reaccion_golpe            25.1 cm
      recto                      5.2 cm
      recto_v2                  13.2 cm

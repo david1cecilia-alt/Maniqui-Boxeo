@@ -10,6 +10,9 @@ Ejecutar DESPUÉS de fase4_b.py (que rehace las _v2 y deja paso_atras_v2 desplaz
 3. Rueda hecha a mano (37 fot., 1,2 s): rueda_der y rueda_izq. La cabeza dibuja una "U" (sube
    en el lado del nombre); cadera y tronco giran y se inclinan, rodillas flexionadas (la cadera baja hasta 15 cm), pierna de delante adelantada 12 cm,
    guantes en guardia todo el tiempo.
+3b. Pasos hechos a mano (25 fot., 0,8 s): paso_adelante, paso_lateral_izq y paso_lateral_der. Como
+   paso_atras_v2: sale primero el pie del lado hacia el que se va y le sigue el otro; acaban
+   desplazados 25 cm y en guardia (solo la pose coincide con el primer fotograma).
 4. Esquivas _v2: los pies resbalaban bajo una cadera fija (sin desplazamiento X/Y): parecía
    que flotaba. Ahora los pies van fijos en el suelo con IK (suela en Z=0) donde están en el
    fot. 1 de la esquiva (la postura de Mixamo va con su tronco, girado ~45° respecto a la
@@ -100,7 +103,7 @@ if "bloqueo" in acc and "reaccion_golpe" not in acc:
     acc["bloqueo"].name = "reaccion_golpe"
     p("  bloqueo (Mixamo) -> reaccion_golpe (sin _v2)")
 for n in [a.name for a in acc if a.name in ("bloqueo", "bloqueo_v2", "rueda", "rueda_v2", "reaccion_golpe_v2")
-          or a.name.startswith(("bloqueo_", "rueda_"))]:
+          or a.name.startswith(("bloqueo_", "rueda_", "paso_adelante", "paso_lateral_"))]:
     acc.remove(acc[n])
     p(f"  borrada {n}")
 
@@ -374,12 +377,12 @@ def rotar(nombre, R):
     upd()
 
 
-def posar(par, brazos, pies_extra=None):
+def posar(par, brazos, pies_extra=None, cadera_extra=None):
     """par: parámetros (m y grados). brazos: {lado: (guante en coords. de cabeza, codo en coords. de pecho)}.
     giro/torsion/lado positivos = hacia la izquierda del boxeador."""
     base_cuerpo()
     M = pb["Hips"].matrix
-    t = M.translation + X * par["sx"] + DELANTE * par["sy"] - Vector((0, 0, par["baja"]))
+    t = M.translation + X * par["sx"] + DELANTE * par["sy"] - Vector((0, 0, par["baja"])) + (cadera_extra or Vector())
     pb["Hips"].matrix = Matrix.LocRotScale(t, Quaternion((0, 0, 1), math.radians(par["giro"])) @ q(M), None)
     upd()
     # flex: tronco hacia delante repartido; abdomen: contracción (flexión sobre todo abajo, Spine/Spine1)
@@ -498,7 +501,9 @@ def crear(nombre, n_fot, claves, modo, brazos, pico=None, pies=None):
     rep = dict(bajada=0.0, desliz=0.0, hueco=1.0, empuje=0.0, guantes=1.0, cab_min=9.0, cab_x=[0.0, 0.0])
     for f in range(1, n_fot + 1):
         esc.frame_set(f)
-        r = posar(interp(claves, f, modo), brazos, pies(f) if pies else None)
+        extra = pies(f) if pies else None   # {lado: desplazamiento del pie} o ({...}, desplazamiento de la cadera)
+        pe, ce = extra if isinstance(extra, tuple) else (extra, None)
+        r = posar(interp(claves, f, modo), brazos, pe, ce)
         for n, b in pb.items():
             previo[n] = clave(b, f, previo[n])
         pb["Hips"].keyframe_insert("location", frame=f, group=pb["Hips"].name)
@@ -636,6 +641,56 @@ p("\n=== RUEDAS (la cabeza dibuja una U y sube en el lado del nombre) ===")
 for nombre, s in (("rueda_der", 1.0), ("rueda_izq", -1.0)):
     rep = crear(nombre, N_RUEDA, claves_rueda(s), "continuo", MANOS_ARRIBA, pies=pie_delante_rueda)
     informe(nombre, N_RUEDA, rep)
+
+# ---------------------------------------------------------------- 4b. pasos (adelante y laterales)
+# Como paso_atras_v2: desde la guardia, primero el pie del lado hacia el que se va y luego el otro;
+# la cadera acompaña a los pies y el muñeco ACABA DESPLAZADO (solo la pose coincide con el fot. 1).
+N_PASO, D_PASO = 25, 0.25
+PASOS = {
+    # dirección, pie que sale primero, pie que le sigue
+    "paso_adelante": (DELANTE, "Left", "Right"),
+    "paso_lateral_izq": (X, "Left", "Right"),
+    "paso_lateral_der": (-X, "Right", "Left"),
+}
+
+
+def avance(f, f0, f1):
+    """0 -> 1 suave entre f0 y f1 y altura del pie en el aire (0 -> 1 -> 0)."""
+    t = min(max((f - f0) / (f1 - f0), 0.0), 1.0)
+    return suave(t), math.sin(math.pi * t)
+
+
+def pies_paso(dire, primero, segundo):
+    def fn(f):
+        k1, a1 = avance(f, 1, 11)
+        k2, a2 = avance(f, 11, 21)
+        pies = {primero: dire * (D_PASO * k1) + Vector((0, 0, 0.04 * a1)),
+                segundo: dire * (D_PASO * k2) + Vector((0, 0, 0.03 * a2))}
+        return pies, dire * (D_PASO * (0.6 * k1 + 0.4 * k2))
+    return fn
+
+
+p("\n=== PASOS (adelante y laterales; acaban desplazados, la pose final es la de la guardia) ===")
+for nombre, (dire, primero, segundo) in PASOS.items():
+    # un poco más bajo mientras se mueve (rodillas), guardia todo el tiempo
+    claves = [(1, {}), (11, dict(baja=0.02)), (21, {}), (N_PASO, {})]
+    rep_p = crear(nombre, N_PASO, claves, "suave", {}, pies=pies_paso(dire, primero, segundo))
+    a = poner(nombre)
+    esc.frame_set(1)
+    h0 = pb["Hips"].head.copy()
+    pose0 = {n: b.head - h0 for n, b in pb.items()}
+    zs = []
+    for f in range(1, N_PASO + 1):
+        esc.frame_set(f)
+        zs.append(suelas())
+    h1 = pb["Hips"].head.copy()
+    dif = max(((b.head - h1) - pose0[n]).length for n, b in pb.items())
+    apoyo = [z[l] for f, z in enumerate(zs, 1) for l in LADOS
+             if f in (1, N_PASO) or 21 <= f or (l == segundo and f <= 11) or (l == primero and f >= 11)]
+    p(f"  {nombre:18} {N_PASO} fot. ({(N_PASO - 1) / 30:.2f} s) | sale el pie {NOMBRE_LADO[primero]} (fot. 1-11) y le sigue el"
+      f" {NOMBRE_LADO[segundo]} (fot. 11-21) | desplazamiento {(h1 - h0).length * 100:.1f} cm | pose final vs inicial"
+      f" (quitando el desplazamiento) {dif * 1000:.1f} mm | suela de los pies apoyados Z {min(apoyo) * 100:+.2f}/"
+      f"{max(apoyo) * 100:+.2f} cm | aire guante-cabeza mín. {rep_p['hueco'] * 100:.1f} cm")
 
 # ---------------------------------------------------------------- 5. esquivas: pies fijos en el suelo y paso real
 PASO = 0.22

@@ -7,6 +7,7 @@ trabajo/capturas/ (fila de arriba de frente, abajo de lado desde su izquierda):
   fase5_esquiva_retrocediendo_v2.png   5 fotogramas
   fase5_esquiva_avanzando_v2.png       5 fotogramas
   fase5_rueda_der.png / fase5_rueda_izq.png   5 fotogramas de la "U"
+  fase5_paso_adelante.png, fase5_paso_lateral_izq.png, fase5_paso_lateral_der.png   5 fotogramas
 La cámara no se mueve dentro de cada lámina (se ve el desplazamiento) y el suelo (Z=0) es la
 línea gris.
 
@@ -145,6 +146,9 @@ lamina("bloqueos_cerca", [("guardia_v2", 1, "")] + [(b, 14, "") for b in BLQ], a
 for e in ("esquiva_retrocediendo_v2", "esquiva_avanzando_v2"):
     n = ultimo(e)
     lamina(e, [(e, f, "") for f in (1, 10, 28, 46, n)], alto=2.2)
+for pa in ("paso_adelante", "paso_lateral_izq", "paso_lateral_der"):
+    lamina(pa, [(pa, f, txt) for f, txt in ((1, "inicio"), (6, "sale"), (11, "apoya"), (16, "sigue"), (25, "final"))],
+           alto=2.2)
 for r in ("rueda_der", "rueda_izq"):
     lamina(r, [(r, f, "") for f in (1, 8, 19, 30, 37)])
 print("FIN RENDERS FASE 5")
