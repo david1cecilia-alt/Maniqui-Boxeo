@@ -77,8 +77,9 @@ python scripts/comparar_choques.py                               # tablas de cho
     abdomen contraído y guantes delante de la cara.
   `fase5_resumen.txt` dice dónde queda cada codo y cada guante en el punto clave.
 - **Rueda:** `rueda` y `rueda_v2` se sustituyen por `rueda_der` y `rueda_izq` (37 fot., 1,2 s): la cabeza
-  dibuja una U y sube en el lado del nombre; cadera y tronco giran e inclinan, rodillas un poco
-  flexionadas (la cadera baja 9 cm; en la flexión, 18), el abdomen se contrae (el torso baja) y los
+  dibuja una U y sube en el lado del nombre; cadera y tronco giran e inclinan, la pierna de delante
+  se adelanta 12 cm (paso en los fot. 1-7 y vuelta en los 31-37), rodillas flexionadas (la cadera
+  baja hasta 15 cm en el fondo de la U; en la flexión, 18), el abdomen se contrae (el torso baja) y los
   guantes van 3,5 cm más arriba que en la guardia para cubrir los golpes altos.
 - **Esquivas `_v2`:** los pies resbalaban bajo una cadera fija (parecía que flotaba). Ahora los pies
   están fijos en el suelo con IK (suela en Z=0) y dan un paso real de 22 cm: el derecho hacia atrás
@@ -163,8 +164,9 @@ blender.exe --background --python scripts/comparativa_render.py  # comparativa_v
     abdomen contraído y guantes delante de la cara.
   `fase5_resumen.txt` dice dónde queda cada codo y cada guante en el punto clave.
 - **Rueda:** `rueda` y `rueda_v2` se sustituyen por `rueda_der` y `rueda_izq` (37 fot., 1,2 s): la cabeza
-  dibuja una U y sube en el lado del nombre; cadera y tronco giran e inclinan, rodillas un poco
-  flexionadas (la cadera baja 9 cm; en la flexión, 18), el abdomen se contrae (el torso baja) y los
+  dibuja una U y sube en el lado del nombre; cadera y tronco giran e inclinan, la pierna de delante
+  se adelanta 12 cm (paso en los fot. 1-7 y vuelta en los 31-37), rodillas flexionadas (la cadera
+  baja hasta 15 cm en el fondo de la U; en la flexión, 18), el abdomen se contrae (el torso baja) y los
   guantes van 3,5 cm más arriba que en la guardia para cubrir los golpes altos.
 - **Esquivas `_v2`:** los pies resbalaban bajo una cadera fija (parecía que flotaba). Ahora los pies
   están fijos en el suelo con IK (suela en Z=0) y dan un paso real de 22 cm: el derecho hacia atrás

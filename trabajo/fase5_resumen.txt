@@ -23,8 +23,8 @@
      punto clave -> der: codo -23 cm sobre el hombro, 14 cm delante del hueso Spine1, +11 al lado, +3 de altura; guante (delante, alto, lado) respecto a la cabeza (9, -2, 15) cm, aire con la cabeza 2.6 cm
 
 === RUEDAS (la cabeza dibuja una U y sube en el lado del nombre) ===
-  rueda_der             37 fot. (1.20 s) | aire guante-cabeza mín.  1.7 cm (empuje 0.0) | guante-guante mín. 11.3 cm | suelas Z -0.0/+0.0 cm | cabeza: baja hasta 1.22 m, X -28/+7 cm | fot.1 y último vs guardia_v2: 12 / 12 mm
-  rueda_izq             37 fot. (1.20 s) | aire guante-cabeza mín.  1.7 cm (empuje 0.0) | guante-guante mín. 11.3 cm | suelas Z -0.0/+0.0 cm | cabeza: baja hasta 1.22 m, X -28/+7 cm | fot.1 y último vs guardia_v2: 12 / 12 mm
+  rueda_der             37 fot. (1.20 s) | aire guante-cabeza mín.  1.7 cm (empuje 0.0) | guante-guante mín. 11.3 cm | suelas Z -0.0/+3.0 cm | cabeza: baja hasta 1.16 m, X -28/+7 cm | fot.1 y último vs guardia_v2: 12 / 12 mm
+  rueda_izq             37 fot. (1.20 s) | aire guante-cabeza mín.  1.7 cm (empuje 0.0) | guante-guante mín. 11.3 cm | suelas Z -0.0/+3.0 cm | cabeza: baja hasta 1.16 m, X -28/+7 cm | fot.1 y último vs guardia_v2: 12 / 12 mm
 
 === ESQUIVAS: pies fijos en el suelo (IK) en su postura del fot. 1 y paso real ===
   esquiva_retrocediendo_v2   paso de 22 cm hacia atrás con el pie de atrás (der) fot. 2-9, vuelve fot. 58-66 | giro de la cadera respecto a la guardia en el fot. 1: +49°

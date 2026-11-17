@@ -8,7 +8,7 @@ Ejecutar DESPUÉS de fase4_b.py (que rehace las _v2 y deja paso_atras_v2 desplaz
    arriba), bloqueo_bajo_izq/_der (codo pegado a las costillas, giro y encogimiento hacia ese
    lado). Izquierda y derecha se definen a mano (sin espejo: los pies no cambian).
 3. Rueda hecha a mano (37 fot., 1,2 s): rueda_der y rueda_izq. La cabeza dibuja una "U" (sube
-   en el lado del nombre); cadera y tronco giran y se inclinan, rodillas un poco flexionadas,
+   en el lado del nombre); cadera y tronco giran y se inclinan, rodillas flexionadas (la cadera baja hasta 15 cm), pierna de delante adelantada 12 cm,
    guantes en guardia todo el tiempo.
 4. Esquivas _v2: los pies resbalaban bajo una cadera fija (sin desplazamiento X/Y): parecía
    que flotaba. Ahora los pies van fijos en el suelo con IK (suela en Z=0) donde están en el
@@ -374,7 +374,7 @@ def rotar(nombre, R):
     upd()
 
 
-def posar(par, brazos):
+def posar(par, brazos, pies_extra=None):
     """par: parámetros (m y grados). brazos: {lado: (guante en coords. de cabeza, codo en coords. de pecho)}.
     giro/torsion/lado positivos = hacia la izquierda del boxeador."""
     base_cuerpo()
@@ -400,7 +400,7 @@ def posar(par, brazos):
     cara, arriba, _ = marco("Head")
     rotar("Head", Quaternion(arriba.cross(cara), math.radians(par["cabeza"] * 0.6)))
     # piernas: pies fijos en el suelo
-    pies = {lado: PIE0[lado] + par.get("pie_" + lado, Vector()) for lado in LADOS}
+    pies = {lado: PIE0[lado] + (pies_extra or {}).get(lado, Vector()) for lado in LADOS}
     bajada = bajar_para_llegar(pies)
     desliz = max(ik_pierna(lado, T) for lado, T in pies.items())
     # brazos
@@ -489,7 +489,7 @@ def medir_pico(lados):
     return "; ".join(txt)
 
 
-def crear(nombre, n_fot, claves, modo, brazos, pico=None):
+def crear(nombre, n_fot, claves, modo, brazos, pico=None, pies=None):
     a = bpy.data.actions.new(nombre)
     a.use_fake_user = True
     arm.animation_data.action = a
@@ -498,7 +498,7 @@ def crear(nombre, n_fot, claves, modo, brazos, pico=None):
     rep = dict(bajada=0.0, desliz=0.0, hueco=1.0, empuje=0.0, guantes=1.0, cab_min=9.0, cab_x=[0.0, 0.0])
     for f in range(1, n_fot + 1):
         esc.frame_set(f)
-        r = posar(interp(claves, f, modo), brazos)
+        r = posar(interp(claves, f, modo), brazos, pies(f) if pies else None)
         for n, b in pb.items():
             previo[n] = clave(b, f, previo[n])
         pb["Hips"].keyframe_insert("location", frame=f, group=pb["Hips"].name)
@@ -606,10 +606,27 @@ def claves_rueda(s):
     """s = +1: la U empieza a la izquierda y termina a la derecha (rueda_der); s = -1 al revés."""
     # abdomen contraído (el torso baja) y guantes un poco más arriba durante toda la rueda
     a = dict(sx=0.08 * s, giro=15.0 * s, lado=11.0 * s, torsion=8.0 * s, cuello=-11.0 * s,
-             baja=0.03, flex=3.0, abdomen=8.0, cabeza=3.0, wL=1.0, wR=1.0)
-    fondo = dict(baja=0.09, flex=10.0, abdomen=16.0, cabeza=8.0, wL=1.0, wR=1.0)
+             baja=0.06, flex=3.0, abdomen=8.0, cabeza=3.0, wL=1.0, wR=1.0)
+    fondo = dict(baja=0.15, flex=10.0, abdomen=16.0, cabeza=8.0, wL=1.0, wR=1.0)
     b = {k: (-v if k in ("sx", "giro", "lado", "torsion", "cuello") else v) for k, v in a.items()}
     return [(1, {}), (8, a), (19, fondo), (30, b), (N_RUEDA, {})]
+
+
+# pierna de delante (izquierda) adelantada PASO_RUEDA durante la rueda: paso al empezar (fot. 1-7,
+# antes de la U) y vuelta al final (fot. 31-37) para acabar en la guardia
+PASO_RUEDA = 0.12
+
+
+def pie_delante_rueda(f):
+    if f <= 1 or f >= N_RUEDA:
+        return {}
+    if f < 7:
+        t = (f - 1) / 6
+    elif f > 31:
+        t = (N_RUEDA - f) / 6
+    else:
+        return {"Left": DELANTE * PASO_RUEDA}
+    return {"Left": DELANTE * (PASO_RUEDA * suave(t)) + Vector((0, 0, 0.03 * math.sin(math.pi * t)))}
 
 
 # guantes 3,5 cm más arriba que en la guardia (respecto a la cabeza) para cubrir los golpes altos
@@ -617,7 +634,7 @@ MANOS_ARRIBA = {lado: (GUARDIA[lado][0] + Vector((0.0, 0.035, -0.005)), GUARDIA[
                 for lado in LADOS}
 p("\n=== RUEDAS (la cabeza dibuja una U y sube en el lado del nombre) ===")
 for nombre, s in (("rueda_der", 1.0), ("rueda_izq", -1.0)):
-    rep = crear(nombre, N_RUEDA, claves_rueda(s), "continuo", MANOS_ARRIBA)
+    rep = crear(nombre, N_RUEDA, claves_rueda(s), "continuo", MANOS_ARRIBA, pies=pie_delante_rueda)
     informe(nombre, N_RUEDA, rep)
 
 # ---------------------------------------------------------------- 5. esquivas: pies fijos en el suelo y paso real
