@@ -1,0 +1,82 @@
+=== 1. GUARDIA ( fbx\guardia.fbx ) ===
+Armature: Armature | huesos: 25
+Huesos: Hips, Spine, Spine1, Spine2, Neck, Head, HeadTop_End, LeftShoulder, LeftArm, LeftForeArm, LeftHand, RightShoulder, RightArm, RightForeArm, RightHand, LeftUpLeg, LeftLeg, LeftFoot, LeftToeBase, LeftToe_End, RightUpLeg, RightLeg, RightFoot, RightToeBase, RightToe_End
+Huesos de dedos: NINGUNO (confirmado)
+Malla Cube: 0 vért, 0 caras, materiales=['Material'], grupos de vértices=0
+   grupos: 
+Malla Eyebrows: 646 vért, 984 caras, materiales=['MI_Hair_1'], grupos de vértices=1
+   grupos: Head
+Malla Eyes: 556 vért, 768 caras, materiales=['MI_Eyes'], grupos de vértices=1
+   grupos: Head
+Malla SuperHero_Male: 7281 vért, 12566 caras, materiales=['MI_Superhero_Male'], grupos de vértices=22
+   grupos: Hips, Spine, Spine1, Spine2, Neck, Head, LeftShoulder, LeftArm, LeftForeArm, LeftHand, RightShoulder, RightArm, RightForeArm, RightHand, LeftUpLeg, LeftLeg, LeftFoot, LeftToeBase, RightUpLeg, RightLeg, RightFoot, RightToeBase
+BoxeoFigura.fbx: huesos 0 | mallas [('Cube', 0), ('Eyebrows', 646), ('Eyes', 556), ('SuperHero_Male', 7281)] | acciones []
+
+=== 2. ACCIONES ===
+nombre                   acción                          fps  fot    seg  esqueleto=guardia  malla
+guardia                  Armature|mixamo.com|Layer0       30   67   2.20  SÍ (nombres=True, jerarquía=True, dif.reposo=0.0)  0v; 646v; 556v; 7281v
+guardia_alt              Armature|mixamo.com|Layer0       30   90   2.97  SÍ (nombres=True, jerarquía=True, dif.reposo=0.0)  0v; 646v; 556v; 7281v
+jab                      Armature|mixamo.com|Layer0       30   53   1.73  SÍ (nombres=True, jerarquía=True, dif.reposo=0.0)  0v; 646v; 556v; 7281v
+recto                    Armature|mixamo.com|Layer0       30   65   2.13  SÍ (nombres=True, jerarquía=True, dif.reposo=0.0)  0v; 646v; 556v; 7281v
+crochet_adelantado       Armature|mixamo.com|Layer0       30   61   2.00  SÍ (nombres=True, jerarquía=True, dif.reposo=0.0)  0v; 646v; 556v; 7281v
+crochet_trasero          Armature|mixamo.com|Layer0       30   31   1.00  SÍ (nombres=True, jerarquía=True, dif.reposo=0.0)  0v; 646v; 556v; 7281v
+gancho_adelantado        Armature|mixamo.com|Layer0       30   67   2.20  SÍ (nombres=True, jerarquía=True, dif.reposo=0.0)  0v; 646v; 556v; 7281v
+gancho_trasero           Armature|mixamo.com|Layer0       30   67   2.20  SÍ (nombres=True, jerarquía=True, dif.reposo=0.0)  0v; 646v; 556v; 7281v
+crochet_cuerpo           Armature|mixamo.com|Layer0       30   66   2.17  SÍ (nombres=True, jerarquía=True, dif.reposo=0.0)  0v; 646v; 556v; 7281v
+bloqueo                  Armature|mixamo.com|Layer0       30  104   3.43  SÍ (nombres=True, jerarquía=True, dif.reposo=0.0)  0v; 646v; 556v; 7281v
+esquiva_avanzando        Armature|mixamo.com|Layer0       30   71   2.33  SÍ (nombres=True, jerarquía=True, dif.reposo=0.0)  0v; 646v; 556v; 7281v
+esquiva_retrocediendo    Armature|mixamo.com|Layer0       30   68   2.23  SÍ (nombres=True, jerarquía=True, dif.reposo=0.0)  0v; 646v; 556v; 7281v
+Nº de acciones en cada FBX: {'figura': 0, 'guardia': 1, 'guardia_alt': 1, 'jab': 1, 'recto': 1, 'crochet_adelantado': 1, 'crochet_trasero': 1, 'gancho_adelantado': 1, 'gancho_trasero': 1, 'crochet_cuerpo': 1, 'bloqueo': 1, 'esquiva_avanzando': 1, 'esquiva_retrocediendo': 1}
+
+Orientación: mira hacia -Y (Z arriba)
+
+=== 3. GANCHO ADELANTADO vs GANCHO TRASERO ===
+Diferencia máxima de rotaciones locales (cuaternión): 0.80251 => distintas
+Error medio posiciones directo: 0.1508 m | con espejo: 0.3164 m
+  guardia: pie delantero = izquierdo
+  gancho_adelantado: pie delantero = izquierdo, golpea con IZQ (máx fot. 28, 0.71 m)
+  gancho_trasero: pie delantero = izquierdo, golpea con DER (máx fot. 22, 0.90 m)
+
+=== 4. ESQUIVA RETROCEDIENDO como 'paso atrás' ===
+-- esquiva_retrocediendo (68 fot.) pie delantero al inicio: izquierdo
+   LeftFoot  adelante: ini +0.071 min -0.451(f63) max +0.086(f25) fin -0.450
+   RightFoot adelante: ini -0.011 min -0.533(f67) max -0.011(f0) fin -0.533
+   Hips      adelante: ini -0.034 min -0.556(f67) max -0.034(f0) fin -0.556
+   LeftFoot se mueve en fotogramas: [[23, 38]]
+   RightFoot se mueve en fotogramas: [[1, 7], [51, 66]]
+   cadera altura: ini 0.883 min 0.697(f10) fin 0.883
+   mano más baja respecto a la cabeza: peor -0.439 m (f20), inicio -0.302
+   cadera lateral: ini -0.034 min -0.300 max -0.034 fin -0.034
+-- esquiva_avanzando (71 fot.) pie delantero al inicio: izquierdo
+   LeftFoot  adelante: ini -0.038 min -0.038(f0) max +0.878(f70) fin +0.878
+   RightFoot adelante: ini -0.098 min -0.098(f0) max +0.822(f70) fin +0.822
+   Hips      adelante: ini -0.018 min -0.051(f4) max +0.915(f66) fin +0.902
+   LeftFoot se mueve en fotogramas: [[4, 4], [22, 44]]
+   RightFoot se mueve en fotogramas: [[1, 7], [12, 16], [50, 70]]
+   cadera altura: ini 0.929 min 0.713(f47) fin 0.929
+   mano más baja respecto a la cabeza: peor -0.441 m (f22), inicio -0.373
+   cadera lateral: ini +0.091 min -0.155 max +0.092 fin +0.091
+
+=== 5. GUARDIA vs GUARDIA_ALT (medias de toda la animación) ===
+  mano_vs_barbilla_z         guardia -0.164   guardia_alt -0.215
+  mano_sep_lateral           guardia +0.142   guardia_alt +0.171
+  codo_sep_lateral           guardia +0.256   guardia_alt +0.289
+  codo_altura_vs_mano        guardia -0.149   guardia_alt -0.102
+  mano_delante_cara          guardia +0.225   guardia_alt +0.178
+  cabeza_inclinada_grados    guardia +49.591   guardia_alt +45.458
+  cabeza_adelantada          guardia +0.010   guardia_alt +0.061
+  pie_delantero              guardia izquierdo   guardia_alt izquierdo
+  cadera_z                   guardia +0.927   guardia_alt +0.945
+  (mano_vs_barbilla_z >0 = manos por encima de la barbilla; codo_sep_lateral menor = codos más cerrados; cabeza_inclinada >0 = cabeza hacia delante/abajo)
+
+=== 6. FOTOGRAMA DE MÁXIMO MOVIMIENTO (mano que más se aleja de su posición inicial) ===
+  jab                      fot.  16  mano LeftHand   0.969 m  pie delantero: izquierdo
+  recto                    fot.  21  mano RightHand  1.191 m  pie delantero: izquierdo
+  crochet_adelantado       fot.  16  mano LeftHand   0.566 m  pie delantero: izquierdo
+  crochet_trasero          fot.  17  mano RightHand  0.667 m  pie delantero: izquierdo
+  gancho_adelantado        fot.  28  mano LeftHand   0.715 m  pie delantero: izquierdo
+  gancho_trasero           fot.  22  mano RightHand  0.899 m  pie delantero: izquierdo
+  crochet_cuerpo           fot.  24  mano RightHand  0.913 m  pie delantero: izquierdo
+  bloqueo                  fot.  39  mano LeftHand   0.383 m  pie delantero: izquierdo
+  esquiva_avanzando        fot.  54  mano RightHand  1.037 m  pie delantero: izquierdo
+  esquiva_retrocediendo    fot.  58  mano RightHand  0.735 m  pie delantero: izquierdo

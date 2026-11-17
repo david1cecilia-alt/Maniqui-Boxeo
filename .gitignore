@@ -1,0 +1,15 @@
+# Originales de Mixamo: no se pueden redistribuir
+fbx/
+*.fbx
+
+# Copias automáticas de Blender
+*.blend1
+
+# Repo PÚBLICO: los .blend llevan dentro animaciones de Mixamo
+*.blend
+
+# Datos extraídos de las animaciones de Mixamo (rotaciones por fotograma)
+trabajo/*.json
+
+# Python
+__pycache__/
