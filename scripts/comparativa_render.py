@@ -21,7 +21,7 @@ from mathutils import Vector
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import comun as C  # noqa: E402
 
-VARIANTES = [("v2", "boxeador.blend"), ("B", "boxeador_b.blend"), ("C", "boxeador_c.blend")]
+VARIANTES = [("v2", "boxeador_v2.blend"), ("B", "boxeador.blend"), ("C", "boxeador_c.blend")]
 VISTAS = {"frente": Vector((0, -1, 0)), "lado": Vector((1, 0, 0))}
 P = "mixamorig:"
 RES = 900          # píxeles por panel (cuadrado)

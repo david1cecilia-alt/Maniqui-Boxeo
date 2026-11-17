@@ -20,7 +20,7 @@ import comun as C  # noqa: E402
 import modelo_b as MB  # noqa: E402
 
 FBX_SIN_RIG = os.path.join(C.RAIZ, "modelos", "boxeador_b.fbx")
-BLEND = os.path.join(C.TRABAJO, "boxeador.blend")
+BLEND = os.path.join(C.TRABAJO, "boxeador_v2.blend")
 out = []
 
 

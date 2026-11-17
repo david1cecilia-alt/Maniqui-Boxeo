@@ -18,7 +18,7 @@ from mathutils import Vector
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import comun as C  # noqa: E402
 
-BLEND = os.path.join(C.TRABAJO, "boxeador.blend")
+BLEND = os.path.join(C.TRABAJO, "boxeador_v2.blend")
 REF = os.path.join(C.RAIZ, "referencias")
 # vista: (referencia, dirección desde la que mira la cámara)
 VISTAS = {

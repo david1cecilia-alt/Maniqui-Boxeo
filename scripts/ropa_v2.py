@@ -27,7 +27,7 @@ from mathutils.bvhtree import BVHTree
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import comun as C  # noqa: E402
 
-BLEND = os.path.join(C.TRABAJO, "boxeador.blend")
+BLEND = os.path.join(C.TRABAJO, "boxeador_v2.blend")
 P = "mixamorig:"
 
 GRIS_OSCURO = (0.10, 0.10, 0.11, 1.0)

@@ -26,7 +26,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import comun as C  # noqa: E402
 import modelo_b as MB  # noqa: E402
 
-BLEND_A = os.path.join(C.TRABAJO, "boxeador.blend")
+BLEND_A = os.path.join(C.TRABAJO, "boxeador_v2.blend")
 BLEND_C = os.path.join(C.TRABAJO, "boxeador_c.blend")
 P = "mixamorig:"
 HOLGURA_PUNO = 0.004      # el puño de velcro queda al menos 4 mm por fuera de la muñeca de A
@@ -77,6 +77,7 @@ def matriz_a(n):
 
 # ---------------------------------------------------------------- 1. importar B y separar piezas
 arm_b, ob_b = MB.cargar_b("B_tmp", "B_tmp_cuerpo")
+MB.textura_sin_logo(ob_b)   # guantes sin el logo de la marca
 co_b_cuerpo = np.array([v.co[:] for v in ob_b.data.vertices])
 W_B = {g.name.split(":")[-1]: np.zeros(len(co_b_cuerpo)) for g in ob_b.vertex_groups}
 nom_b = {g.index: g.name.split(":")[-1] for g in ob_b.vertex_groups}

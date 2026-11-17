@@ -159,6 +159,90 @@ def separar_piezas(arm, ob):
     return objetos, {"corte": corte, "pantalon": pantalon, "botas": botas, "puno": puno, "principal": principal}
 
 
+TEXTURA_SIN_LOGO = os.path.join(C.RAIZ, "modelos", "Boxer_texture_sin_logo.png")
+
+
+def textura_sin_logo(ob, desde_original=False):
+    """Tapa el logo de la marca de los puños de velcro con una etiqueta lisa, en una COPIA de la
+    textura (modelos/Boxer_texture_sin_logo.png, empaquetada en el .blend). La etiqueta es la zona
+    gris claro de las piezas sueltas del puño: cada triángulo de UV de esas piezas con más de un
+    15 % de píxeles de etiqueta (gris claro o el amarillo del logo) se pinta entero del gris de
+    la etiqueta (así desaparecen el texto y el trazo amarillo). Sirve con la malla entera de B o
+    con los objetos Guante_* (B y C: sus islas pequeñas son las piezas del puño).
+    desde_original: parte de modelos/Boxer_texture.png (si no, de la imagen actual del material).
+    Devuelve el número de píxeles pintados."""
+    me = ob.data
+    nodo = next(n for m in me.materials if m and m.use_nodes for n in m.node_tree.nodes
+                if n.type == "TEX_IMAGE" and n.image)
+    if desde_original:
+        nodo.image = bpy.data.images.load(TEXTURA, check_existing=True)
+    img = nodo.image
+    W, H = img.size
+    px = np.array(img.pixels[:], dtype=np.float32).reshape(H, W, 4)
+    isl = islas(me)
+    dom = dominante(ob)
+    es_guante = ob.name.startswith("Guante")
+    cand = set()
+    for i in range(isl.max() + 1):
+        sel = isl == i
+        g, c = np.unique(dom[sel], return_counts=True)
+        if sel.sum() < 2000 and (es_guante or g[c.argmax()].endswith(("ForeArm", "Hand"))):
+            cand.add(i)
+    uv = np.zeros(len(me.loops) * 2)
+    me.uv_layers.active.data.foreach_get("uv", uv)
+    uv = uv.reshape(-1, 2) * [W, H]
+    rgb = px[..., :3]
+    claro = (rgb.min(axis=2) > 0.45) & (rgb.max(axis=2) - rgb.min(axis=2) < 0.12)
+    amarillo = (rgb[..., 0] > 0.55) & (rgb[..., 1] > 0.35) & (rgb[..., 2] < 0.35)
+    etiqueta = claro | amarillo
+    mascara = np.zeros((H, W), bool)
+    yy, xx = np.mgrid[0:H, 0:W]
+    for pl in me.polygons:
+        if isl[pl.vertices[0]] not in cand:
+            continue
+        ls = list(pl.loop_indices)
+        for k in range(1, len(ls) - 1):
+            t = uv[[ls[0], ls[k], ls[k + 1]]]
+            x0, y0 = np.floor(t.min(0)).astype(int) - 1
+            x1, y1 = np.ceil(t.max(0)).astype(int) + 1
+            x0, y0, x1, y1 = max(x0, 0), max(y0, 0), min(x1, W - 1), min(y1, H - 1)
+            if x1 <= x0 or y1 <= y0:
+                continue
+            X, Y = xx[y0:y1 + 1, x0:x1 + 1] + 0.5, yy[y0:y1 + 1, x0:x1 + 1] + 0.5
+            (ax, ay), (bx, by), (cx, cy) = t
+            den = (by - cy) * (ax - cx) + (cx - bx) * (ay - cy)
+            if abs(den) < 1e-9:
+                continue
+            l1 = ((by - cy) * (X - cx) + (cx - bx) * (Y - cy)) / den
+            l2 = ((cy - ay) * (X - cx) + (ax - cx) * (Y - cy)) / den
+            dentro = (l1 >= -0.05) & (l2 >= -0.05) & (1 - l1 - l2 >= -0.05)
+            if dentro.sum() == 0:
+                continue
+            if etiqueta[y0:y1 + 1, x0:x1 + 1][dentro].mean() > 0.15:
+                mascara[y0:y1 + 1, x0:x1 + 1] |= dentro
+    if not mascara.any():
+        return 0
+    # dilatar 3 px (costuras de las UV)
+    for _ in range(3):
+        m = mascara.copy()
+        m[1:] |= mascara[:-1]
+        m[:-1] |= mascara[1:]
+        m[:, 1:] |= mascara[:, :-1]
+        m[:, :-1] |= mascara[:, 1:]
+        mascara = m
+    gris = np.median(rgb[mascara & claro], axis=0)
+    nuevo = px.copy()
+    nuevo[mascara, :3] = gris
+    out = bpy.data.images.new("Boxer_texture_sin_logo", W, H, alpha=True)
+    out.pixels[:] = nuevo.ravel()
+    out.filepath_raw = TEXTURA_SIN_LOGO
+    out.file_format = "PNG"
+    out.save()
+    out.pack()
+    nodo.image = out
+    return int(mascara.sum())
+
+
 def color_textura(ob):
     """Color medio de la textura por vértice (muestreo en las UV)."""
     me = ob.data

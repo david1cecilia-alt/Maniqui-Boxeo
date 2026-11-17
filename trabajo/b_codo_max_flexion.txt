@@ -1,0 +1,6 @@
+guardia 19 Left
+jab 48 Right
+crochet_adelantado 38 Left
+guardia_v2 65 Left
+jab_v2 31 Left
+crochet_adelantado_v2 59 Left

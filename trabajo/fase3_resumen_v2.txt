@@ -1,0 +1,181 @@
+=== 1. CHOQUES POR ACCIÓN (cm; solo > 0.2 cm) ===
+pantalon/botas_cuerpo = cuánto sale por fuera de la prenda el cuerpo visible que en reposo
+queda dentro; guante_* = profundidad de penetración (exacta: el guante son piezas convexas);
+hueco = cuánto queda fuera del guante el borde de la mano oculta por el Mask (agujero visible).
+
+-- bloqueo (104 fot.)
+   pantalon_cuerpo           23 fot. [3-4, 6, 13, 21, 24, 31, 49, 51, 53-54, 62, 67, 70-72, 78-79, 81, 83, 85, 90, 101]  máx. 0.9 cm en fot. 72  -> media
+   botas_cuerpo             OK
+   guante_cabeza            OK
+   guante_cuerpo             12 fot. [31-32, 40-49]  máx. 1.1 cm en fot. 43 (guante L en LeftArm)  -> media
+   guante_guante            OK
+   hueco_guante_antebrazo   OK
+
+-- crochet_adelantado (61 fot.)
+   pantalon_cuerpo          OK
+   botas_cuerpo             OK
+   guante_cabeza              2 fot. [9-10]  máx. 0.3 cm en fot. 9  -> baja
+   guante_cuerpo              7 fot. [35-41]  máx. 0.9 cm en fot. 38 (guante L en LeftArm)  -> baja
+   guante_guante            OK
+   hueco_guante_antebrazo   OK
+
+-- crochet_trasero (31 fot.)
+   pantalon_cuerpo           14 fot. [9-22]  máx. 3.5 cm en fot. 13  -> alta
+   botas_cuerpo             OK
+   guante_cabeza            OK
+   guante_cuerpo            OK
+   guante_guante            OK
+   hueco_guante_antebrazo   OK
+
+-- crochet_trasero_cuerpo (66 fot.)
+   pantalon_cuerpo           11 fot. [1, 4, 21-27, 56, 59]  máx. 1.5 cm en fot. 25  -> alta
+   botas_cuerpo             OK
+   guante_cabeza            OK
+   guante_cuerpo              5 fot. [60-64]  máx. 0.5 cm en fot. 62 (guante L en LeftArm)  -> baja
+   guante_guante            OK
+   hueco_guante_antebrazo   OK
+
+-- esquiva_avanzando (71 fot.)
+   pantalon_cuerpo           24 fot. [8-19, 43-54]  máx. 2.6 cm en fot. 54  -> alta
+   botas_cuerpo             OK
+   guante_cabeza            OK
+   guante_cuerpo             11 fot. [25-33, 60-61]  máx. 2.0 cm en fot. 32 (guante L en Spine1+Spine)  -> media
+   guante_guante            OK
+   hueco_guante_antebrazo   OK
+
+-- esquiva_retrocediendo (68 fot.)
+   pantalon_cuerpo           41 fot. [4-18, 24-26, 28-29, 31, 34, 39-51, 56-57, 59-62]  máx. 2.7 cm en fot. 5  -> alta
+   botas_cuerpo             OK
+   guante_cabeza            OK
+   guante_cuerpo              7 fot. [26-28, 57-60]  máx. 1.9 cm en fot. 58 (guante R en Spine1)  -> media
+   guante_guante            OK
+   hueco_guante_antebrazo   OK
+
+-- flexion (31 fot.)
+   pantalon_cuerpo          OK
+   botas_cuerpo             OK
+   guante_cabeza            OK
+   guante_cuerpo            OK
+   guante_guante            OK
+   hueco_guante_antebrazo   OK
+
+-- gancho_adelantado_cuerpo (67 fot.)
+   pantalon_cuerpo          OK
+   botas_cuerpo             OK
+   guante_cabeza              2 fot. [13-14]  máx. 0.6 cm en fot. 13  -> media
+   guante_cuerpo             10 fot. [48-50, 60-66]  máx. 0.6 cm en fot. 63 (guante L en LeftArm)  -> baja
+   guante_guante            OK
+   hueco_guante_antebrazo   OK
+
+-- gancho_trasero_cuerpo (67 fot.)
+   pantalon_cuerpo           14 fot. [2, 19-25, 54, 57-59, 61-62]  máx. 1.5 cm en fot. 25  -> alta
+   botas_cuerpo             OK
+   guante_cabeza            OK
+   guante_cuerpo              4 fot. [16-17, 63-64]  máx. 1.1 cm en fot. 17 (guante R en RightUpLeg)  -> media
+   guante_guante            OK
+   hueco_guante_antebrazo   OK
+
+-- guardia (67 fot.)
+   pantalon_cuerpo          OK
+   botas_cuerpo             OK
+   guante_cabeza            OK
+   guante_cuerpo            OK
+   guante_guante             29 fot. [11-12, 20-21, 29-41, 50-57, 62-65]  máx. 2.9 cm en fot. 33  -> media
+   hueco_guante_antebrazo   OK
+
+-- guardia_alt (90 fot.)
+   pantalon_cuerpo          OK
+   botas_cuerpo             OK
+   guante_cabeza            OK
+   guante_cuerpo             19 fot. [5-12, 27-29, 74-76, 83-87]  máx. 0.7 cm en fot. 9 (guante L en LeftArm)  -> baja
+   guante_guante            OK
+   hueco_guante_antebrazo   OK
+
+-- jab (53 fot.)
+   pantalon_cuerpo          OK
+   botas_cuerpo             OK
+   guante_cabeza              2 fot. [9-10]  máx. 0.4 cm en fot. 9  -> baja
+   guante_cuerpo             36 fot. [7-28, 35-38, 41-50]  máx. 2.3 cm en fot. 11 (guante R en Spine2)  -> media
+   guante_guante            OK
+   hueco_guante_antebrazo   OK
+
+-- paso_atras (25 fot.)
+   pantalon_cuerpo          OK
+   botas_cuerpo             OK
+   guante_cabeza            OK
+   guante_cuerpo            OK
+   guante_guante            OK
+   hueco_guante_antebrazo   OK
+
+-- recto (65 fot.)
+   pantalon_cuerpo            8 fot. [22-24, 26-28, 43-44]  máx. 1.4 cm en fot. 44  -> alta
+   botas_cuerpo             OK
+   guante_cabeza            OK
+   guante_cuerpo             47 fot. [1, 8-16, 20-23, 27, 34-65]  máx. 1.9 cm en fot. 14 (guante R en Spine2)  -> media
+   guante_guante            OK
+   hueco_guante_antebrazo   OK
+
+-- rueda (37 fot.)
+   pantalon_cuerpo          OK
+   botas_cuerpo             OK
+   guante_cabeza            OK
+   guante_cuerpo            OK
+   guante_guante            OK
+   hueco_guante_antebrazo   OK
+
+=== 2. FOTOGRAMA DE IMPACTO ===
+  jab                      mano Left  criterio lejos     -> IMPACTO fot.  16 (más lejos fot. 16, 102 cm; pico vel. fot. 11, 5.8 m/s) | guante a -34 cm de la base de la cabeza | golpe fot. 7-37 | la otra mano se mueve 15 cm respecto a la cabeza
+  recto                    mano Right criterio lejos     -> IMPACTO fot.  21 (más lejos fot. 21, 123 cm; pico vel. fot. 18, 5.9 m/s) | guante a -29 cm de la base de la cabeza | golpe fot. 14-42 | la otra mano se mueve 24 cm respecto a la cabeza
+  crochet_trasero_cuerpo   mano Right criterio lejos     -> IMPACTO fot.  25 (más lejos fot. 25, 91 cm; pico vel. fot. 20, 8.3 m/s) | guante a -48 cm de la base de la cabeza | golpe fot. 13-44 | la otra mano se mueve 36 cm respecto a la cabeza
+  crochet_adelantado       mano Left  criterio velocidad -> IMPACTO fot.  16 (más lejos fot. 15, 59 cm; pico vel. fot. 16, 6.3 m/s) | guante a +1 cm de la base de la cabeza | golpe fot. 9-38 | la otra mano se mueve 11 cm respecto a la cabeza
+  crochet_trasero          mano Right criterio velocidad -> IMPACTO fot.  11 (más lejos fot. 17, 71 cm; pico vel. fot. 11, 6.2 m/s) | guante a -26 cm de la base de la cabeza | golpe fot. 3-28 | la otra mano se mueve 37 cm respecto a la cabeza
+  gancho_adelantado_cuerpo mano Left  criterio velocidad -> IMPACTO fot.  20 (más lejos fot. 28, 76 cm; pico vel. fot. 20, 6.3 m/s) | guante a -60 cm de la base de la cabeza | golpe fot. 12-54 | la otra mano se mueve 23 cm respecto a la cabeza
+  gancho_trasero_cuerpo    mano Right criterio velocidad -> IMPACTO fot.  19 (más lejos fot. 23, 93 cm; pico vel. fot. 19, 5.9 m/s) | guante a -66 cm de la base de la cabeza | golpe fot. 12-43 | la otra mano se mueve 22 cm respecto a la cabeza
+  Nota: en los dos ganchos de Mixamo el guante golpea a la altura de la cadera/abdomen (gancho
+  al cuerpo) y no sube a la barbilla: el pico de velocidad es la salida hacia delante y arriba.
+
+=== 3. DATOS PARA LA FASE 4 (guardia) ===
+  centro de la cabeza (guardia fot. 1): [-0.032 -0.038  1.547]
+  guante Left : lateral +15.1 cm (+ = su izquierda), delante +34.0 cm, altura -6.6 cm respecto al centro de la cabeza
+  guante Right: lateral -2.7 cm (+ = su izquierda), delante +28.9 cm, altura -10.0 cm respecto al centro de la cabeza
+  separación lateral entre guantes: +17.8 cm (sin cruzar; > 0 = cada uno en su lado)
+  ¿Las acciones empiezan en la guardia? diferencia del fot. 1 con guardia fot. 1 (guantes respecto a la cadera):
+     bloqueo                   25.4 cm
+     crochet_adelantado        12.8 cm
+     crochet_trasero           23.4 cm
+     crochet_trasero_cuerpo    13.5 cm
+     esquiva_avanzando         22.8 cm
+     esquiva_retrocediendo     31.2 cm
+     flexion                    0.0 cm
+     gancho_adelantado_cuerpo  10.0 cm
+     gancho_trasero_cuerpo     10.4 cm
+     guardia                    0.0 cm
+     guardia_alt               13.5 cm
+     jab                        9.4 cm
+     paso_atras                 0.0 cm
+     recto                      4.8 cm
+     rueda                      0.0 cm
+
+=== 4. TABLA RESUMEN ===
+acción                   | qué falla                                    | fotogramas                       |     máx. | gravedad
+crochet_trasero          | pantalon_cuerpo                              | 9-22                             |   3.5 cm | alta (peor fot. 13)
+crochet_trasero_cuerpo   | pantalon_cuerpo                              | 1, 4, 21-27, 56, 59              |   1.5 cm | alta (peor fot. 25)
+esquiva_avanzando        | pantalon_cuerpo                              | 8-19, 43-54                      |   2.6 cm | alta (peor fot. 54)
+esquiva_retrocediendo    | pantalon_cuerpo                              | 4-18, 24-26, 28-29, 31, 34, 39-5 |   2.7 cm | alta (peor fot. 5)
+gancho_trasero_cuerpo    | pantalon_cuerpo                              | 2, 19-25, 54, 57-59, 61-62       |   1.5 cm | alta (peor fot. 25)
+recto                    | pantalon_cuerpo                              | 22-24, 26-28, 43-44              |   1.4 cm | alta (peor fot. 44)
+bloqueo                  | pantalon_cuerpo                              | 3-4, 6, 13, 21, 24, 31, 49, 51,  |   0.9 cm | media (peor fot. 72)
+bloqueo                  | guante_cuerpo (guante L en LeftArm)          | 31-32, 40-49                     |   1.1 cm | media (peor fot. 43)
+esquiva_avanzando        | guante_cuerpo (guante L en Spine1+Spine)     | 25-33, 60-61                     |   2.0 cm | media (peor fot. 32)
+esquiva_retrocediendo    | guante_cuerpo (guante R en Spine1)           | 26-28, 57-60                     |   1.9 cm | media (peor fot. 58)
+gancho_adelantado_cuerpo | guante_cabeza                                | 13-14                            |   0.6 cm | media (peor fot. 13)
+gancho_trasero_cuerpo    | guante_cuerpo (guante R en RightUpLeg)       | 16-17, 63-64                     |   1.1 cm | media (peor fot. 17)
+guardia                  | guante_guante                                | 11-12, 20-21, 29-41, 50-57, 62-6 |   2.9 cm | media (peor fot. 33)
+jab                      | guante_cuerpo (guante R en Spine2)           | 7-28, 35-38, 41-50               |   2.3 cm | media (peor fot. 11)
+recto                    | guante_cuerpo (guante R en Spine2)           | 1, 8-16, 20-23, 27, 34-65        |   1.9 cm | media (peor fot. 14)
+crochet_adelantado       | guante_cabeza                                | 9-10                             |   0.3 cm | baja (peor fot. 9)
+crochet_adelantado       | guante_cuerpo (guante L en LeftArm)          | 35-41                            |   0.9 cm | baja (peor fot. 38)
+crochet_trasero_cuerpo   | guante_cuerpo (guante L en LeftArm)          | 60-64                            |   0.5 cm | baja (peor fot. 62)
+gancho_adelantado_cuerpo | guante_cuerpo (guante L en LeftArm)          | 48-50, 60-66                     |   0.6 cm | baja (peor fot. 63)
+guardia_alt              | guante_cuerpo (guante L en LeftArm)          | 5-12, 27-29, 74-76, 83-87        |   0.7 cm | baja (peor fot. 9)
+jab                      | guante_cabeza                                | 9-10                             |   0.4 cm | baja (peor fot. 9)

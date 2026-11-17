@@ -1,0 +1,69 @@
+Cuerpo: vértices con pesos de los dos lados: 0; suma de pesos != 1: 0
+Guante_Left: vértices con pesos de los dos lados: 0; suma de pesos != 1: 0
+Guante_Right: vértices con pesos de los dos lados: 0; suma de pesos != 1: 0
+
+== guardia: máxima flexión 122° en fot. 19 (Left)
+  Cuerpo        shape key=1.0: estiramiento máx. 1.47, aristas > 1.6: 0
+      arista [6266, 6215] x1.47  pesos v6266: [(0.55, 'engordar'), (0.51, 'LeftShoulder'), (0.42, 'LeftArm'), (0.07, 'Spine2')]
+      arista [5822, 5791] x1.44  pesos v5822: [(0.85, 'LeftForeArm'), (0.23, 'engordar'), (0.15, 'LeftArm'), (0.0, 'LeftHand')]
+  Cuerpo        shape key=0.0: estiramiento máx. 1.43, aristas > 1.6: 0
+      arista [5822, 5791] x1.43  pesos v5822: [(0.85, 'LeftForeArm'), (0.23, 'engordar'), (0.15, 'LeftArm'), (0.0, 'LeftHand')]
+      arista [6266, 6215] x1.40  pesos v6266: [(0.55, 'engordar'), (0.51, 'LeftShoulder'), (0.42, 'LeftArm'), (0.07, 'Spine2')]
+  Guante_Left   shape key=None: estiramiento máx. 1.18, aristas > 1.6: 0
+      arista [3056, 3352] x1.18  pesos v3056: [(0.98, 'LeftForeArm'), (0.01, 'LeftHand'), (0.01, 'LeftArm')]
+      arista [3067, 3329] x1.15  pesos v3067: [(0.99, 'LeftForeArm'), (0.01, 'LeftArm'), (0.0, 'LeftHand')]
+
+== jab: máxima flexión 128° en fot. 48 (Right)
+  Cuerpo        shape key=1.0: estiramiento máx. 1.65, aristas > 1.6: 1
+      arista [8232, 8233] x1.65  pesos v8232: [(0.98, 'RightForeArm'), (0.02, 'RightArm'), (0.0, 'RightHand')]
+      arista [6723, 6772] x1.49  pesos v6723: [(0.54, 'engordar'), (0.53, 'RightArm'), (0.41, 'RightShoulder'), (0.05, 'Spine2')]
+  Cuerpo        shape key=0.0: estiramiento máx. 1.43, aristas > 1.6: 0
+      arista [6723, 6772] x1.43  pesos v6723: [(0.54, 'engordar'), (0.53, 'RightArm'), (0.41, 'RightShoulder'), (0.05, 'Spine2')]
+      arista [7150, 7146] x1.41  pesos v7150: [(0.93, 'engordar'), (0.48, 'RightShoulder'), (0.46, 'RightArm'), (0.04, 'Spine2')]
+  Guante_Right  shape key=None: estiramiento máx. 1.28, aristas > 1.6: 0
+      arista [3353, 3039] x1.28  pesos v3353: [(0.99, 'RightForeArm'), (0.01, 'RightArm'), (0.0, 'RightHand')]
+      arista [3603, 3602] x1.22  pesos v3603: [(0.99, 'RightForeArm'), (0.01, 'RightArm'), (0.0, 'RightHand')]
+
+== crochet_adelantado: máxima flexión 133° en fot. 38 (Left)
+  Cuerpo        shape key=1.0: estiramiento máx. 1.44, aristas > 1.6: 0
+      arista [5822, 5791] x1.44  pesos v5822: [(0.85, 'LeftForeArm'), (0.23, 'engordar'), (0.15, 'LeftArm'), (0.0, 'LeftHand')]
+      arista [5790, 5821] x1.39  pesos v5790: [(0.72, 'LeftForeArm'), (0.28, 'LeftArm'), (0.21, 'engordar'), (0.0, 'LeftHand')]
+  Cuerpo        shape key=0.0: estiramiento máx. 1.43, aristas > 1.6: 0
+      arista [5822, 5791] x1.43  pesos v5822: [(0.85, 'LeftForeArm'), (0.23, 'engordar'), (0.15, 'LeftArm'), (0.0, 'LeftHand')]
+      arista [5790, 5821] x1.38  pesos v5790: [(0.72, 'LeftForeArm'), (0.28, 'LeftArm'), (0.21, 'engordar'), (0.0, 'LeftHand')]
+  Guante_Left   shape key=None: estiramiento máx. 1.20, aristas > 1.6: 0
+      arista [3056, 3352] x1.20  pesos v3056: [(0.98, 'LeftForeArm'), (0.01, 'LeftHand'), (0.01, 'LeftArm')]
+      arista [3067, 3329] x1.16  pesos v3067: [(0.99, 'LeftForeArm'), (0.01, 'LeftArm'), (0.0, 'LeftHand')]
+
+== guardia_v2: máxima flexión 135° en fot. 65 (Left)
+  Cuerpo        shape key=1.0: estiramiento máx. 1.73, aristas > 1.6: 1
+      arista [6671, 6676] x1.73  pesos v6671: [(0.77, 'engordar'), (0.5, 'LeftShoulder'), (0.22, 'LeftArm'), (0.15, 'Spine1')]
+      arista [6672, 6673] x1.60  pesos v6672: [(0.82, 'engordar'), (0.48, 'LeftShoulder'), (0.33, 'LeftArm'), (0.11, 'Spine2')]
+  Cuerpo        shape key=0.0: estiramiento máx. 1.62, aristas > 1.6: 1
+      arista [6671, 6676] x1.62  pesos v6671: [(0.77, 'engordar'), (0.5, 'LeftShoulder'), (0.22, 'LeftArm'), (0.15, 'Spine1')]
+      arista [6672, 6673] x1.50  pesos v6672: [(0.82, 'engordar'), (0.48, 'LeftShoulder'), (0.33, 'LeftArm'), (0.11, 'Spine2')]
+  Guante_Left   shape key=None: estiramiento máx. 1.20, aristas > 1.6: 0
+      arista [3056, 3352] x1.20  pesos v3056: [(0.98, 'LeftForeArm'), (0.01, 'LeftHand'), (0.01, 'LeftArm')]
+      arista [3067, 3329] x1.17  pesos v3067: [(0.99, 'LeftForeArm'), (0.01, 'LeftArm'), (0.0, 'LeftHand')]
+
+== jab_v2: máxima flexión 140° en fot. 31 (Left)
+  Cuerpo        shape key=1.0: estiramiento máx. 1.95, aristas > 1.6: 7
+      arista [6671, 6676] x1.95  pesos v6671: [(0.77, 'engordar'), (0.5, 'LeftShoulder'), (0.22, 'LeftArm'), (0.15, 'Spine1')]
+      arista [6672, 6673] x1.80  pesos v6672: [(0.82, 'engordar'), (0.48, 'LeftShoulder'), (0.33, 'LeftArm'), (0.11, 'Spine2')]
+  Cuerpo        shape key=0.0: estiramiento máx. 1.83, aristas > 1.6: 3
+      arista [6671, 6676] x1.83  pesos v6671: [(0.77, 'engordar'), (0.5, 'LeftShoulder'), (0.22, 'LeftArm'), (0.15, 'Spine1')]
+      arista [6672, 6673] x1.70  pesos v6672: [(0.82, 'engordar'), (0.48, 'LeftShoulder'), (0.33, 'LeftArm'), (0.11, 'Spine2')]
+  Guante_Left   shape key=None: estiramiento máx. 1.20, aristas > 1.6: 0
+      arista [3056, 3352] x1.20  pesos v3056: [(0.98, 'LeftForeArm'), (0.01, 'LeftHand'), (0.01, 'LeftArm')]
+      arista [3067, 3329] x1.17  pesos v3067: [(0.99, 'LeftForeArm'), (0.01, 'LeftArm'), (0.0, 'LeftHand')]
+
+== crochet_adelantado_v2: máxima flexión 140° en fot. 59 (Left)
+  Cuerpo        shape key=1.0: estiramiento máx. 1.69, aristas > 1.6: 1
+      arista [6672, 6673] x1.69  pesos v6672: [(0.82, 'engordar'), (0.48, 'LeftShoulder'), (0.33, 'LeftArm'), (0.11, 'Spine2')]
+      arista [6671, 6676] x1.58  pesos v6671: [(0.77, 'engordar'), (0.5, 'LeftShoulder'), (0.22, 'LeftArm'), (0.15, 'Spine1')]
+  Cuerpo        shape key=0.0: estiramiento máx. 1.59, aristas > 1.6: 0
+      arista [6672, 6673] x1.59  pesos v6672: [(0.82, 'engordar'), (0.48, 'LeftShoulder'), (0.33, 'LeftArm'), (0.11, 'Spine2')]
+      arista [6211, 6443] x1.49  pesos v6211: [(0.65, 'engordar'), (0.52, 'LeftArm'), (0.46, 'LeftShoulder'), (0.02, 'Spine2')]
+  Guante_Left   shape key=None: estiramiento máx. 1.21, aristas > 1.6: 0
+      arista [3056, 3352] x1.21  pesos v3056: [(0.98, 'LeftForeArm'), (0.01, 'LeftHand'), (0.01, 'LeftArm')]
+      arista [3067, 3329] x1.17  pesos v3067: [(0.99, 'LeftForeArm'), (0.01, 'LeftArm'), (0.0, 'LeftHand')]

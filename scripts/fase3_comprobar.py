@@ -8,10 +8,11 @@
 Escribe trabajo/fase3_resumen.txt y PNG en trabajo/capturas/.
 
 Uso:
-  blender.exe --background --python scripts/fase3_comprobar.py                 (v2: boxeador.blend)
-  blender.exe --background --python scripts/fase3_comprobar.py -- b --sin-renders   (boxeador_b.blend)
-  blender.exe --background --python scripts/fase3_comprobar.py -- c --sin-renders   (boxeador_c.blend)
-Con variante escribe trabajo/fase3_resumen_<variante>.txt y las capturas con prefijo fase3<variante>.
+  blender.exe --background --python scripts/fase3_comprobar.py [--sin-renders]   (B, modelo principal: boxeador.blend)
+  blender.exe --background --python scripts/fase3_comprobar.py -- v2 --sin-renders   (boxeador_v2.blend)
+  blender.exe --background --python scripts/fase3_comprobar.py -- c --sin-renders    (boxeador_c.blend)
+B escribe trabajo/fase3_resumen.txt; con variante, trabajo/fase3_resumen_<variante>.txt y las
+capturas con prefijo fase3<variante>. Se comprueban todas las acciones (también las _v2 de la Fase 4).
 Guantes: si son piezas convexas rígidas (v2) la penetración es exacta; si no (B: con pesos;
 C: rígidos pero no convexos) se mide con la superficie del guante (BVH, punto más cercano + normal).
 """
@@ -214,7 +215,7 @@ arm.data.pose_position = "REST"
 bpy.context.view_layer.update()
 _cu_rest = np.array([cuerpo.matrix_world @ v.co for v in cuerpo.data.vertices])
 DENTRO_ROPA = []
-if not VARIANTE:
+if VARIANTE == "v2":
     Z_PRENDA = [(0.735, 0.975), (-1.0, 0.29)]   # pantalón (entre el bajo y la cinturilla), botas (caña)
 else:   # B y C: del tamaño de cada prenda en reposo (2 cm sobre el bajo, sin la cinturilla)
     _zp = coords_eval(prendas[0])[0][:, 2]

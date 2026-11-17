@@ -10,7 +10,15 @@
    de cada hueso (escalado radial proporcional, mezclado con los pesos de los huesos):
    hombros/deltoides, brazo y antebrazo hasta la muñeca. Guantes, puños y pantalón no se
    tocan (son otros objetos). Grupo 'engordar' = cuánto se ha engordado (para verlo).
-Guarda trabajo/boxeador_b.blend y trabajo/b_resumen.txt.
+   En el codo el refuerzo baja casi a 0 y los pesos Arm/ForeArm se suavizan: el refuerzo
+   radial y el salto brusco de pesos hacían un pico en el pliegue al flexionar.
+5. Guantes un 12 % más cortos (solo la manopla, desde el final del puño de velcro).
+6. Textura sin el logo de la marca en los puños (copia: modelos/Boxer_texture_sin_logo.png).
+7. Pies: la rotación de Foot/ToeBase se rehace para que giren respecto a su reposo igual que
+   en la v2 (con la copia directa quedaban ~14° girados, porque el reposo de los pies de B es
+   distinto), y la cadera se sube/baja en cada fotograma para que la suela apoye en Z=0.
+Modelo principal: guarda trabajo/boxeador.blend y trabajo/b_resumen.txt (acciones de
+trabajo/boxeador_v2.blend).
 
 Uso:
   blender.exe --background --python scripts/b_montar.py
@@ -21,22 +29,25 @@ import sys
 import bmesh
 import bpy
 import numpy as np
-from mathutils import Vector
+from mathutils import Matrix, Vector
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import comun as C  # noqa: E402
 import modelo_b as MB  # noqa: E402
 
-BLEND_A = os.path.join(C.TRABAJO, "boxeador.blend")
-BLEND_B = os.path.join(C.TRABAJO, "boxeador_b.blend")
+BLEND_A = os.path.join(C.TRABAJO, "boxeador_v2.blend")
+BLEND_B = os.path.join(C.TRABAJO, "boxeador.blend")
 P = "mixamorig:"
 # refuerzo radial (fracción de la distancia al eje del hueso) a lo largo del hueso: [(t, s)]
 REFUERZO = {
-    "Shoulder": [(0.0, 0.00), (0.5, 0.06), (1.0, 0.12)],                 # trapecio -> hombro
-    "Arm": [(0.0, 0.16), (0.30, 0.15), (0.60, 0.12), (1.0, 0.10)],       # deltoides -> codo
-    "ForeArm": [(0.0, 0.11), (0.45, 0.13), (0.80, 0.09), (1.0, 0.06)],   # codo -> muñeca
+    "Shoulder": [(0.0, 0.00), (0.5, 0.06), (1.0, 0.12)],                              # trapecio -> hombro
+    "Arm": [(0.0, 0.16), (0.30, 0.15), (0.60, 0.12), (0.82, 0.07), (1.0, 0.02)],      # deltoides -> codo
+    "ForeArm": [(0.0, 0.02), (0.18, 0.07), (0.45, 0.13), (0.80, 0.09), (1.0, 0.06)],  # codo -> muñeca
 }
 RAMPA_PUNO = (0.07, 0.015)   # el refuerzo baja a 0 entre 7 y 1,5 cm antes del puño de velcro
+CODO_RADIO, CODO_ITER = 0.08, 12   # suavizado de pesos Arm/ForeArm alrededor del codo
+K_GUANTE = 0.88                    # largo de la manopla del guante (desde el puño de velcro)
+PIES = ["LeftFoot", "LeftToeBase", "RightFoot", "RightToeBase"]
 
 resumen = []
 
@@ -52,10 +63,31 @@ bpy.ops.wm.open_mainfile(filepath=BLEND_A)
 arm_a = bpy.data.objects["Boxeador"]
 esc_a = arm_a.matrix_world.to_scale()[0]
 cad_a = (arm_a.matrix_world @ arm_a.data.bones[P + "Hips"].head_local).z / esc_a   # en unidades de A
-nombres_acc = sorted(a.name for a in bpy.data.actions)
+nombres_acc = sorted(a.name for a in bpy.data.actions if not a.name.endswith("_v2"))
+
+
+def q_mundo(m):
+    return m.to_3x3().normalized().to_quaternion()
+
+
+# giro de cada pie respecto a su reposo, en el mundo, en cada fotograma de cada acción de la v2
+GIRO_PIES = {}
+for nombre in nombres_acc:
+    a = bpy.data.actions[nombre]
+    arm_a.animation_data.action = a
+    if arm_a.animation_data.action_slot is None:
+        arm_a.animation_data.action_slot = a.slots[0]
+    f0, f1 = (int(x) for x in a.frame_range)
+    GIRO_PIES[nombre] = {}
+    for f in range(f0, f1 + 1):
+        bpy.context.scene.frame_set(f)
+        GIRO_PIES[nombre][f] = {b: q_mundo(arm_a.matrix_world @ arm_a.pose.bones[P + b].matrix)
+                                @ q_mundo(arm_a.matrix_world @ arm_a.data.bones[P + b].matrix_local).inverted()
+                                for b in PIES}
 
 C.escena_vacia()
 arm, ob = MB.cargar_b("Boxeador", "Cuerpo")
+n_logo = MB.textura_sin_logo(ob)
 with bpy.data.libraries.load(BLEND_A, link=False) as (src, dst):
     dst.actions = list(nombres_acc)
 cad_b = (arm.matrix_world @ arm.data.bones[P + "Hips"].head_local).z / arm.matrix_world.to_scale()[0]
@@ -92,6 +124,22 @@ def eje_hueso(nombre):
     return Vector(b.head_local), Vector(b.tail_local)
 
 
+r(f"  textura: logo de la marca tapado con una etiqueta lisa en {n_logo} píxeles (copia de la textura)")
+
+# guantes más cortos: la manopla se acorta hacia el puño de velcro (el puño no se mueve)
+for lado in ("Left", "Right"):
+    g = objs["Guante_" + lado]
+    h0, d, t_ini, t_mitad = corte[lado]
+    t_fin = 2 * t_mitad - t_ini
+    cg = np.array([v.co[:] for v in g.data.vertices])
+    t = (cg - np.array(h0)) @ np.array(d)
+    largo0 = t.max() - t_ini
+    mas = np.maximum(t - t_fin, 0)
+    cg -= np.outer(mas * (1 - K_GUANTE), np.array(d))
+    g.data.vertices.foreach_set("co", cg.ravel())
+    t2 = (cg - np.array(h0)) @ np.array(d)
+    r(f"  Guante_{lado}: manopla x{K_GUANTE} -> largo {largo0 * 100:.1f} -> {(t2.max() - t_ini) * 100:.1f} cm (con el puño)")
+
 # ---------------------------------------------------------------- 3. refuerzo (shape key)
 co = np.array([v.co[:] for v in me.vertices])
 n = len(co)
@@ -100,6 +148,35 @@ W = np.zeros((n, len(ob.vertex_groups)))
 for v in me.vertices:
     for e in v.groups:
         W[v.index, e.group] = e.weight
+
+# codo: pesos Arm/ForeArm suavizados (manteniendo su suma) cerca de la articulación
+ed = np.array([e.vertices[:] for e in me.edges])
+grado = np.maximum(np.bincount(ed.ravel(), minlength=n), 1).astype(float)
+for lado in ("Left", "Right"):
+    ga, gf = gidx[lado + "Arm"], gidx[lado + "ForeArm"]
+    codo = np.array(eje_hueso(lado + "ForeArm")[0])
+    suma = W[:, ga] + W[:, gf]
+    zona = (np.linalg.norm(co - codo, axis=1) < CODO_RADIO) & (suma > 0.05)
+    antes_w = W[zona][:, [ga, gf]].copy()
+    for _ in range(CODO_ITER):
+        for g in (ga, gf):
+            S = np.zeros(n)
+            np.add.at(S, ed[:, 0], W[ed[:, 1], g])
+            np.add.at(S, ed[:, 1], W[ed[:, 0], g])
+            W[zona, g] = 0.5 * W[zona, g] + 0.5 * S[zona] / grado[zona]
+        tot = W[zona, ga] + W[zona, gf]
+        W[zona, ga] *= suma[zona] / np.maximum(tot, 1e-9)
+        W[zona, gf] *= suma[zona] / np.maximum(tot, 1e-9)
+    for g in (ga, gf):
+        vgp = ob.vertex_groups[g]
+        for i in np.where(zona)[0]:
+            if W[i, g] > 1e-4:
+                vgp.add([int(i)], float(W[i, g]), "REPLACE")
+            else:
+                vgp.remove([int(i)])
+    cambio = np.abs(W[zona][:, [ga, gf]] - antes_w).max()
+    r(f"  codo {lado}: pesos Arm/ForeArm suavizados en {int(zona.sum())} vért. (radio {CODO_RADIO * 100:.0f} cm),"
+      f" cambio máx. {cambio:.2f}")
 
 
 def interp(t, tabla):
@@ -127,8 +204,6 @@ for lado in ("Left", "Right"):
             s = s * lim
         desp += (w * s)[:, None] * radial
 # suavizado del desplazamiento (evita escalones entre huesos)
-ed = np.array([e.vertices[:] for e in me.edges])
-grado = np.maximum(np.bincount(ed.ravel(), minlength=n), 1).astype(float)
 for _ in range(6):
     S = np.zeros_like(desp)
     np.add.at(S, ed[:, 0], desp[ed[:, 1]])
@@ -180,12 +255,83 @@ for nombre in codigos:
     if not any(m.type == "ARMATURE" for m in o.modifiers):
         am = o.modifiers.new("Armature", "ARMATURE")
         am.object = arm
-a = bpy.data.actions["guardia"]
-arm.animation_data.action = a
-if arm.animation_data.action_slot is None:
-    arm.animation_data.action_slot = a.slots[0]
-bpy.context.scene.frame_set(1)
-bpy.context.scene.render.fps = 30
+esc = bpy.context.scene
+esc.render.fps = 30
+
+
+def poner(nombre):
+    a = bpy.data.actions[nombre]
+    arm.animation_data.action = a
+    if arm.animation_data.action_slot is None or arm.animation_data.action_slot.identifier not in [s.identifier for s in a.slots]:
+        arm.animation_data.action_slot = a.slots[0]
+    return a
+
+
+def clave_rot(pb, f, previo):
+    """Inserta la rotación del hueso en f (cuaternión con el signo continuo respecto a 'previo')."""
+    if pb.rotation_mode == "QUATERNION":
+        q = pb.rotation_quaternion.copy()
+        if previo is not None and q.dot(previo) < 0:
+            q.negate()
+            pb.rotation_quaternion = q
+        pb.keyframe_insert("rotation_quaternion", frame=f, group=pb.name)
+        return q
+    pb.keyframe_insert("rotation_euler", frame=f, group=pb.name)
+    return None
+
+
+# pies: mismo giro respecto al reposo que en la v2
+rest_pie = {b: arm.data.bones[P + b].matrix_local.to_quaternion() for b in PIES}
+dif_max = 0.0
+for nombre in nombres_acc:
+    a = poner(nombre)
+    f0, f1 = (int(x) for x in a.frame_range)
+    previo = {b: None for b in PIES}
+    for f in range(f0, f1 + 1):
+        esc.frame_set(f)
+        for b in PIES:
+            pb = arm.pose.bones[P + b]
+            q = GIRO_PIES[nombre][f][b] @ rest_pie[b]
+            ang = np.degrees(pb.matrix.to_quaternion().rotation_difference(q).angle)
+            dif_max = max(dif_max, min(ang, 360 - ang))
+            pb.matrix = Matrix.LocRotScale(pb.matrix.translation, q, None)
+            bpy.context.view_layer.update()
+            previo[b] = clave_rot(pb, f, previo[b])
+r(f"  pies: Foot/ToeBase rehechos en las {len(nombres_acc)} acciones (corrección máx. {dif_max:.1f}°)")
+
+
+# suelo: la suela más baja (zapatillas) en Z=0 en cada fotograma
+def z_suela():
+    dg = bpy.context.evaluated_depsgraph_get()
+    oe = bpy.data.objects["Botas"].evaluated_get(dg)
+    m = oe.to_mesh()
+    z = np.empty(len(m.vertices) * 3)
+    m.vertices.foreach_get("co", z)
+    oe.to_mesh_clear()
+    return float(z.reshape(-1, 3)[:, 2].min())
+
+
+hips = arm.pose.bones[P + "Hips"]
+R_hips = arm.data.bones[P + "Hips"].matrix_local.to_3x3().inverted()
+ruta_loc = f'pose.bones["{P}Hips"].location'
+peor = {}
+for nombre in nombres_acc:
+    a = poner(nombre)
+    f0, f1 = (int(x) for x in a.frame_range)
+    dz = {}
+    for f in range(f0, f1 + 1):
+        esc.frame_set(f)
+        dz[f] = -z_suela()
+    fcs = [next(fc for fc in a.fcurves if fc.data_path == ruta_loc and fc.array_index == i) for i in range(3)]
+    base = {f: Vector([fc.evaluate(f) for fc in fcs]) for f in dz}
+    for f in dz:
+        hips.location = base[f] + R_hips @ Vector((0, 0, dz[f]))
+        hips.keyframe_insert("location", frame=f, group=hips.name)
+    peor[nombre] = (min(dz.values()), max(dz.values()))
+r("  suelo: cadera corregida para apoyar en Z=0 (corrección en cm, mín./máx. por acción): "
+  + ", ".join(f"{k} {v[0] * 100:+.1f}/{v[1] * 100:+.1f}" for k, v in sorted(peor.items())))
+poner("guardia")
+esc.frame_set(1)
 bpy.ops.wm.save_as_mainfile(filepath=BLEND_B, compress=True)
 r("GUARDADO", os.path.relpath(BLEND_B, C.RAIZ))
 with open(os.path.join(C.TRABAJO, "b_resumen.txt"), "w", encoding="utf-8") as fh:

@@ -7,15 +7,22 @@
   Guante_Left  :   3952 vért.,   7723 caras
   Guante_Right :   3949 vért.,   7719 caras
   islas: pantalón [49], botas 24 piezas (zapatilla + cordones), puños de velcro {'Left': [3, 4, 5], 'Right': [0, 1, 2]}; la manopla del guante iba soldada al brazo (isla 21): cortada a mitad del puño
+  textura: logo de la marca tapado con una etiqueta lisa en 10128 píxeles (copia de la textura)
+  Guante_Left: manopla x0.88 -> largo 29.1 -> 26.5 cm (con el puño)
+  Guante_Right: manopla x0.88 -> largo 29.2 -> 26.6 cm (con el puño)
+  codo Left: pesos Arm/ForeArm suavizados en 99 vért. (radio 8 cm), cambio máx. 0.14
+  codo Right: pesos Arm/ForeArm suavizados en 98 vért. (radio 8 cm), cambio máx. 0.14
   refuerzo LeftShoulder  :    48 vért. (peso > 0,5), desplazamiento medio 5.8 mm, máx. 8.0 mm
-  refuerzo LeftArm       :   144 vért. (peso > 0,5), desplazamiento medio 5.8 mm, máx. 9.2 mm
-  refuerzo LeftForeArm   :   529 vért. (peso > 0,5), desplazamiento medio 0.6 mm, máx. 4.5 mm
+  refuerzo LeftArm       :   146 vért. (peso > 0,5), desplazamiento medio 4.8 mm, máx. 9.2 mm
+  refuerzo LeftForeArm   :   527 vért. (peso > 0,5), desplazamiento medio 0.3 mm, máx. 2.9 mm
   refuerzo RightShoulder :    35 vért. (peso > 0,5), desplazamiento medio 6.6 mm, máx. 8.7 mm
-  refuerzo RightArm      :   143 vért. (peso > 0,5), desplazamiento medio 5.8 mm, máx. 10.1 mm
-  refuerzo RightForeArm  :   519 vért. (peso > 0,5), desplazamiento medio 0.6 mm, máx. 4.5 mm
-  refuerzo total: 1592 vért. movidos, máx. 10.1 mm; guantes/puños/pantalón: 0 (otros objetos)
+  refuerzo RightArm      :   147 vért. (peso > 0,5), desplazamiento medio 4.8 mm, máx. 10.1 mm
+  refuerzo RightForeArm  :   515 vért. (peso > 0,5), desplazamiento medio 0.3 mm, máx. 3.0 mm
+  refuerzo total: 1033 vért. movidos, máx. 10.1 mm; guantes/puños/pantalón: 0 (otros objetos)
   contorno aprox. LeftArm al 15 %: 36.6 -> 43.2 cm
-  contorno aprox. LeftArm al 50 %: 31.2 -> 34.5 cm
-  contorno aprox. LeftForeArm al 40 %: 23.1 -> 25.6 cm
+  contorno aprox. LeftArm al 50 %: 31.2 -> 34.3 cm
+  contorno aprox. LeftForeArm al 40 %: 23.1 -> 24.8 cm
   contorno aprox. LeftForeArm al 80 %: 18.2 -> 18.2 cm
-GUARDADO trabajo\boxeador_b.blend
+  pies: Foot/ToeBase rehechos en las 15 acciones (corrección máx. 15.3°)
+  suelo: cadera corregida para apoyar en Z=0 (corrección en cm, mín./máx. por acción): bloqueo +3.1/+4.3, crochet_adelantado +2.8/+7.8, crochet_trasero +2.9/+7.3, crochet_trasero_cuerpo +2.6/+7.3, esquiva_avanzando +1.9/+8.6, esquiva_retrocediendo +0.9/+6.1, flexion +4.0/+6.4, gancho_adelantado_cuerpo +2.9/+8.3, gancho_trasero_cuerpo +2.9/+7.2, guardia +3.4/+5.6, guardia_alt +3.3/+3.9, jab +2.9/+8.1, paso_atras +3.1/+4.3, recto +3.8/+7.7, rueda +3.9/+6.6
+GUARDADO trabajo\boxeador.blend
