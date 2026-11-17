@@ -23,8 +23,9 @@ Para ejecutar los scripts, descarga los FBX desde Mixamo y colócalos en `fbx/`:
 ```
 fbx/guardia.fbx  fbx/guardia_alt.fbx  fbx/1_jab.fbx  fbx/2_recto.fbx
 fbx/3_crochet_adelantado.fbx  fbx/4_crochet_trasero.fbx
-fbx/5_gancho_adelantado.fbx  fbx/6_gancho_trasero.fbx
-fbx/10_crochet_cuerpo.fbx  fbx/bloqueo.fbx
+fbx/10_crochet_cuerpo.fbx
+fbx/11_gancho_adelantado_cuerpo.fbx  fbx/12_gancho_trasero_cuerpo.fbx
+fbx/bloqueo.fbx
 fbx/esquiva_avanzando_REVISAR.fbx  fbx/esquiva_retrocediendo_REVISAR.fbx
 fbx/extra/BoxeoFigura.fbx
 ```
@@ -49,12 +50,25 @@ blender.exe --background --python scripts/fase2_montar.py
 blender.exe --background --python scripts/fase2_render.py
 ```
 
+Ropa v2 (sustituye la ropa de la Fase 2 en `boxeador.blend`) y comparativas con
+las referencias (carpeta `referencias/`, no incluida: renders de un modelo con
+licencia CC BY de Meshy):
+
+```
+blender.exe --background --python scripts/ropa_v2.py
+blender.exe --background --python scripts/ropa_v2_render.py
+```
+
 Fase 3 (comprobación; lee `boxeador.blend` sin guardarlo): resultados en
 `trabajo/fase3_resumen.txt` y propuesta de la Fase 4 en `trabajo/fase4_propuesta.md`.
+`comparar_choques.py` compara con los choques de la ropa v1.
 
 ```
 blender.exe --background --python scripts/fase3_comprobar.py
+python scripts/comparar_choques.py
 ```
+
+Orden completo: fase2_montar → ropa_v2 → ropa_v2_render / fase3_comprobar.
 
 Los scripts usan la API de acciones de Blender 4.5 (`action.fcurves`), que
 Blender 5.x ya no tiene: hay que usar la 4.5.
@@ -63,15 +77,22 @@ Blender 5.x ya no tiene: hay que usar la 4.5.
 
 - Un esqueleto (`Boxeador`), una malla de cuerpo (`Cuerpo`), `Eyes` y `Eyebrows`.
 - 15 acciones con Fake User: guardia, guardia_alt, jab, recto,
-  crochet_adelantado, crochet_trasero, gancho_adelantado, gancho_trasero,
-  crochet_trasero_cuerpo, bloqueo, esquiva_avanzando, esquiva_retrocediendo,
-  flexion, paso_atras y rueda.
+  crochet_adelantado, crochet_trasero, gancho_adelantado_cuerpo (nº 11),
+  gancho_trasero_cuerpo (nº 12), crochet_trasero_cuerpo, bloqueo,
+  esquiva_avanzando, esquiva_retrocediendo, flexion, paso_atras y rueda.
+  Los ganchos de Mixamo son ganchos AL CUERPO (golpean a la altura del abdomen).
 - Esquivas en el sitio: sin desplazamiento horizontal de la cadera (se
   mantienen la bajada y los giros).
-- Ropa: `Pantalon` (gris oscuro) y `Botas` (rojas), sacadas de la malla del
-  cuerpo con Displace + Solidify, pesos copiados con Data Transfer y Armature.
-- `Guante_Left` y `Guante_Right` (rojos): mallas emparentadas al hueso Hand,
-  sin pesos; las manos del cuerpo se ocultan con un Mask.
+- Ropa v2 (`ropa_v2.py`, mallas nuevas, no caras del cuerpo):
+  - `Pantalon`: corto de boxeo ancho hasta medio muslo, pliegues en la
+    cintura, raja lateral y cinturilla gruesa. Pesos del cuerpo (Data
+    Transfer) suavizados, Armature + Subdivision + Solidify.
+  - `Botas`: caña hasta media pantorrilla, puntera lisa, suela fina, ribete y
+    cordones. Pesos suavizados; el pie del cuerpo se oculta con el Mask.
+  - `Guante_Left` / `Guante_Right`: ~15 cm de ancho, puño, pulgar, puño de la
+    muñeca y tira de velcro; piezas convexas emparentadas al hueso Hand, sin
+    pesos; las manos del cuerpo se ocultan con el Mask.
+  - Copia de la versión anterior (ropa v1): `trabajo/boxeador_v1.blend`.
 - flexion, paso_atras y rueda: hechas con IK temporal en las piernas y
   horneadas a fotogramas Bezier; empiezan (y acaban) en el fotograma 1 de la
   guardia. paso_atras acaba 28 cm más atrás.
@@ -87,3 +108,5 @@ Resultados y comprobaciones: `trabajo/fase2_resumen.txt`.
   meten uno dentro del otro en todos los fotogramas (hasta 7 cm); en
   guardia_alt, en 16 de 90 (hasta 2 cm). Se arreglará al corregir la guardia.
 - Esquivas, flexión, paso atrás y rueda: REVISAR CON ENTRENADOR.
+- **Ganchos a la cara (nº 5 y 6):** pendientes de buscar en Mixamo; los que hay
+  son ganchos al cuerpo (11 y 12).

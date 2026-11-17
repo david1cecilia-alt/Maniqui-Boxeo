@@ -13,3 +13,6 @@ trabajo/*.json
 
 # Python
 __pycache__/
+
+# Referencias visuales (renders de un modelo CC BY de Meshy): no se suben
+referencias/

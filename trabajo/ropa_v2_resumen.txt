@@ -1,0 +1,9 @@
+=== ROPA V2 ===
+  Guante_Left: 4512 caras, 14.6 cm de ancho, 30.0 cm de largo (6 piezas convexas), emparentado a mixamorig:LeftHand, sin pesos
+  Guante_Right: 4512 caras, 14.6 cm de ancho, 30.0 cm de largo (6 piezas convexas), emparentado a mixamorig:RightHand, sin pesos
+  Cuerpo: Mask con el grupo 'ocultar' (manos con peso > 0.5 y 1032 vértices de pies/tobillos dentro de las botas)
+  Pantalon: 1858 caras base -> 15388 con modificadores (ARMATURE, SUBSURF, SOLIDIFY)
+  Botas: 10240 caras base -> 20652 con modificadores (ARMATURE, SOLIDIFY)
+  Pantalón: bajo a z=0.715 m (medio muslo), raja lateral de 7 cm, holgura 1.4-5.6 cm, cinturilla 7 cm; pesos suavizados x25
+  Botas: caña hasta z=0.31 m (media pantorrilla), suela 1,2 cm, ribete, cordones; pesos suavizados x6
+GUARDADO trabajo\boxeador.blend
