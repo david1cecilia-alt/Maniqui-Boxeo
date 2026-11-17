@@ -99,7 +99,7 @@ python scripts/comparar_choques.py                               # tablas de cho
     Pendiente: en el impacto el puño roza la otra mano (2-4 cm). Si llega un gancho de Mixamo, lo sustituye.
   - `esquiva_der` / `esquiva_izq`: la cabeza se aparta 22-23 cm girando e inclinando el tronco, rodillas
     un poco flexionadas; el pie contrario pivota (20°, talón arriba 15°) sin moverse; vuelve al centro.
-  - `ballesteo`: tronco atrás (la cabeza retrocede 23 cm) sin paso, barbilla abajo, manos arriba; solo el pie
+  - `ballesteo`: tronco bien atrás (la cabeza retrocede 35 cm) sin paso, barbilla abajo, manos arriba; solo el pie
     de atrás retrocede 10 cm y vuelve, el de delante fijo.
   - `parada`: la mano derecha da un toque corto hacia dentro y abajo (16 cm desde la guardia, menos de un
     palmo) y la cabeza se aparta un poco a su derecha.

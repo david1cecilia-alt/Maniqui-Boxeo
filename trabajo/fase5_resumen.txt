@@ -59,9 +59,9 @@
      la cabeza se aparta 23 cm (y baja 6 cm); pivota el pie der (20° y talón arriba 15°) sin moverse del sitio
 
 === BALLESTEO (tronco atrás sin paso; solo el pie de atrás puede retroceder) ===
-  ballesteo             28 fot. (0.90 s) | aire guante-cabeza mín.  2.4 cm (empuje 0.0) | guante-guante mín. 11.1 cm | suelas Z -0.0/+3.0 cm | cabeza: baja hasta 1.40 m, X -7/+0 cm | fot.1 y último vs guardia_v2: 12 / 12 mm
-     punto clave -> izq: codo -23 cm sobre el hombro, 2 cm delante del hueso Spine1, +14 al lado, -1 de altura; guante (delante, alto, lado) respecto a la cabeza (13, +1, 14) cm, aire con la cabeza 2.5 cm; der: codo -20 cm sobre el hombro, 10 cm delante del hueso Spine1, +16 al lado, +4 de altura; guante (delante, alto, lado) respecto a la cabeza (13, +0, 14) cm, aire con la cabeza 4.2 cm
-     la cabeza se echa 23 cm hacia atrás; el pie de atrás retrocede 10 cm y vuelve; el de delante fijo
+  ballesteo             28 fot. (0.90 s) | aire guante-cabeza mín.  2.2 cm (empuje 0.0) | guante-guante mín. 10.9 cm | suelas Z -0.0/+3.0 cm | cabeza: baja hasta 1.39 m, X -7/+4 cm | fot.1 y último vs guardia_v2: 12 / 12 mm
+     punto clave -> izq: codo -22 cm sobre el hombro, -1 cm delante del hueso Spine1, +13 al lado, -2 de altura; guante (delante, alto, lado) respecto a la cabeza (13, +1, 14) cm, aire con la cabeza 2.2 cm; der: codo -20 cm sobre el hombro, 8 cm delante del hueso Spine1, +17 al lado, +3 de altura; guante (delante, alto, lado) respecto a la cabeza (13, +0, 14) cm, aire con la cabeza 4.1 cm
+     la cabeza se echa 35 cm hacia atrás; el pie de atrás retrocede 10 cm y vuelve; el de delante fijo
 
 === PARADA (toque corto hacia abajo con la mano de atrás, derecha) ===
   parada                18 fot. (0.57 s) | aire guante-cabeza mín.  0.8 cm (empuje 2.6) | guante-guante mín.  6.6 cm | suelas Z -0.0/+0.0 cm | cabeza: baja hasta 1.42 m, X -13/+0 cm | fot.1 y último vs guardia_v2: 12 / 12 mm

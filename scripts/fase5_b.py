@@ -935,7 +935,7 @@ def pies_bal(f):
     return {"Right": -DELANTE * (0.10 * kk) + Z * (0.03 * (alt + alt2))}
 
 
-pose_bal = dict(sy=-0.12, flex=-20.0, cabeza=16.0, baja=0.02, wL=1.0, wR=1.0)
+pose_bal = dict(sy=-0.18, flex=-32.0, cabeza=24.0, baja=0.02, wL=1.0, wR=1.0)
 rep_b = crear("ballesteo", N_BAL, [(1, {}), (10, pose_bal), (18, pose_bal), (N_BAL, {})], "suave", MANOS_ARRIBA,
               pico=14, pies=pies_bal)
 informe("ballesteo", N_BAL, rep_b)
