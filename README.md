@@ -50,6 +50,7 @@ Necesita `trabajo/boxeador_v2.blend` (de donde salen las 15 acciones; ver más a
 
 ```
 blender.exe --background --python scripts/b_montar.py            # monta trabajo/boxeador.blend
+blender.exe --background --python scripts/b_brazo.py             # brazo (hombro-codo) un 30 % más largo
 blender.exe --background --python scripts/fase4_b.py             # guardia corregida: acciones _v2
 blender.exe --background --python scripts/fase5_b.py             # bloqueos y ruedas a mano, pies de las esquivas
 blender.exe --background --python scripts/fase3_comprobar.py -- --sin-renders   # choques -> fase3_resumen.txt
@@ -65,20 +66,27 @@ python scripts/comparar_choques.py                               # tablas de cho
   el primer fotograma, la posición no (es la excepción a la regla).
 - **Bloqueo:** la animación de Mixamo era una reacción a un golpe: ahora es `reaccion_golpe` (sin `_v2`,
   fuera de la lista principal). Bloqueos hechos a mano desde `guardia_v2` y volviendo a ella (28 fot.,
-  0,9 s): `bloqueo_cerrado`, `bloqueo_alto_izq` / `_der` (guante en la sien, antebrazo vertical) y
-  `bloqueo_bajo_izq` / `_der` (codo pegado a las costillas, giro y encogimiento hacia ese lado). Lado
-  izquierdo y derecho definidos por separado (sin espejo).
+  0,9 s). Lado izquierdo y derecho definidos por separado (sin espejo). Se colocan "codo primero":
+  el codo donde tiene que tapar y el antebrazo sale de él hacia la cabeza.
+  - `bloqueo_alto_izq` / `_der`: tapan el lateral de la cabeza. El codo sube rotando el hombro y queda
+    delante; el antebrazo sube por el lado de la cabeza con el guante pegado a la sien/oreja.
+  - `bloqueo_bajo_izq` / `_der`: tapan costillas e hígado. El codo baja pegado al cuerpo pero
+    adelantado (13-14 cm por delante de la columna; la superficie del pecho está a 16), hombro
+    adelantado, abdomen contraído y giro del tronco hacia ese lado; el guante cerca de la barbilla.
+  - `bloqueo_cerrado`: los dos codos juntos por delante de las costillas (15 cm), hombros adelantados,
+    abdomen contraído y guantes delante de la cara.
+  `fase5_resumen.txt` dice dónde queda cada codo y cada guante en el punto clave.
 - **Rueda:** `rueda` y `rueda_v2` se sustituyen por `rueda_der` y `rueda_izq` (37 fot., 1,2 s): la cabeza
   dibuja una U y sube en el lado del nombre; cadera y tronco giran e inclinan, rodillas un poco
-  flexionadas (la cadera baja 9 cm; en la flexión, 18), guantes en guardia.
+  flexionadas (la cadera baja 9 cm; en la flexión, 18), el abdomen se contrae (el torso baja) y los
+  guantes van 3,5 cm más arriba que en la guardia para cubrir los golpes altos.
 - **Esquivas `_v2`:** los pies resbalaban bajo una cadera fija (parecía que flotaba). Ahora los pies
   están fijos en el suelo con IK (suela en Z=0) y dan un paso real de 22 cm: el derecho hacia atrás
   (retrocediendo) o el izquierdo hacia delante (avanzando), y vuelven al final. La postura de partida
   sigue siendo la de Mixamo (cadera girada 40-50° respecto a la guardia).
 - Todas las acciones nuevas tienen pies IK con las dos suelas en Z=0. Empiezan a 12 mm de `guardia_v2`
   porque en la guardia la suela derecha queda 8 mm por encima del suelo.
-- Choques: guante-cabeza 0 en todas las acciones nuevas. Guante contra el pecho (Spine2): hasta 2,6 cm
-  en los bloqueos bajos y 2,1 cm en el cerrado (la guardia_v2 ya llegaba a 1,5 cm).
+- Choques: ninguno en las acciones nuevas (guante-cabeza, guante-cuerpo, guante-guante).
 - Renders: `trabajo/capturas/fase5_*.png`.
 - **REVISAR CON ENTRENADOR:** cómo quiere Iván el bloqueo del crochet (guante a la sien, codo
   arriba...) y qué crochet del rival evita cada rueda.
@@ -120,6 +128,9 @@ blender.exe --background --python scripts/comparativa_render.py  # comparativa_v
 - Shape key `reforzado`: hombros, deltoides, brazo y antebrazo (escalado radial desde el
   eje del hueso); casi 0 en el codo. Pesos Arm/ForeArm suavizados alrededor del codo.
 - Guantes un 12 % más cortos (la manopla; el puño de velcro no se toca).
+- Brazo (hombro -> codo) un 30 % más largo (`b_brazo.py`): era 0,85 veces el antebrazo y ahora 1,10
+  (0,205 -> 0,266 m). Se estira la malla del brazo y el antebrazo, la mano y el guante se desplazan.
+  Con el brazo nuevo casi desaparecen los roces guante-cuerpo de las `_v2` (guardia 1,5 -> 0,6 cm).
 
 ### Fase 4 (acciones `_v2`), ver `trabajo/fase4_propuesta.md` y `trabajo/fase4_resumen.txt`
 
@@ -141,20 +152,27 @@ blender.exe --background --python scripts/comparativa_render.py  # comparativa_v
   el primer fotograma, la posición no (es la excepción a la regla).
 - **Bloqueo:** la animación de Mixamo era una reacción a un golpe: ahora es `reaccion_golpe` (sin `_v2`,
   fuera de la lista principal). Bloqueos hechos a mano desde `guardia_v2` y volviendo a ella (28 fot.,
-  0,9 s): `bloqueo_cerrado`, `bloqueo_alto_izq` / `_der` (guante en la sien, antebrazo vertical) y
-  `bloqueo_bajo_izq` / `_der` (codo pegado a las costillas, giro y encogimiento hacia ese lado). Lado
-  izquierdo y derecho definidos por separado (sin espejo).
+  0,9 s). Lado izquierdo y derecho definidos por separado (sin espejo). Se colocan "codo primero":
+  el codo donde tiene que tapar y el antebrazo sale de él hacia la cabeza.
+  - `bloqueo_alto_izq` / `_der`: tapan el lateral de la cabeza. El codo sube rotando el hombro y queda
+    delante; el antebrazo sube por el lado de la cabeza con el guante pegado a la sien/oreja.
+  - `bloqueo_bajo_izq` / `_der`: tapan costillas e hígado. El codo baja pegado al cuerpo pero
+    adelantado (13-14 cm por delante de la columna; la superficie del pecho está a 16), hombro
+    adelantado, abdomen contraído y giro del tronco hacia ese lado; el guante cerca de la barbilla.
+  - `bloqueo_cerrado`: los dos codos juntos por delante de las costillas (15 cm), hombros adelantados,
+    abdomen contraído y guantes delante de la cara.
+  `fase5_resumen.txt` dice dónde queda cada codo y cada guante en el punto clave.
 - **Rueda:** `rueda` y `rueda_v2` se sustituyen por `rueda_der` y `rueda_izq` (37 fot., 1,2 s): la cabeza
   dibuja una U y sube en el lado del nombre; cadera y tronco giran e inclinan, rodillas un poco
-  flexionadas (la cadera baja 9 cm; en la flexión, 18), guantes en guardia.
+  flexionadas (la cadera baja 9 cm; en la flexión, 18), el abdomen se contrae (el torso baja) y los
+  guantes van 3,5 cm más arriba que en la guardia para cubrir los golpes altos.
 - **Esquivas `_v2`:** los pies resbalaban bajo una cadera fija (parecía que flotaba). Ahora los pies
   están fijos en el suelo con IK (suela en Z=0) y dan un paso real de 22 cm: el derecho hacia atrás
   (retrocediendo) o el izquierdo hacia delante (avanzando), y vuelven al final. La postura de partida
   sigue siendo la de Mixamo (cadera girada 40-50° respecto a la guardia).
 - Todas las acciones nuevas tienen pies IK con las dos suelas en Z=0. Empiezan a 12 mm de `guardia_v2`
   porque en la guardia la suela derecha queda 8 mm por encima del suelo.
-- Choques: guante-cabeza 0 en todas las acciones nuevas. Guante contra el pecho (Spine2): hasta 2,6 cm
-  en los bloqueos bajos y 2,1 cm en el cerrado (la guardia_v2 ya llegaba a 1,5 cm).
+- Choques: ninguno en las acciones nuevas (guante-cabeza, guante-cuerpo, guante-guante).
 - Renders: `trabajo/capturas/fase5_*.png`.
 - **REVISAR CON ENTRENADOR:** cómo quiere Iván el bloqueo del crochet (guante a la sien, codo
   arriba...) y qué crochet del rival evita cada rueda.

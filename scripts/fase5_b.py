@@ -253,7 +253,7 @@ GUARDIA = {}
 for lado, s in LADOS.items():
     gc = M0[lado + "Hand"] @ CENTRO_PUNO[lado]
     GUARDIA[lado] = (coords(centro_cabeza(), marco("Head"), gc, s),
-                     coords(pb["Spine2"].head, marco("Spine2"), M0[lado + "ForeArm"].translation, s))
+                     coords(pb["Spine1"].head, marco("Spine1"), M0[lado + "ForeArm"].translation, s))
 gl, cl = GUARDIA["Left"]
 p(f"  guardia (izq.): guante a {gl.x * 100:.1f} cm delante, {gl.y * 100:+.1f} cm de altura y {gl.z * 100:.1f} cm"
   f" al lado del centro de la cabeza; codo {cl.x * 100:.1f} delante, {cl.y * 100:+.1f} alto, {cl.z * 100:.1f} cm al lado del pecho")
@@ -287,19 +287,24 @@ def ik_brazo(lado, T, polo):
     return MA, MF, MH
 
 
-def resolver_brazo(lado, gc, polo):
-    """Brazo con el centro del guante en gc; si se mete en la cabeza se aparta y se recalcula."""
+def resolver_brazo(lado, gc, polo, dir_emp=None, muneca=False):
+    """Brazo con el centro del guante en gc (o la muñeca, si muneca=True); si el guante se mete en la
+    cabeza se aparta y se recalcula (desde el centro de la cabeza, o en la dirección dir_emp)."""
     MA0, MF0, MH0 = (pb[lado + n].matrix.copy() for n in ("Arm", "ForeArm", "Hand"))
     rot = q(MH0)
     empuje = Vector()
+
+    def objetivo():
+        return (gc if muneca else gc - rot @ CENTRO_PUNO[lado]) + empuje
+
     for _ in range(3):
-        MA, MF, MH = ik_brazo(lado, gc - rot @ CENTRO_PUNO[lado] + empuje, polo)
+        MA, MF, MH = ik_brazo(lado, objetivo(), polo)
         rot = q(MH)
     hq, n = hueco(guante_mundo(lado, MF, MH), pb["Head"].matrix), 0
     while hq < MARGEN and n < 8:
-        dirc = (Vector(guante_mundo(lado, MF, MH).mean(axis=0)) - centro_cabeza()).normalized()
+        dirc = dir_emp or (Vector(guante_mundo(lado, MF, MH).mean(axis=0)) - centro_cabeza()).normalized()
         empuje += dirc * (MARGEN - hq + 0.003)
-        MA, MF, MH = ik_brazo(lado, gc - rot @ CENTRO_PUNO[lado] + empuje, polo)
+        MA, MF, MH = ik_brazo(lado, objetivo(), polo)
         hq, n = hueco(guante_mundo(lado, MF, MH), pb["Head"].matrix), n + 1
     for parte, M in (("Arm", MA), ("ForeArm", MF), ("Hand", MH)):
         pb[lado + parte].matrix = M
@@ -360,7 +365,7 @@ def bajar_para_llegar(pies):
 
 # ---------------------------------------------------------------- pose a mano a partir de parámetros
 CERO = dict(sx=0.0, sy=0.0, baja=0.0, giro=0.0, flex=0.0, lado=0.0, torsion=0.0, cuello=0.0,
-            cabeza=0.0, hombros=0.0, wL=0.0, wR=0.0)
+            cabeza=0.0, hombros=0.0, abdomen=0.0, hL=0.0, hR=0.0, aL=0.0, aR=0.0, wL=0.0, wR=0.0)
 
 
 def rotar(nombre, R):
@@ -377,15 +382,19 @@ def posar(par, brazos):
     t = M.translation + X * par["sx"] + DELANTE * par["sy"] - Vector((0, 0, par["baja"]))
     pb["Hips"].matrix = Matrix.LocRotScale(t, Quaternion((0, 0, 1), math.radians(par["giro"])) @ q(M), None)
     upd()
-    for n, frac in (("Spine", 0.3), ("Spine1", 0.35), ("Spine2", 0.35)):
+    # flex: tronco hacia delante repartido; abdomen: contracción (flexión sobre todo abajo, Spine/Spine1)
+    for n, frac, fab in (("Spine", 0.3, 0.5), ("Spine1", 0.35, 0.4), ("Spine2", 0.35, 0.1)):
         cara, arriba, izq = marco(n)
         rotar(n, Quaternion(arriba, math.radians(par["torsion"] * frac))
               @ Quaternion(arriba.cross(izq), math.radians(par["lado"] * frac))
-              @ Quaternion(arriba.cross(cara), math.radians(par["flex"] * frac)))
-    if par["hombros"]:
-        for lado, s in LADOS.items():
+              @ Quaternion(arriba.cross(cara), math.radians(par["flex"] * frac + par["abdomen"] * fab)))
+    # hombros: hacia arriba (los dos: hombros; cada uno: hL / hR) y hacia delante (aL / aR, protracción)
+    for lado, s in LADOS.items():
+        g, adel = par["hombros"] + par["h" + lado[0]], par["a" + lado[0]]
+        if g or adel:
             cara, arriba, izq = marco("Spine2")
-            rotar(lado + "Shoulder", Quaternion((izq * s).cross(arriba), math.radians(par["hombros"])))
+            rotar(lado + "Shoulder", Quaternion((izq * s).cross(cara), math.radians(adel))
+                  @ Quaternion((izq * s).cross(arriba), math.radians(g)))
     cara, arriba, _ = marco("Neck")
     rotar("Neck", Quaternion(arriba, math.radians(par["cuello"])) @ Quaternion(arriba.cross(cara), math.radians(par["cabeza"] * 0.4)))
     cara, arriba, _ = marco("Head")
@@ -397,18 +406,36 @@ def posar(par, brazos):
     # brazos
     huecos, emp = {}, 0.0
     for lado, s in LADOS.items():
-        w = par["w" + lado[0]]
+        w = min(par["w" + lado[0]], 1.0)
         if w <= 0:
             huecos[lado] = hueco(guante_mundo(lado, pb[lado + "ForeArm"].matrix, pb[lado + "Hand"].matrix), pb["Head"].matrix)
             if huecos[lado] >= MARGEN:
                 continue   # sigue rígido con el pecho (la guardia de guardia_v2)
             w = 0.0
-        g_obj, c_obj = brazos.get(lado, GUARDIA[lado])
-        g = GUARDIA[lado][0].lerp(g_obj, w)
-        c = GUARDIA[lado][1].lerp(c_obj, w)
-        gc = punto(centro_cabeza(), marco("Head"), g, s)
-        polo = punto(pb["Spine2"].head, marco("Spine2"), c, s)
-        huecos[lado], e = resolver_brazo(lado, gc, polo)
+        spec = brazos.get(lado, GUARDIA[lado])
+        sp1 = (pb["Spine1"].head, marco("Spine1"))
+        if isinstance(spec[0], str) and spec[0] == "codo":
+            # primero el codo (donde tiene que tapar) y el antebrazo sale de él hacia la cara
+            _, e_c, d_c, *extra = spec
+            S = pb[lado + "Arm"].head
+            E = punto(*sp1, e_c, s)
+            if (E - S).length > LON[lado + "Arm"] * 0.995:
+                E = S + (E - S).normalized() * LON[lado + "Arm"] * 0.995
+            dirf = (punto(*sp1, d_c, s) - sp1[0]).normalized()
+            Wb = E + dirf * LON[lado + "ForeArm"]
+            Wg = punto(centro_cabeza(), marco("Head"), GUARDIA[lado][0], s) - q(pb[lado + "Hand"].matrix) @ CENTRO_PUNO[lado]
+            T = Wg.lerp(Wb, w)
+            polo = punto(*sp1, GUARDIA[lado][1], s).lerp(E, w)
+            dir_emp = marco("Head")[2] * s if extra and extra[0] == "lateral" else None
+            huecos[lado], e = resolver_brazo(lado, T, polo, dir_emp, muneca=True)
+        else:
+            g_obj, c_obj, *extra = spec
+            g = GUARDIA[lado][0].lerp(g_obj, w)
+            c = GUARDIA[lado][1].lerp(c_obj, w)
+            gc = punto(centro_cabeza(), marco("Head"), g, s)
+            polo = punto(*sp1, c, s)
+            dir_emp = marco("Head")[2] * s if extra and extra[0] == "lateral" else None
+            huecos[lado], e = resolver_brazo(lado, gc, polo, dir_emp)
         emp = max(emp, e)
     return dict(bajada=bajada, desliz=desliz, huecos=huecos, empuje=emp)
 
@@ -446,7 +473,23 @@ def clave(b, f, previo):
     return qq
 
 
-def crear(nombre, n_fot, claves, modo, brazos):
+def medir_pico(lados):
+    """Dónde queda cada brazo que bloquea: codo respecto al hombro y al pecho, guante respecto a la cabeza."""
+    txt = []
+    for lado in lados:
+        s = LADOS[lado]
+        codo = pb[lado + "ForeArm"].head
+        c = coords(pb["Spine1"].head, marco("Spine1"), codo, s)
+        alto = codo.z - pb[lado + "Arm"].head.z
+        hq = hueco(guante_mundo(lado, pb[lado + "ForeArm"].matrix, pb[lado + "Hand"].matrix), pb["Head"].matrix)
+        g = coords(centro_cabeza(), marco("Head"), pb[lado + "Hand"].matrix @ CENTRO_PUNO[lado], s)
+        txt.append(f"{NOMBRE_LADO[lado]}: codo {alto * 100:+.0f} cm sobre el hombro, {c.x * 100:.0f} cm delante del hueso"
+                   f" Spine1, {c.z * 100:+.0f} al lado, {c.y * 100:+.0f} de altura; guante (delante, alto, lado) respecto a la"
+                   f" cabeza ({g.x * 100:.0f}, {g.y * 100:+.0f}, {g.z * 100:.0f}) cm, aire con la cabeza {hq * 100:.1f} cm")
+    return "; ".join(txt)
+
+
+def crear(nombre, n_fot, claves, modo, brazos, pico=None):
     a = bpy.data.actions.new(nombre)
     a.use_fake_user = True
     arm.animation_data.action = a
@@ -469,6 +512,8 @@ def crear(nombre, n_fot, claves, modo, brazos):
         cab = centro_cabeza()
         rep["cab_min"] = min(rep["cab_min"], cab.z)
         rep["cab_x"] = [min(rep["cab_x"][0], cab.x), max(rep["cab_x"][1], cab.x)]
+        if f == pico:
+            rep["pico"] = medir_pico(brazos)
     for fc in a.fcurves:
         for k in fc.keyframe_points:
             k.interpolation = "BEZIER"
@@ -503,6 +548,8 @@ def informe(nombre, n_fot, rep):
       f" (empuje {rep['empuje'] * 100:3.1f}) | guante-guante mín. {rep['guantes'] * 100:4.1f} cm"
       f" | suelas Z {min(zs) * 100:+.1f}/{max(zs) * 100:+.1f} cm | cabeza: baja hasta {rep['cab_min']:.2f} m,"
       f" X {rep['cab_x'][0] * 100:+.0f}/{rep['cab_x'][1] * 100:+.0f} cm | fot.1 y último vs guardia_v2: {ini:.0f} / {fin:.0f} mm")
+    if "pico" in rep:
+        p(f"     punto clave -> {rep['pico']}")
 
 
 # ---------------------------------------------------------------- 3. bloqueos (28 fot.: sube 1-8, aguanta 8-20, vuelve 20-28)
@@ -513,27 +560,42 @@ def claves_bloqueo(pose):
     return [(1, {}), (8, pose), (20, pose), (N_BLQ, {})]
 
 
-# coordenadas de los objetivos: guante (delante, arriba, lateral) respecto al centro de la cabeza;
-# codo (delante, arriba, lateral) respecto al pecho (Spine2). Lateral positivo = hacia SU lado.
+# Brazo que bloquea: ("codo", codo, antebrazo[, "lateral"]). Primero el codo, donde tiene que tapar,
+# en (delante, arriba, lateral) respecto al hueso Spine1 (columna a la altura de las costillas bajas;
+# la superficie del pecho está ~16 cm por delante); el antebrazo sale del codo en la dirección dada
+# (mismas coordenadas) y la muñeca queda a un antebrazo de distancia. Lateral positivo = hacia SU lado.
+# Si el codo no llega (brazo de 27 cm desde el hombro) se acerca al hombro en la misma dirección.
+# Si el guante se mete en la cabeza se aparta (hacia el lado con "lateral").
 BLOQUEOS = {
-    # los dos guantes pegados a la cara (por delante, casi juntos), codos juntos delante de las costillas
-    "bloqueo_cerrado": (dict(baja=0.045, flex=10.0, cabeza=7.0, hombros=7.0, wL=1.0, wR=1.0),
-                        {lado: (Vector((0.14, 0.005, 0.078)), Vector((0.30, -0.32, 0.02))) for lado in LADOS}),
+    # los dos guantes delante de la cara; codos juntos y ADELANTADOS delante de las costillas, antebrazos
+    # casi verticales, abdomen contraído y hombros adelantados para tapar el torso (aquí es grande)
+    "bloqueo_cerrado": (dict(baja=0.045, flex=10.0, abdomen=14.0, cabeza=7.0, hombros=8.0, aL=16.0, aR=16.0,
+                             wL=1.0, wR=1.0),
+                        {lado: ("codo", Vector((0.15, 0.06, 0.08)), Vector((0.35, 1.0, 0.05))) for lado in LADOS}),
 }
 for lado, s in LADOS.items():
     nl = NOMBRE_LADO[lado]
-    # guante a la sien/oreja de ese lado, antebrazo vertical, codo algo levantado y hacia fuera
+    # tapa el lateral de la cabeza: el codo SUBE (rotando el hombro) y queda delante; el antebrazo sube
+    # por el lado de la cabeza y el guante queda PEGADO a la sien/oreja (el derecho, hombro trasero,
+    # con el antebrazo más vertical para que el guante no se vaya detrás de la cabeza)
     BLOQUEOS[f"bloqueo_alto_{nl}"] = (
-        dict(baja=0.02, cabeza=4.0, torsion=-4.0 * s, **{"w" + lado[0]: 1.0}),
-        {lado: (Vector((0.04, -0.015, 0.165)), Vector((0.14, -0.04, 0.36)))})
-    # codo pegado a las costillas de ese lado, guante cerca de la cara; giro y encogimiento hacia ese lado
+        dict(baja=0.02, cabeza=4.0, torsion=-4.0 * s, **{"h" + lado[0]: 14.0, "w" + lado[0]: 1.0}),
+        {lado: ("codo", Vector((0.17, 0.13, 0.17)), Vector((-0.20 if lado == "Left" else -0.02, 1.0, -0.10)), "lateral")})
+    # tapa costillas e hígado: el codo baja pegado al cuerpo pero ADELANTADO, por delante de las
+    # costillas; antebrazo casi vertical hacia la barbilla; giro y encogimiento del tronco hacia ese lado
     BLOQUEOS[f"bloqueo_bajo_{nl}"] = (
-        dict(baja=0.035, flex=6.0, lado=8.0 * s, torsion=10.0 * s, cabeza=5.0, **{"w" + lado[0]: 1.0}),
-        {lado: (Vector((0.15, -0.06, 0.085)), Vector((0.06, -0.42, 0.12)))})
+        dict(baja=0.035, flex=4.0, abdomen=9.0, lado=8.0 * s, torsion=6.0 * s, cabeza=5.0,
+             **{"a" + lado[0]: 20.0, "w" + lado[0]: 1.0}),
+        {lado: ("codo", Vector((0.15, 0.03, 0.11)), Vector((0.25, 1.0, 0.0)))})
 
+_sp1 = [v.co for v in cuerpo.data.vertices if any(nom[e.group] == "Spine1" and e.weight > 0.5 for e in v.groups)]
+_cara_sp1 = (q(REST["Spine1"]).inverted() @ Vector((0, -1, 0)))
+PECHO = max((REST_INV["Spine1"] @ c).dot(_cara_sp1) for c in _sp1)
 p("\n=== BLOQUEOS (desde guardia_v2 y volviendo a ella) ===")
+p(f"  (referencia: la superficie del pecho/abdomen a la altura de Spine1 está {PECHO * 100:.0f} cm por delante del hueso;"
+  " un codo tapa las costillas si queda cerca o por delante de esa distancia)")
 for nombre, (pose, brazos) in BLOQUEOS.items():
-    rep = crear(nombre, N_BLQ, claves_bloqueo(pose), "suave", brazos)
+    rep = crear(nombre, N_BLQ, claves_bloqueo(pose), "suave", brazos, pico=14)
     informe(nombre, N_BLQ, rep)
 
 # ---------------------------------------------------------------- 4. ruedas (37 fot.)
@@ -542,16 +604,20 @@ N_RUEDA = 37
 
 def claves_rueda(s):
     """s = +1: la U empieza a la izquierda y termina a la derecha (rueda_der); s = -1 al revés."""
+    # abdomen contraído (el torso baja) y guantes un poco más arriba durante toda la rueda
     a = dict(sx=0.08 * s, giro=15.0 * s, lado=11.0 * s, torsion=8.0 * s, cuello=-11.0 * s,
-             baja=0.03, flex=4.0, cabeza=3.0)
-    fondo = dict(baja=0.09, flex=16.0, cabeza=8.0)
+             baja=0.03, flex=3.0, abdomen=8.0, cabeza=3.0, wL=1.0, wR=1.0)
+    fondo = dict(baja=0.09, flex=10.0, abdomen=16.0, cabeza=8.0, wL=1.0, wR=1.0)
     b = {k: (-v if k in ("sx", "giro", "lado", "torsion", "cuello") else v) for k, v in a.items()}
     return [(1, {}), (8, a), (19, fondo), (30, b), (N_RUEDA, {})]
 
 
+# guantes 3,5 cm más arriba que en la guardia (respecto a la cabeza) para cubrir los golpes altos
+MANOS_ARRIBA = {lado: (GUARDIA[lado][0] + Vector((0.0, 0.035, -0.005)), GUARDIA[lado][1] + Vector((0.0, 0.03, 0.0)))
+                for lado in LADOS}
 p("\n=== RUEDAS (la cabeza dibuja una U y sube en el lado del nombre) ===")
 for nombre, s in (("rueda_der", 1.0), ("rueda_izq", -1.0)):
-    rep = crear(nombre, N_RUEDA, claves_rueda(s), "continuo", {})
+    rep = crear(nombre, N_RUEDA, claves_rueda(s), "continuo", MANOS_ARRIBA)
     informe(nombre, N_RUEDA, rep)
 
 # ---------------------------------------------------------------- 5. esquivas: pies fijos en el suelo y paso real

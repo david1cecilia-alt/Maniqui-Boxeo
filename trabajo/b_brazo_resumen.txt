@@ -1,0 +1,11 @@
+=== BRAZO MÁS LARGO (hombro -> codo) x1.30 ===
+  Left: brazo 0.205 -> 0.266 m (antebrazo 0.242; brazo/antebrazo 0.84 -> 1.10)
+  Right: brazo 0.205 -> 0.266 m (antebrazo 0.242; brazo/antebrazo 0.84 -> 1.10)
+  Botas: 0 vértices movidos (máx. 0.0 cm)
+  Cuerpo: 1390 vértices movidos (máx. 6.1 cm)
+  Guante_Left: 3952 vértices movidos (máx. 6.1 cm)
+  Guante_Right: 3949 vértices movidos (máx. 6.1 cm)
+  Pantalon: 0 vértices movidos (máx. 0.0 cm)
+  Left: se desplazan LeftForeArm, LeftHand
+  Right: se desplazan RightForeArm, RightHand
+  GUARDADO trabajo\boxeador.blend
