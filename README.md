@@ -49,6 +49,13 @@ blender.exe --background --python scripts/fase2_montar.py
 blender.exe --background --python scripts/fase2_render.py
 ```
 
+Fase 3 (comprobación; lee `boxeador.blend` sin guardarlo): resultados en
+`trabajo/fase3_resumen.txt` y propuesta de la Fase 4 en `trabajo/fase4_propuesta.md`.
+
+```
+blender.exe --background --python scripts/fase3_comprobar.py
+```
+
 Los scripts usan la API de acciones de Blender 4.5 (`action.fcurves`), que
 Blender 5.x ya no tiene: hay que usar la 4.5.
 
