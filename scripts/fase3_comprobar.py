@@ -42,7 +42,7 @@ GOLPES = {
     "crochet_adelantado": "velocidad", "crochet_trasero": "velocidad",
     "gancho_adelantado_cuerpo": "velocidad", "gancho_trasero_cuerpo": "velocidad",
 }
-OTRAS = ["bloqueo", "esquiva_avanzando", "esquiva_retrocediendo"]
+OTRAS = ["bloqueo_cerrado", "esquiva_avanzando_v2", "esquiva_retrocediendo_v2"]
 UMBRAL_CM = 0.2   # por debajo no se cuenta
 
 bpy.ops.wm.open_mainfile(filepath=BLEND)

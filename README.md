@@ -27,7 +27,7 @@ fbx/guardia.fbx  fbx/guardia_alt.fbx  fbx/1_jab.fbx  fbx/2_recto.fbx
 fbx/3_crochet_adelantado.fbx  fbx/4_crochet_trasero.fbx
 fbx/10_crochet_cuerpo.fbx
 fbx/11_gancho_adelantado_cuerpo.fbx  fbx/12_gancho_trasero_cuerpo.fbx
-fbx/bloqueo.fbx
+fbx/bloqueo.fbx   (es una reacción a un golpe: en el .blend se llama reaccion_golpe)
 fbx/esquiva_avanzando_REVISAR.fbx  fbx/esquiva_retrocediendo_REVISAR.fbx
 fbx/extra/BoxeoFigura.fbx
 ```
@@ -51,13 +51,39 @@ Necesita `trabajo/boxeador_v2.blend` (de donde salen las 15 acciones; ver más a
 ```
 blender.exe --background --python scripts/b_montar.py            # monta trabajo/boxeador.blend
 blender.exe --background --python scripts/fase4_b.py             # guardia corregida: acciones _v2
+blender.exe --background --python scripts/fase5_b.py             # bloqueos y ruedas a mano, pies de las esquivas
 blender.exe --background --python scripts/fase3_comprobar.py -- --sin-renders   # choques -> fase3_resumen.txt
 blender.exe --background --python scripts/b_codo_diag.py         # codo -> b_codo_diag.txt
 blender.exe --background --python scripts/fase4_render.py        # renders de la Fase 4
+blender.exe --background --python scripts/fase5_render.py        # renders de la Fase 5
 python scripts/comparar_choques.py                               # tablas de choques
 ```
 
-### Modelo v2 (anterior) → `trabajo/boxeador_v2.blend`
+#### Fase 5 (correcciones tras revisar las `_v2`), ver `trabajo/fase5_resumen.txt`
+
+- **paso_atras_v2:** acaba desplazado hacia atrás (23 cm) y en guardia; solo la pose coincide con
+  el primer fotograma, la posición no (es la excepción a la regla).
+- **Bloqueo:** la animación de Mixamo era una reacción a un golpe: ahora es `reaccion_golpe` (sin `_v2`,
+  fuera de la lista principal). Bloqueos hechos a mano desde `guardia_v2` y volviendo a ella (28 fot.,
+  0,9 s): `bloqueo_cerrado`, `bloqueo_alto_izq` / `_der` (guante en la sien, antebrazo vertical) y
+  `bloqueo_bajo_izq` / `_der` (codo pegado a las costillas, giro y encogimiento hacia ese lado). Lado
+  izquierdo y derecho definidos por separado (sin espejo).
+- **Rueda:** `rueda` y `rueda_v2` se sustituyen por `rueda_der` y `rueda_izq` (37 fot., 1,2 s): la cabeza
+  dibuja una U y sube en el lado del nombre; cadera y tronco giran e inclinan, rodillas un poco
+  flexionadas (la cadera baja 9 cm; en la flexión, 18), guantes en guardia.
+- **Esquivas `_v2`:** los pies resbalaban bajo una cadera fija (parecía que flotaba). Ahora los pies
+  están fijos en el suelo con IK (suela en Z=0) y dan un paso real de 22 cm: el derecho hacia atrás
+  (retrocediendo) o el izquierdo hacia delante (avanzando), y vuelven al final. La postura de partida
+  sigue siendo la de Mixamo (cadera girada 40-50° respecto a la guardia).
+- Todas las acciones nuevas tienen pies IK con las dos suelas en Z=0. Empiezan a 12 mm de `guardia_v2`
+  porque en la guardia la suela derecha queda 8 mm por encima del suelo.
+- Choques: guante-cabeza 0 en todas las acciones nuevas. Guante contra el pecho (Spine2): hasta 2,6 cm
+  en los bloqueos bajos y 2,1 cm en el cerrado (la guardia_v2 ya llegaba a 1,5 cm).
+- Renders: `trabajo/capturas/fase5_*.png`.
+- **REVISAR CON ENTRENADOR:** cómo quiere Iván el bloqueo del crochet (guante a la sien, codo
+  arriba...) y qué crochet del rival evita cada rueda.
+
+## Modelo v2 (anterior) → `trabajo/boxeador_v2.blend`
 
 ```
 blender.exe --background --python scripts/fase1_extraer_datos.py
@@ -85,8 +111,9 @@ blender.exe --background --python scripts/comparativa_render.py  # comparativa_v
   de Creazilla separada en `Cuerpo`, `Pantalon`, `Botas` (zapatillas) y `Guante_Left` /
   `Guante_Right` (el guante va soldado al brazo: se corta bajo el puño de velcro, que tapa el
   corte). Un solo material con textura (sin el logo de la marca).
-- 15 acciones originales (copiadas de la v2, traslación escalada por la altura de la cadera)
-  y sus 15 versiones `_v2` de la Fase 4. Todas con Fake User.
+- Acciones originales (copiadas de la v2, traslación escalada por la altura de la cadera; `bloqueo`
+  pasa a llamarse `reaccion_golpe` y `rueda` se sustituye), 13 versiones `_v2` de la Fase 4 y 7 acciones
+  hechas a mano en la Fase 5 (5 bloqueos y 2 ruedas). Todas con Fake User.
 - Pies: rotación rehecha para que giren respecto a su reposo igual que en la v2 (la copia
   directa los dejaba hasta 15° girados) y cadera corregida en cada fotograma para que la
   suela apoye en Z=0 (antes se hundían hasta 9 cm).
@@ -107,6 +134,30 @@ blender.exe --background --python scripts/comparativa_render.py  # comparativa_v
 - Resultado (`trabajo/fase4_choques_antes_despues.txt`): guante-cabeza 0 cm en todas las `_v2`
   (antes hasta 4,3 cm), guante-guante hasta 1,5 cm (antes 3,5).
 - Renders: `trabajo/capturas/fase4_guardia_v2.png`, `fase4_impacto_<golpe>.png`, `fase4_codo_cerca.png`.
+
+### Fase 5 (correcciones tras revisar las `_v2`), ver `trabajo/fase5_resumen.txt`
+
+- **paso_atras_v2:** acaba desplazado hacia atrás (23 cm) y en guardia; solo la pose coincide con
+  el primer fotograma, la posición no (es la excepción a la regla).
+- **Bloqueo:** la animación de Mixamo era una reacción a un golpe: ahora es `reaccion_golpe` (sin `_v2`,
+  fuera de la lista principal). Bloqueos hechos a mano desde `guardia_v2` y volviendo a ella (28 fot.,
+  0,9 s): `bloqueo_cerrado`, `bloqueo_alto_izq` / `_der` (guante en la sien, antebrazo vertical) y
+  `bloqueo_bajo_izq` / `_der` (codo pegado a las costillas, giro y encogimiento hacia ese lado). Lado
+  izquierdo y derecho definidos por separado (sin espejo).
+- **Rueda:** `rueda` y `rueda_v2` se sustituyen por `rueda_der` y `rueda_izq` (37 fot., 1,2 s): la cabeza
+  dibuja una U y sube en el lado del nombre; cadera y tronco giran e inclinan, rodillas un poco
+  flexionadas (la cadera baja 9 cm; en la flexión, 18), guantes en guardia.
+- **Esquivas `_v2`:** los pies resbalaban bajo una cadera fija (parecía que flotaba). Ahora los pies
+  están fijos en el suelo con IK (suela en Z=0) y dan un paso real de 22 cm: el derecho hacia atrás
+  (retrocediendo) o el izquierdo hacia delante (avanzando), y vuelven al final. La postura de partida
+  sigue siendo la de Mixamo (cadera girada 40-50° respecto a la guardia).
+- Todas las acciones nuevas tienen pies IK con las dos suelas en Z=0. Empiezan a 12 mm de `guardia_v2`
+  porque en la guardia la suela derecha queda 8 mm por encima del suelo.
+- Choques: guante-cabeza 0 en todas las acciones nuevas. Guante contra el pecho (Spine2): hasta 2,6 cm
+  en los bloqueos bajos y 2,1 cm en el cerrado (la guardia_v2 ya llegaba a 1,5 cm).
+- Renders: `trabajo/capturas/fase5_*.png`.
+- **REVISAR CON ENTRENADOR:** cómo quiere Iván el bloqueo del crochet (guante a la sien, codo
+  arriba...) y qué crochet del rival evita cada rueda.
 
 ## Modelo v2 (anterior): `trabajo/boxeador_v2.blend`
 
@@ -140,7 +191,7 @@ el hueso Hand; pantalón con Shrinkwrap, pesos del cuerpo y la piel de debajo oc
   `.blend` sin volver a montarlos). Quedan unos píxeles amarillos en el margen de la textura, fuera
   de las UV (no se ven en el modelo). Los renders de `trabajo/capturas/` se hicieron con una
   primera versión que dejaba un trazo amarillo pequeño en el puño.
-- **Guardia, esquivas, flexión, paso atrás y rueda: REVISAR CON ENTRENADOR** (ahora sobre las `_v2`).
+- **Guardia, esquivas, flexión, paso atrás, ruedas y bloqueos: REVISAR CON ENTRENADOR**.
 - **Ganchos a la cara (nº 5 y 6):** pendientes de buscar en Mixamo; los que hay son al cuerpo.
 - **C:** el pantalón hace un pico en el bajo trasero en el jab; la medida del pantalón de C da un
   falso positivo fijo (4,3 cm) en la franja visible sobre el bajo.

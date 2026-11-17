@@ -15,6 +15,10 @@ Ver trabajo/fase4_propuesta.md. Las acciones originales no se tocan.
 - Seguridad: en cada fotograma, si un guante queda a menos de MARGEN de la cabeza (o dentro),
   se aparta de la cabeza y se recalcula.
 - Primer y último fotograma iguales: los últimos FINAL fotogramas se llevan suavemente al primero.
+  Excepción: en las acciones que DESPLAZAN (paso_atras) solo coincide la pose; la traslación de
+  la cadera no se toca y el muñeco acaba desplazado.
+- bloqueo (ahora reaccion_golpe) y rueda no tienen _v2: fase5_b.py crea a mano los bloqueos y
+  las ruedas (y arregla los pies de las esquivas). Ejecutar fase5_b.py después de este script.
 Guarda trabajo/boxeador.blend y trabajo/fase4_resumen.txt.
 
 Uso:
@@ -45,6 +49,9 @@ LADOS = {"Left": 1.0, "Right": -1.0}   # +X en reposo = izquierda del boxeador
 GOLPES = {"jab", "recto", "crochet_adelantado", "crochet_trasero", "crochet_trasero_cuerpo",
           "gancho_adelantado_cuerpo", "gancho_trasero_cuerpo"}
 SUELTA_LIBRE = {"bloqueo"}
+DESPLAZA = {"paso_atras"}          # acaban desplazadas: la cadera no vuelve al sitio
+# sin _v2: la reacción a un golpe de Mixamo, la rueda antigua y las acciones hechas a mano (fase5_b.py)
+SIN_V2 = {"bloqueo", "reaccion_golpe", "rueda"}
 
 out = []
 
@@ -61,7 +68,8 @@ cuerpo = bpy.data.objects["Cuerpo"]
 assert arm.matrix_world == Matrix(), "se espera el esqueleto con las transformaciones aplicadas"
 for a in [a for a in bpy.data.actions if a.name.endswith("_v2")]:
     bpy.data.actions.remove(a)
-ORIGINALES = sorted(a.name for a in bpy.data.actions)
+ORIGINALES = sorted(a.name for a in bpy.data.actions
+                    if a.name not in SIN_V2 and not a.name.startswith(("bloqueo_", "rueda_")))
 pb = {n.split(":")[-1]: b for n, b in arm.pose.bones.items()}
 REST = {n.split(":")[-1]: b.matrix_local.copy() for n, b in arm.data.bones.items()}
 REST_INV = {k: m.inverted() for k, m in REST.items()}
@@ -375,6 +383,8 @@ for nombre in ORIGINALES:
     for fc in a2.fcurves:
         por_hueso.setdefault(fc.data_path, []).append(fc)
     for ruta, fcs in por_hueso.items():
+        if nombre in DESPLAZA and ruta.endswith('Hips"].location'):
+            continue
         fcs.sort(key=lambda c: c.array_index)
         v0 = [fc.evaluate(f0) for fc in fcs]
         v1 = [fc.evaluate(f1) for fc in fcs]
