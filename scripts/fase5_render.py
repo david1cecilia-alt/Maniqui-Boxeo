@@ -8,6 +8,7 @@ trabajo/capturas/ (fila de arriba de frente, abajo de lado desde su izquierda):
   fase5_esquiva_avanzando_v2.png       5 fotogramas
   fase5_rueda_der.png / fase5_rueda_izq.png   5 fotogramas de la "U"
   fase5_paso_adelante.png, fase5_paso_lateral_izq.png, fase5_paso_lateral_der.png   5 fotogramas
+  fase5_<acción>.png   golpes 5-9, esquiva_der/izq, ballesteo, parada y pivote (con el fotograma clave)
 La cámara no se mueve dentro de cada lámina (se ve el desplazamiento) y el suelo (Z=0) es la
 línea gris.
 
@@ -151,4 +152,10 @@ for pa in ("paso_adelante", "paso_lateral_izq", "paso_lateral_der"):
            alto=2.2)
 for r in ("rueda_der", "rueda_izq"):
     lamina(r, [(r, f, "") for f in (1, 8, 19, 30, 37)])
+for ac in ("jab_cuerpo", "recto_cuerpo", "crochet_adelantado_cuerpo", "gancho_adelantado", "gancho_trasero",
+           "esquiva_der", "esquiva_izq", "ballesteo", "parada", "pivote"):
+    n = ultimo(ac)
+    k = int(bpy.data.actions[ac].get("clave", n // 2))
+    fotos = sorted({1, max(2, (1 + k) // 2), k, min(n - 1, (k + n) // 2), n})
+    lamina(ac, [(ac, f, "clave" if f == k else "") for f in fotos], alto=2.2)
 print("FIN RENDERS FASE 5")

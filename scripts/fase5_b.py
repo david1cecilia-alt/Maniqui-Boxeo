@@ -13,6 +13,11 @@ Ejecutar DESPUÉS de fase4_b.py (que rehace las _v2 y deja paso_atras_v2 desplaz
 3b. Pasos hechos a mano (25 fot., 0,8 s): paso_adelante, paso_lateral_izq y paso_lateral_der. Como
    paso_atras_v2: sale primero el pie del lado hacia el que se va y le sigue el otro; acaban
    desplazados 25 cm y en guardia (solo la pose coincide con el primer fotograma).
+3c. Acciones que faltaban para la app (todas REVISAR CON ENTRENADOR): jab_cuerpo, recto_cuerpo y
+   crochet_adelantado_cuerpo (desde las _v2, bajando con las piernas hasta que el hombro queda a la
+   altura del objetivo), gancho_adelantado y gancho_trasero a la cara (desde los ganchos al cuerpo,
+   puño a la altura de la barbilla, codo ~90°, palma hacia uno mismo), esquiva_der / esquiva_izq,
+   ballesteo, parada (mano derecha) y pivote (acaba girado 45°).
 4. Esquivas _v2: los pies resbalaban bajo una cadera fija (sin desplazamiento X/Y): parecía
    que flotaba. Ahora los pies van fijos en el suelo con IK (suela en Z=0) donde están en el
    fot. 1 de la esquiva (la postura de Mixamo va con su tronco, girado ~45° respecto a la
@@ -102,7 +107,8 @@ acc = bpy.data.actions
 if "bloqueo" in acc and "reaccion_golpe" not in acc:
     acc["bloqueo"].name = "reaccion_golpe"
     p("  bloqueo (Mixamo) -> reaccion_golpe (sin _v2)")
-for n in [a.name for a in acc if a.name in ("bloqueo", "bloqueo_v2", "rueda", "rueda_v2", "reaccion_golpe_v2")
+NUEVAS_APP = ("jab_cuerpo", "recto_cuerpo", "crochet_adelantado_cuerpo", "gancho_adelantado", "gancho_trasero", "esquiva_der", "esquiva_izq", "ballesteo", "parada", "pivote")
+for n in [a.name for a in acc if a.name in ("bloqueo", "bloqueo_v2", "rueda", "rueda_v2", "reaccion_golpe_v2") + NUEVAS_APP
           or a.name.startswith(("bloqueo_", "rueda_", "paso_adelante", "paso_lateral_"))]:
     acc.remove(acc[n])
     p(f"  borrada {n}")
@@ -213,6 +219,9 @@ p(f"  guardia_v2 fot. 1: suela izq. {s0['Left'] * 100:+.1f} cm, der. {s0['Right'
   " fijos se apoyan las dos en Z=0")
 
 
+BOLA0 = {lado: M0[lado + "ToeBase"].translation - Vector((0, 0, s0[lado])) for lado in LADOS}
+
+
 def referencia_piernas(M, pie):
     """Pose de referencia de las piernas: matrices, pie apoyado y polo de la rodilla (sigue al pie)."""
     ref = {}
@@ -320,8 +329,9 @@ def base_ortonormal(y, n):
     return Matrix((x, y, x.cross(y))).transposed()
 
 
-def ik_pierna(lado, T, ref=None):
-    """Pierna con el tobillo en T y el pie con el mismo giro que en la referencia (apoyado)."""
+def ik_pierna(lado, T, ref=None, rot=None):
+    """Pierna con el tobillo en T y el pie con el mismo giro que en la referencia (apoyado), más
+    el giro extra rot (pie que pivota sobre la punta)."""
     r = (ref or REF_GUARDIA)[lado]
     RM = r["M"]
     S = pb[lado + "UpLeg"].matrix.translation.copy()
@@ -345,7 +355,7 @@ def ik_pierna(lado, T, ref=None):
         R = base_ortonormal((f - i).normalized(), n) @ base_ortonormal((f0 - i0).normalized(), n0).inverted()
         pb[lado + hueso].matrix = Matrix.LocRotScale(i, R.to_quaternion() @ q(RM[hueso]), None)
         upd()
-    pb[lado + "Foot"].matrix = Matrix.LocRotScale(T2, q(RM["Foot"]), None)
+    pb[lado + "Foot"].matrix = Matrix.LocRotScale(T2, (rot or Quaternion()) @ q(RM["Foot"]), None)
     upd()
     return (T2 - T).length
 
@@ -377,13 +387,13 @@ def rotar(nombre, R):
     upd()
 
 
-def posar(par, brazos, pies_extra=None, cadera_extra=None):
+def posar(par, brazos, pies_extra=None, cadera_extra=None, giro_extra=0.0, rot_pies=None):
     """par: parámetros (m y grados). brazos: {lado: (guante en coords. de cabeza, codo en coords. de pecho)}.
     giro/torsion/lado positivos = hacia la izquierda del boxeador."""
     base_cuerpo()
     M = pb["Hips"].matrix
     t = M.translation + X * par["sx"] + DELANTE * par["sy"] - Vector((0, 0, par["baja"])) + (cadera_extra or Vector())
-    pb["Hips"].matrix = Matrix.LocRotScale(t, Quaternion((0, 0, 1), math.radians(par["giro"])) @ q(M), None)
+    pb["Hips"].matrix = Matrix.LocRotScale(t, Quaternion((0, 0, 1), math.radians(par["giro"] + giro_extra)) @ q(M), None)
     upd()
     # flex: tronco hacia delante repartido; abdomen: contracción (flexión sobre todo abajo, Spine/Spine1)
     for n, frac, fab in (("Spine", 0.3, 0.5), ("Spine1", 0.35, 0.4), ("Spine2", 0.35, 0.1)):
@@ -404,8 +414,22 @@ def posar(par, brazos, pies_extra=None, cadera_extra=None):
     rotar("Head", Quaternion(arriba.cross(cara), math.radians(par["cabeza"] * 0.6)))
     # piernas: pies fijos en el suelo
     pies = {lado: PIE0[lado] + (pies_extra or {}).get(lado, Vector()) for lado in LADOS}
+    # pie que pivota sobre la punta: giro (grados, + = hacia su izquierda) y talón levantado (grados)
+    rot, dedos = {}, {}
+    for lado, (yaw, talon) in (rot_pies or {}).items():
+        B = BOLA0[lado] + (pies_extra or {}).get(lado, Vector())
+        d = B - pies[lado]
+        d = Vector((d.x, d.y, 0)).normalized()
+        eje = (-d).cross(Vector((0, 0, 1))).normalized()
+        Ry = Quaternion((0, 0, 1), math.radians(yaw))
+        R = Ry @ Quaternion(eje, math.radians(talon))
+        pies[lado] = B + R @ (pies[lado] - B)
+        rot[lado], dedos[lado] = R, (Ry @ eje, talon)
     bajada = bajar_para_llegar(pies)
-    desliz = max(ik_pierna(lado, T) for lado, T in pies.items())
+    desliz = max(ik_pierna(lado, T, rot=rot.get(lado)) for lado, T in pies.items())
+    for lado, (eje, talon) in dedos.items():   # los dedos siguen planos en el suelo
+        if talon:
+            rotar(lado + "ToeBase", Quaternion(eje, -math.radians(talon)))
     # brazos
     huecos, emp = {}, 0.0
     for lado, s in LADOS.items():
@@ -501,9 +525,15 @@ def crear(nombre, n_fot, claves, modo, brazos, pico=None, pies=None):
     rep = dict(bajada=0.0, desliz=0.0, hueco=1.0, empuje=0.0, guantes=1.0, cab_min=9.0, cab_x=[0.0, 0.0])
     for f in range(1, n_fot + 1):
         esc.frame_set(f)
-        extra = pies(f) if pies else None   # {lado: desplazamiento del pie} o ({...}, desplazamiento de la cadera)
-        pe, ce = extra if isinstance(extra, tuple) else (extra, None)
-        r = posar(interp(claves, f, modo), brazos, pe, ce)
+        # pies(f): {lado: desplazamiento del pie}, o (pies, cadera), o dict(pies=, cadera=, giro=, rotpie=)
+        ext = pies(f) if pies else None
+        if isinstance(ext, tuple):
+            ext = dict(pies=ext[0], cadera=ext[1])
+        elif ext is not None and not ({"pies", "cadera", "giro", "rotpie"} & set(ext)):
+            ext = dict(pies=ext)
+        ext = ext or {}
+        r = posar(interp(claves, f, modo), brazos, ext.get("pies"), ext.get("cadera"), ext.get("giro", 0.0),
+                  ext.get("rotpie"))
         for n, b in pb.items():
             previo[n] = clave(b, f, previo[n])
         pb["Hips"].keyframe_insert("location", frame=f, group=pb["Hips"].name)
@@ -524,6 +554,8 @@ def crear(nombre, n_fot, claves, modo, brazos, pico=None, pies=None):
             k.interpolation = "BEZIER"
             k.handle_left_type = k.handle_right_type = "AUTO_CLAMPED"
         fc.update()
+    if pico:
+        a["clave"] = pico
     return rep
 
 
@@ -553,7 +585,7 @@ def informe(nombre, n_fot, rep):
       f" (empuje {rep['empuje'] * 100:3.1f}) | guante-guante mín. {rep['guantes'] * 100:4.1f} cm"
       f" | suelas Z {min(zs) * 100:+.1f}/{max(zs) * 100:+.1f} cm | cabeza: baja hasta {rep['cab_min']:.2f} m,"
       f" X {rep['cab_x'][0] * 100:+.0f}/{rep['cab_x'][1] * 100:+.0f} cm | fot.1 y último vs guardia_v2: {ini:.0f} / {fin:.0f} mm")
-    if "pico" in rep:
+    if rep.get("pico"):
         p(f"     punto clave -> {rep['pico']}")
 
 
@@ -691,6 +723,270 @@ for nombre, (dire, primero, segundo) in PASOS.items():
       f" {NOMBRE_LADO[segundo]} (fot. 11-21) | desplazamiento {(h1 - h0).length * 100:.1f} cm | pose final vs inicial"
       f" (quitando el desplazamiento) {dif * 1000:.1f} mm | suela de los pies apoyados Z {min(apoyo) * 100:+.2f}/"
       f"{max(apoyo) * 100:+.2f} cm | aire guante-cabeza mín. {rep_p['hueco'] * 100:.1f} cm")
+
+# ================================================================ 4c. acciones que faltaban para la app (25)
+# Todas: REVISAR CON ENTRENADOR. Desde guardia_v2 (o desde la _v2 de la que salen) y volviendo a ella.
+import re  # noqa: E402
+
+_F3 = open(os.path.join(C.TRABAJO, "fase3_resumen.txt"), encoding="utf-8").read()
+Z = Vector((0, 0, 1))
+
+
+def impacto(golpe):
+    m = re.search(rf"^\s+{golpe}\s+mano.*?IMPACTO fot\.\s+(\d+)", _F3, re.M)
+    return int(m.group(1))
+
+
+def curva(f, imp, f1, sube=10, aguanta=3, baja=12):
+    """0 -> 1 (suave) hasta el impacto, se mantiene `aguanta` fotogramas y vuelve a 0 antes del final."""
+    a = max(2, imp - sube)
+    b = min(imp + aguanta, f1 - 3)
+    c = min(b + baja, f1 - 1)
+    if f <= a or f >= c:
+        return 0.0
+    if f < imp:
+        return suave((f - a) / (imp - a))
+    if f <= b:
+        return 1.0
+    return 1 - suave((f - b) / (c - b))
+
+
+def rampa(f, claves):
+    """claves [(fot, valor)] con transiciones suaves."""
+    for (fa, va), (fb, vb) in zip(claves, claves[1:]):
+        if fa <= f <= fb:
+            return va + (vb - va) * suave((f - fa) / (fb - fa))
+    return claves[-1][1]
+
+
+REST_Z = {n: REST[n].translation.z for n in ("Spine1", "Spine2", "Head")}
+OBJ_PLEXO = (REST_Z["Spine1"] + REST_Z["Spine2"]) / 2          # plexo/estómago del rival (mismo muñeco)
+OBJ_COSTILLAS = REST_Z["Spine1"] + 0.05                         # costillas flotantes del rival
+OBJ_BARBILLA = REST_Z["Head"] - 0.03                            # barbilla del rival
+PALMA = {lado: q(REST[lado + "Hand"]).inverted() @ Vector((0, 0, -1)) for lado in LADOS}   # en T las palmas miran abajo
+HUESOS_PIERNA6 = [l + x for l in LADOS for x in ("UpLeg", "Leg", "Foot", "ToeBase")]
+
+
+def gancho_a_la_cara(lado, w):
+    """Brazo del gancho a la cara (impacto): codo doblado ~90°, antebrazo vertical delante del pecho y
+    el puño a la altura de la barbilla; palma hacia uno mismo. Se mezcla con el brazo de la _v2 (peso w)."""
+    s = LADOS[lado]
+    sp1 = (pb["Spine1"].head, marco("Spine1"))
+    S = pb[lado + "Arm"].head
+    E = punto(*sp1, Vector((0.30, 0.12, 0.10)), s)
+    if (E - S).length > LON[lado + "Arm"] * 0.995:
+        E = S + (E - S).normalized() * LON[lado + "Arm"] * 0.995
+    dirf = (punto(*sp1, Vector((0.35, 1.0, 0.0)), s) - sp1[0]).normalized()
+    # sube (o baja) codo y muñeca para que el puño quede a la altura de la barbilla del rival
+    puno_z = (E + dirf * (LON[lado + "ForeArm"] + CENTRO_PUNO[lado].length)).z
+    E = E + Z * (OBJ_BARBILLA - puno_z)
+    if (E - S).length > LON[lado + "Arm"] * 0.995:
+        E = S + (E - S).normalized() * LON[lado + "Arm"] * 0.995
+    W = E + dirf * LON[lado + "ForeArm"]
+    T = pb[lado + "Hand"].head.lerp(W, w)
+    polo = pb[lado + "ForeArm"].head.lerp(E, w)
+    hq, _ = resolver_brazo(lado, T, polo, muneca=True)
+    # palma hacia uno mismo: girar la mano sobre su eje
+    MH = pb[lado + "Hand"].matrix
+    ej = eje_y(MH)
+    palma = q(MH) @ PALMA[lado]
+    quiero = -sp1[1][0]
+    a_ = palma - ej * palma.dot(ej)
+    b_ = quiero - ej * quiero.dot(ej)
+    if a_.length > 1e-4 and b_.length > 1e-4:
+        ang = a_.normalized().angle(b_.normalized())
+        if a_.cross(b_).dot(ej) < 0:
+            ang = -ang
+        rotar(lado + "Hand", Quaternion(ej, ang * w))
+    return hq
+
+
+BAJA_MIN = 0.08
+
+
+def derivar(origen, nombre, lado_golpe, objetivo=None, paso=0.10, gancho=False):
+    """Golpe nuevo a partir de una _v2: se baja con las piernas (rodillas y pierna de delante que
+    avanza) hasta que el hombro del brazo que golpea queda a la altura del objetivo; la otra mano sigue
+    pegada a la cara. Gancho a la cara: el brazo cambia de trayectoria y las piernas cargan y empujan."""
+    base = origen[:-3]
+    imp = impacto(base)
+    a = bpy.data.actions[origen].copy()
+    a.name = nombre
+    a.use_fake_user = True
+    a["clave"] = imp
+    poner(nombre)
+    f0, f1 = (int(x) for x in a.frame_range)
+    # en los golpes de Mixamo la cadera se desplaza y los pies la acompañan: las piernas siguen los pies de
+    # la animación en cada fotograma (suela en el suelo) y encima la pierna de delante avanza y la cadera baja
+    esc.frame_set(imp)
+    hombro0 = pb[lado_golpe + "Arm"].head.z
+    puno0 = (pb[lado_golpe + "Hand"].matrix @ CENTRO_PUNO[lado_golpe]).z
+    # se baja con las piernas hasta que el hombro quede a la altura del objetivo (máx. 20 cm). El jab y el recto
+    # de Mixamo ya se inclinan y golpean bajo (el hombro casi está a esa altura): como mínimo BAJA_MIN de piernas
+    baja_max = 0.0 if objetivo is None else min(max(hombro0 - objetivo, BAJA_MIN), 0.20)
+    huesos = HUESOS_PIERNA6 + ([lado_golpe + x for x in ("Arm", "ForeArm", "Hand")] if gancho else [])
+    previo = {n: None for n in huesos}
+    medida, bajada, aire = {}, 0.0, 1.0
+    for f in range(f0, f1 + 1):
+        esc.frame_set(f)
+        k = curva(f, imp, f1)
+        for n in [l + "ToeBase" for l in LADOS]:
+            pb[n].rotation_quaternion = BASE[n][1]
+        upd()
+        sf = suelas()
+        pief = {l: pb[l + "Foot"].matrix.translation - Vector((0, 0, sf[l] if sf[l] < 0.015 else min(sf[l], 0.0)))
+                for l in LADOS}   # apoyado (menos de 1,5 cm del suelo) -> suela en Z=0; en el aire se deja
+        ref = referencia_piernas({n: b.matrix.copy() for n, b in pb.items()}, pief)
+        if gancho:   # carga (baja) antes del impacto y empuja hacia arriba hasta el impacto
+            dz = 0.05 * rampa(f, [(f0, 0), (max(f0 + 1, imp - 12), 0), (imp - 5, 1), (imp, 0), (f1, 0)])
+            kp = curva(f, imp, f1, sube=8, aguanta=2, baja=10)
+        else:
+            dz = baja_max * k
+            kp = k
+        M = pb["Hips"].matrix
+        pb["Hips"].matrix = Matrix.LocRotScale(M.translation + DELANTE * (paso * 0.5 * kp) - Z * dz, q(M), None)
+        upd()
+        pies = {lado: pief[lado].copy() for lado in LADOS}
+        pies["Left"] += DELANTE * (paso * kp) + Z * (0.03 * math.sin(math.pi * kp))
+        bajada = max(bajada, bajar_para_llegar(pies))
+        for lado, T in pies.items():
+            ik_pierna(lado, T, ref)
+        if gancho:
+            aire = min(aire, gancho_a_la_cara(lado_golpe, curva(f, imp, f1, sube=8, aguanta=2, baja=10)))
+        pb["Hips"].keyframe_insert("location", frame=f, group=pb["Hips"].name)
+        for n in huesos:
+            previo[n] = clave(pb[n], f, previo[n])
+        if f == imp:
+            puno = pb[lado_golpe + "Hand"].matrix @ CENTRO_PUNO[lado_golpe]
+            MF = pb[lado_golpe + "ForeArm"].matrix
+            flex = math.degrees((pb[lado_golpe + "ForeArm"].head - pb[lado_golpe + "Arm"].head).angle(
+                pb[lado_golpe + "Hand"].head - pb[lado_golpe + "ForeArm"].head))
+            otra = "Right" if lado_golpe == "Left" else "Left"
+            medida = dict(hombro=pb[lado_golpe + "Arm"].head.z, puno=puno.z, flex=flex,
+                          otra=hueco(guante_mundo(otra, pb[otra + "ForeArm"].matrix, pb[otra + "Hand"].matrix),
+                                     pb["Head"].matrix))
+    for fc in a.fcurves:
+        fc.update()
+    txt = (f"  {nombre:26} desde {origen}, impacto fot. {imp} | baja la cadera {baja_max * 100:.0f} cm"
+           f" (+{bajada * 100:.1f} para llegar) y la pierna de delante avanza {paso * 100:.0f} cm | en el impacto: hombro"
+           f" {medida['hombro']:.2f} m (antes {hombro0:.2f}), puño {medida['puno']:.2f} m (antes {puno0:.2f})")
+    if objetivo is not None:
+        txt += f", objetivo {objetivo:.2f} m"
+    txt += f" | la otra mano a {medida['otra'] * 100:.1f} cm de la cara"
+    if gancho:
+        txt += (f" | codo doblado {medida['flex']:.0f}° | barbilla del rival a {OBJ_BARBILLA:.2f} m"
+                f" | aire guante-cabeza mín. {aire * 100:.1f} cm")
+    p(txt)
+
+
+p("\n=== GOLPES NUEVOS (7, 8, 9 al cuerpo bajando con las piernas; 5 y 6 ganchos a la cara) ===")
+p(f"  objetivos (rival del mismo tamaño): plexo/estómago {OBJ_PLEXO:.2f} m, costillas {OBJ_COSTILLAS:.2f} m,"
+  f" barbilla {OBJ_BARBILLA:.2f} m")
+derivar("jab_v2", "jab_cuerpo", "Left", OBJ_PLEXO)
+derivar("recto_v2", "recto_cuerpo", "Right", OBJ_PLEXO)
+derivar("crochet_adelantado_v2", "crochet_adelantado_cuerpo", "Left", OBJ_COSTILLAS)
+derivar("gancho_adelantado_cuerpo_v2", "gancho_adelantado", "Left", paso=0.05, gancho=True)
+derivar("gancho_trasero_cuerpo_v2", "gancho_trasero", "Right", paso=0.05, gancho=True)
+
+
+# ---------------------------------------------------------------- esquivas laterales
+def cabeza_lateral(nombre, f):
+    poner(nombre)
+    esc.frame_set(1)
+    c1 = centro_cabeza().copy()
+    esc.frame_set(f)
+    d = centro_cabeza() - c1
+    return Vector((d.x, d.y, 0)).length, d.z
+
+
+N_ESQ = 25
+p("\n=== ESQUIVAS LATERALES (la cabeza se aparta 20-25 cm y vuelve; pie contrario pivota sin moverse) ===")
+for nombre, s in (("esquiva_der", -1.0), ("esquiva_izq", 1.0)):
+    opuesto = "Left" if s < 0 else "Right"
+    escala = 1.0
+    for intento in range(3):
+        pose = dict(sx=0.07 * s * escala, lado=14.0 * s * escala, torsion=15.0 * s * escala, giro=8.0 * s * escala,
+                    cuello=-8.0 * s * escala, baja=0.04, flex=4.0)
+
+        def pies_esq(f, s=s, opuesto=opuesto):
+            k = rampa(f, [(1, 0), (9, 1), (15, 1), (N_ESQ, 0)])
+            return dict(rotpie={opuesto: (20.0 * s * k, 15.0 * k)})
+
+        if nombre in bpy.data.actions:
+            bpy.data.actions.remove(bpy.data.actions[nombre])
+        rep_e = crear(nombre, N_ESQ, [(1, {}), (9, pose), (15, pose), (N_ESQ, {})], "suave", {}, pico=12, pies=pies_esq)
+        d, dz = cabeza_lateral(nombre, 12)
+        if 0.20 <= d <= 0.25:
+            break
+        escala *= 0.225 / d
+    informe(nombre, N_ESQ, rep_e)
+    p(f"     la cabeza se aparta {d * 100:.0f} cm (y baja {-dz * 100:.0f} cm); pivota el pie {NOMBRE_LADO[opuesto]}"
+      f" (20° y talón arriba 15°) sin moverse del sitio")
+
+# ---------------------------------------------------------------- ballesteo
+N_BAL = 28
+p("\n=== BALLESTEO (tronco atrás sin paso; solo el pie de atrás puede retroceder) ===")
+
+
+def pies_bal(f):
+    k, alt = avance(f, 2, 9)
+    k2, alt2 = avance(f, 19, 27)
+    kk = k * (1 - k2)
+    return {"Right": -DELANTE * (0.10 * kk) + Z * (0.03 * (alt + alt2))}
+
+
+pose_bal = dict(sy=-0.12, flex=-20.0, cabeza=16.0, baja=0.02, wL=1.0, wR=1.0)
+rep_b = crear("ballesteo", N_BAL, [(1, {}), (10, pose_bal), (18, pose_bal), (N_BAL, {})], "suave", MANOS_ARRIBA,
+              pico=14, pies=pies_bal)
+informe("ballesteo", N_BAL, rep_b)
+d, dz = cabeza_lateral("ballesteo", 14)
+p(f"     la cabeza se echa {d * 100:.0f} cm hacia atrás; el pie de atrás retrocede 10 cm y vuelve; el de delante fijo")
+
+# ---------------------------------------------------------------- parada (mano de atrás)
+N_PAR = 18
+p("\n=== PARADA (toque corto hacia abajo con la mano de atrás, derecha) ===")
+g_par = GUARDIA["Right"][0] + Vector((0.07, -0.07, -0.12))
+c_par = GUARDIA["Right"][1] + Vector((0.05, 0.0, -0.03))
+pose_par = dict(wR=1.0, torsion=-5.0, lado=-5.0, sx=-0.02, cabeza=2.0)
+rep_pa = crear("parada", N_PAR, [(1, {}), (6, pose_par), (9, pose_par), (N_PAR, {})], "suave",
+               {"Right": (g_par, c_par)}, pico=7)
+informe("parada", N_PAR, rep_pa)
+p(f"     la mano se mueve {(g_par - GUARDIA['Right'][0]).length * 100:.0f} cm desde la guardia (un palmo ~20 cm):"
+  " hacia dentro, abajo y adelante; la cabeza se aparta un poco a su derecha")
+
+# ---------------------------------------------------------------- pivote
+N_PIV = 25
+p("\n=== PIVOTE (paso en diagonal con el pie de delante y giro de 45° sobre su punta; acaba girado) ===")
+PASO_PIV = (DELANTE + X).normalized() * 0.15
+GIRO_PIV = -45.0   # hacia su derecha (sentido horario visto desde arriba): vuelve a encarar al rival
+
+
+def pies_piv(f):
+    k1, a1 = avance(f, 1, 9)
+    k2, a2 = avance(f, 9, 24)
+    th = GIRO_PIV * k2
+    Rz = Quaternion(Z, math.radians(th))
+    Bp = BOLA0["Left"] + PASO_PIV * k1
+    off_L = PASO_PIV * k1 + Z * (0.035 * a1)
+    nb = Bp + Rz @ (BOLA0["Right"] - Bp)
+    off_R = nb - BOLA0["Right"] + Z * (0.03 * a2)
+    H0 = M0["Hips"].translation
+    Hs = H0 + PASO_PIV * (0.6 * k1)
+    cad = (Bp + Rz @ (Hs - Bp)) - H0
+    return dict(pies={"Left": off_L, "Right": off_R}, cadera=cad, giro=th,
+                rotpie={"Left": (th, 10.0 * a2), "Right": (th, 0.0)})
+
+
+rep_pv = crear("pivote", N_PIV, [(1, {}), (13, dict(baja=0.03)), (N_PIV, {})], "suave", {}, pico=16, pies=pies_piv)
+informe("pivote", N_PIV, rep_pv)
+poner("pivote")
+esc.frame_set(1)
+y1 = math.degrees(q(pb["Hips"].matrix).to_euler().z)
+h1 = pb["Hips"].head.copy()
+esc.frame_set(N_PIV)
+y2 = math.degrees(q(pb["Hips"].matrix).to_euler().z)
+p(f"     acaba girado {y2 - y1:+.0f}° (negativo = hacia su derecha) y desplazado {(pb['Hips'].head - h1).length * 100:.0f} cm;"
+  " el pie de delante gira sobre su punta y el de atrás describe un arco")
 
 # ---------------------------------------------------------------- 5. esquivas: pies fijos en el suelo y paso real
 PASO = 0.22

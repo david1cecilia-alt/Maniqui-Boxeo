@@ -51,7 +51,7 @@ GOLPES = {"jab", "recto", "crochet_adelantado", "crochet_trasero", "crochet_tras
 SUELTA_LIBRE = {"bloqueo"}
 DESPLAZA = {"paso_atras"}          # acaban desplazadas: la cadera no vuelve al sitio
 # sin _v2: la reacción a un golpe de Mixamo, la rueda antigua y las acciones hechas a mano (fase5_b.py)
-SIN_V2 = {"bloqueo", "reaccion_golpe", "rueda"}
+SIN_V2 = {"bloqueo", "reaccion_golpe", "rueda", "jab_cuerpo", "recto_cuerpo", "crochet_adelantado_cuerpo", "gancho_adelantado", "gancho_trasero", "esquiva_der", "esquiva_izq", "ballesteo", "parada", "pivote"}
 
 out = []
 
