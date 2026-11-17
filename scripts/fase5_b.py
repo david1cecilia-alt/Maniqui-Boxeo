@@ -18,6 +18,8 @@ Ejecutar DESPUÉS de fase4_b.py (que rehace las _v2 y deja paso_atras_v2 desplaz
    altura del objetivo), gancho_adelantado y gancho_trasero a la cara (desde los ganchos al cuerpo,
    puño a la altura de la barbilla, codo ~90°, palma hacia uno mismo), esquiva_der / esquiva_izq,
    ballesteo, parada (mano derecha) y pivote (acaba girado 45°).
+3d. crochet_trasero_v2 empieza y acaba en la guardia (la de Mixamo empezaba a mitad del golpe):
+   transición de 8 fotogramas desde guardia_v2 al principio y de vuelta al final.
 4. Esquivas _v2: los pies resbalaban bajo una cadera fija (sin desplazamiento X/Y): parecía
    que flotaba. Ahora los pies van fijos en el suelo con IK (suela en Z=0) donde están en el
    fot. 1 de la esquiva (la postura de Mixamo va con su tronco, girado ~45° respecto a la
@@ -767,22 +769,28 @@ PALMA = {lado: q(REST[lado + "Hand"]).inverted() @ Vector((0, 0, -1)) for lado i
 HUESOS_PIERNA6 = [l + x for l in LADOS for x in ("UpLeg", "Leg", "Foot", "ToeBase")]
 
 
+PUNO_LADO = 0.08   # el puño, hacia su lado del centro de la cara
+
+
 def gancho_a_la_cara(lado, w):
     """Brazo del gancho a la cara (impacto): codo doblado ~90°, antebrazo vertical delante del pecho y
     el puño a la altura de la barbilla; palma hacia uno mismo. Se mezcla con el brazo de la _v2 (peso w)."""
     s = LADOS[lado]
     sp1 = (pb["Spine1"].head, marco("Spine1"))
     S = pb[lado + "Arm"].head
-    E = punto(*sp1, Vector((0.30, 0.12, 0.10)), s)
-    if (E - S).length > LON[lado + "Arm"] * 0.995:
-        E = S + (E - S).normalized() * LON[lado + "Arm"] * 0.995
-    dirf = (punto(*sp1, Vector((0.35, 1.0, 0.0)), s) - sp1[0]).normalized()
-    # sube (o baja) codo y muñeca para que el puño quede a la altura de la barbilla del rival
-    puno_z = (E + dirf * (LON[lado + "ForeArm"] + CENTRO_PUNO[lado].length)).z
-    E = E + Z * (OBJ_BARBILLA - puno_z)
-    if (E - S).length > LON[lado + "Arm"] * 0.995:
-        E = S + (E - S).normalized() * LON[lado + "Arm"] * 0.995
-    W = E + dirf * LON[lado + "ForeArm"]
+    # el puño va DELANTE de la propia cara, hacia el rival, a la altura de su barbilla (la cara del rival a
+    # la misma altura que la del muñeco) y PUNO_LADO hacia su lado (sin cruzar la cara). La distancia hacia
+    # delante se elige para que el codo quede doblado ~90°; el codo cae abajo y hacia su lado.
+    a_, b_ = LON[lado + "Arm"], LON[lado + "ForeArm"]
+    largo_p = CENTRO_PUNO[lado].length
+    izq_h = marco("Head")[2] * s
+    lado_h = Vector((izq_h.x, izq_h.y, 0)).normalized()
+    dirf = (Z + DELANTE * 0.35 - lado_h * 0.05).normalized()
+    cab = centro_cabeza()
+    base = Vector((cab.x, cab.y, OBJ_BARBILLA)) + lado_h * PUNO_LADO - dirf * largo_p
+    d90 = math.sqrt(a_ * a_ + b_ * b_)
+    W = min((base + DELANTE * (k / 100) for k in range(5, 70)), key=lambda w_: abs((w_ - S).length - d90))
+    E = S + (DELANTE * 0.4 + lado_h * 0.6 - Z * 0.6)     # polo del codo: abajo y hacia su lado
     T = pb[lado + "Hand"].head.lerp(W, w)
     polo = pb[lado + "ForeArm"].head.lerp(E, w)
     hq, _ = resolver_brazo(lado, T, polo, muneca=True)
@@ -790,7 +798,7 @@ def gancho_a_la_cara(lado, w):
     MH = pb[lado + "Hand"].matrix
     ej = eje_y(MH)
     palma = q(MH) @ PALMA[lado]
-    quiero = -sp1[1][0]
+    quiero = -DELANTE   # la palma mira hacia atrás, hacia uno mismo
     a_ = palma - ej * palma.dot(ej)
     b_ = quiero - ej * quiero.dot(ej)
     if a_.length > 1e-4 and b_.length > 1e-4:
@@ -862,7 +870,10 @@ def derivar(origen, nombre, lado_golpe, objetivo=None, paso=0.10, gancho=False):
             flex = math.degrees((pb[lado_golpe + "ForeArm"].head - pb[lado_golpe + "Arm"].head).angle(
                 pb[lado_golpe + "Hand"].head - pb[lado_golpe + "ForeArm"].head))
             otra = "Right" if lado_golpe == "Left" else "Left"
+            sg = LADOS[lado_golpe]
             medida = dict(hombro=pb[lado_golpe + "Arm"].head.z, puno=puno.z, flex=flex,
+                          lat_puno=(puno - centro_cabeza()).dot(marco("Head")[2] * sg),
+                          lat_codo=(pb[lado_golpe + "ForeArm"].head - pb["Spine2"].head).dot(marco("Spine2")[2] * sg),
                           otra=hueco(guante_mundo(otra, pb[otra + "ForeArm"].matrix, pb[otra + "Hand"].matrix),
                                      pb["Head"].matrix))
     for fc in a.fcurves:
@@ -874,7 +885,9 @@ def derivar(origen, nombre, lado_golpe, objetivo=None, paso=0.10, gancho=False):
         txt += f", objetivo {objetivo:.2f} m"
     txt += f" | la otra mano a {medida['otra'] * 100:.1f} cm de la cara"
     if gancho:
-        txt += (f" | codo doblado {medida['flex']:.0f}° | barbilla del rival a {OBJ_BARBILLA:.2f} m"
+        txt += (f" | codo doblado {medida['flex']:.0f}°, codo {medida['lat_codo'] * 100:+.0f} cm hacia su lado del eje del"
+                f" pecho, puño {medida['lat_puno'] * 100:+.0f} cm hacia su lado del centro de la cara (+ = sin cruzar)"
+                f" | barbilla del rival a {OBJ_BARBILLA:.2f} m"
                 f" | aire guante-cabeza mín. {aire * 100:.1f} cm")
     p(txt)
 
@@ -906,7 +919,7 @@ for nombre, s in (("esquiva_der", -1.0), ("esquiva_izq", 1.0)):
     escala = 1.0
     for intento in range(3):
         pose = dict(sx=0.07 * s * escala, lado=14.0 * s * escala, torsion=15.0 * s * escala, giro=8.0 * s * escala,
-                    cuello=-8.0 * s * escala, baja=0.04, flex=4.0)
+                    cuello=-8.0 * s * escala, baja=0.10, flex=12.0, abdomen=6.0)   # más agachada
 
         def pies_esq(f, s=s, opuesto=opuesto):
             k = rampa(f, [(1, 0), (9, 1), (15, 1), (N_ESQ, 0)])
@@ -1055,6 +1068,78 @@ for nombre, (pie, sentido, ida, vuelta) in ESQUIVAS.items():
       f"     suela de los pies apoyados: Z {min(zs_apoyo) * 100:+.2f}/{max(zs_apoyo) * 100:+.2f} cm | cadera bajada para llegar:"
       f" {bajada * 100:.1f} cm máx. | tobillo fuera del objetivo: {desliz * 1000:.1f} mm | fot.1 y último vs guardia_v2:"
       f" {ini:.0f} / {fin:.0f} mm (el tronco es el de Mixamo)")
+
+# ---------------------------------------------------------------- 5b. crochet_trasero_v2 desde la guardia
+# La animación de Mixamo empieza a mitad del golpe (el brazo ya va suelto en el fot. 1). Se retrasa
+# P fotogramas y se añade una transición suave desde guardia_v2 (fot. 1) al principio y de vuelta a
+# ella al final; las piernas con IK (los pies van de su sitio en la guardia al de la animación).
+P_TRANS = 8
+
+
+def pose_local():
+    return {n: (b.location.copy(), b.rotation_quaternion.copy()) for n, b in pb.items()}
+
+
+def pies_suelo():
+    sf = suelas()
+    return {l: pb[l + "Foot"].matrix.translation - Vector((0, 0, sf[l])) for l in LADOS}
+
+
+def desde_guardia(nombre):
+    a = bpy.data.actions[nombre]
+    if a.get("desde_guardia"):
+        return None
+    poner(nombre)
+    f0, f1 = (int(x) for x in a.frame_range)
+    esc.frame_set(f0)
+    antes = max((b.head - M0[n].translation).length for n, b in pb.items())
+    for fc in a.fcurves:
+        for k in fc.keyframe_points:
+            k.co.x += P_TRANS
+            k.handle_left.x += P_TRANS
+            k.handle_right.x += P_TRANS
+        fc.update()
+    esc.frame_set(f0 + P_TRANS)
+    ini, pies_ini = pose_local(), pies_suelo()
+    esc.frame_set(f1 + P_TRANS)
+    fin, pies_fin = pose_local(), pies_suelo()
+    guard = {n: (BASE[n][0], BASE[n][1]) for n in pb}
+    tramos = [(f, (f - f0) / P_TRANS, guard, ini, PIE0, pies_ini) for f in range(f0, f0 + P_TRANS)]
+    tramos += [(f, (f - f1 - P_TRANS) / P_TRANS, fin, guard, pies_fin, PIE0)
+               for f in range(f1 + P_TRANS + 1, f1 + 2 * P_TRANS + 1)]
+    for f, t, A, B, pa, pb_ in tramos:
+        t = suave(t)
+        esc.frame_set(f)
+        for n, b in pb.items():
+            qa, qb = A[n][1].copy(), B[n][1]
+            if qa.dot(qb) < 0:
+                qa.negate()
+            b.location = A[n][0].lerp(B[n][0], t)
+            b.rotation_quaternion = qa.slerp(qb, t)
+        upd()
+        for lado in LADOS:
+            ik_pierna(lado, pa[lado].lerp(pb_[lado], t))
+        for n, b in pb.items():
+            b.keyframe_insert("rotation_quaternion", frame=f, group=b.name)
+        pb["Hips"].keyframe_insert("location", frame=f, group=pb["Hips"].name)
+    for fc in a.fcurves:
+        fc.update()
+    a["desde_guardia"] = True
+    poner(nombre)
+    f0, f1 = (int(x) for x in a.frame_range)
+    res = []
+    for f in (f0, f1):
+        esc.frame_set(f)
+        res.append(max((b.head - M0[n].translation).length for n, b in pb.items()))
+    return antes, res, f1
+
+
+p("\n=== crochet_trasero_v2: empieza y acaba en la guardia ===")
+r_cr = desde_guardia("crochet_trasero_v2")
+if r_cr:
+    p(f"  fot. 1 frente a guardia_v2: antes {r_cr[0] * 100:.0f} cm (empezaba a mitad del golpe); ahora fot. 1 y último"
+      f" {r_cr[1][0] * 100:.1f} / {r_cr[1][1] * 100:.1f} cm (pies a Z=0). {P_TRANS} fot. de transición al principio y al"
+      f" final: {r_cr[2]} fot. en total")
 
 # ---------------------------------------------------------------- 6. paso_atras_v2 (lo deja fase4_b.py)
 a = poner("paso_atras_v2")

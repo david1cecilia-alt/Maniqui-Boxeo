@@ -94,17 +94,21 @@ python scripts/comparar_choques.py                               # tablas de cho
     recto de Mixamo ya se inclinan y golpean bajo (puño a 0,92 / 1,01 m en el impacto), por eso en 7 y 8
     el hombro ya está casi a la altura del objetivo.
   - `gancho_adelantado` (5) y `gancho_trasero` (6) a la cara: desde los ganchos al cuerpo; el brazo cambia
-    de trayectoria (rampa) hasta el puño a la altura de la barbilla del rival (1,45 m), antebrazo vertical,
-    codo doblado 70-100°, palma hacia uno mismo; las piernas cargan 5 cm antes del impacto y empujan.
-    Pendiente: en el impacto el puño roza la otra mano (2-4 cm). Si llega un gancho de Mixamo, lo sustituye.
-  - `esquiva_der` / `esquiva_izq`: la cabeza se aparta 22-23 cm girando e inclinando el tronco, rodillas
-    un poco flexionadas; el pie contrario pivota (20°, talón arriba 15°) sin moverse; vuelve al centro.
+    de trayectoria (rampa) y golpea HACIA DELANTE: el puño delante de la propia cara, a la altura de la
+    barbilla de un rival de su misma altura (1,45 m) y hacia su lado, sin cruzar la cara; codo doblado
+    ~80-90° y fuera (no pasa el eje del cuerpo); palma hacia uno mismo; las piernas cargan 5 cm antes del
+    impacto y empujan. Si llega un gancho de Mixamo, lo sustituye.
+  - `esquiva_der` / `esquiva_izq`: la cabeza se aparta 21-24 cm girando e inclinando el tronco y baja
+    17 cm (rodillas y tronco flexionados: queda agachada); el pie contrario pivota (20°, talón arriba 15°) sin moverse; vuelve al centro.
   - `ballesteo`: tronco bien atrás (la cabeza retrocede 35 cm) sin paso, barbilla abajo, manos arriba; solo el pie
     de atrás retrocede 10 cm y vuelve, el de delante fijo.
   - `parada`: la mano derecha da un toque corto hacia dentro y abajo (16 cm desde la guardia, menos de un
     palmo) y la cabeza se aparta un poco a su derecha.
   - `pivote`: el pie de delante da un paso de 15 cm en diagonal hacia su lado y el muñeco gira 45° hacia su
     derecha sobre la punta de ese pie, con el de atrás en arco; acaba girado (no vuelve).
+- **Flexión:** se usa la original (`flexion`); la `_v2` separaba demasiado las manos y ya no se genera.
+- **crochet_trasero_v2:** la de Mixamo empezaba a mitad del golpe (44 cm lejos de la guardia en el fot. 1);
+  ahora tiene 8 fotogramas de transición desde guardia_v2 al principio y de vuelta a ella al final.
 - **Esquivas `_v2`:** los pies resbalaban bajo una cadera fija (parecía que flotaba). Ahora los pies
   están fijos en el suelo con IK (suela en Z=0) y dan un paso real de 22 cm: el derecho hacia atrás
   (retrocediendo) o el izquierdo hacia delante (avanzando), y vuelven al final. La postura de partida
@@ -145,7 +149,7 @@ blender.exe --background --python scripts/comparativa_render.py  # comparativa_v
   `Guante_Right` (el guante va soldado al brazo: se corta bajo el puño de velcro, que tapa el
   corte). Un solo material con textura (sin el logo de la marca).
 - Acciones originales (copiadas de la v2, traslación escalada por la altura de la cadera; `bloqueo`
-  pasa a llamarse `reaccion_golpe` y `rueda` se sustituye), 13 versiones `_v2` de la Fase 4 y 7 acciones
+  pasa a llamarse `reaccion_golpe` y `rueda` se sustituye), 12 versiones `_v2` de la Fase 4 (sin `flexion_v2`) y 7 acciones
   hechas a mano en la Fase 5 (5 bloqueos, 2 ruedas, 3 pasos y las 10 acciones que faltaban para la app). Todas con Fake User.
 - Pies: rotación rehecha para que giren respecto a su reposo igual que en la v2 (la copia
   directa los dejaba hasta 15° girados) y cadera corregida en cada fotograma para que la
@@ -192,6 +196,9 @@ blender.exe --background --python scripts/comparativa_render.py  # comparativa_v
   se adelanta 12 cm (paso en los fot. 1-7 y vuelta en los 31-37), rodillas flexionadas (la cadera
   baja hasta 15 cm en el fondo de la U; en la flexión, 18), el abdomen se contrae (el torso baja) y los
   guantes van 3,5 cm más arriba que en la guardia para cubrir los golpes altos.
+- **Flexión:** se usa la original (`flexion`); la `_v2` separaba demasiado las manos y ya no se genera.
+- **crochet_trasero_v2:** la de Mixamo empezaba a mitad del golpe (44 cm lejos de la guardia en el fot. 1);
+  ahora tiene 8 fotogramas de transición desde guardia_v2 al principio y de vuelta a ella al final.
 - **Esquivas `_v2`:** los pies resbalaban bajo una cadera fija (parecía que flotaba). Ahora los pies
   están fijos en el suelo con IK (suela en Z=0) y dan un paso real de 22 cm: el derecho hacia atrás
   (retrocediendo) o el izquierdo hacia delante (avanzando), y vuelven al final. La postura de partida
