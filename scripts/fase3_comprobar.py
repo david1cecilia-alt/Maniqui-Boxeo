@@ -8,7 +8,12 @@
 Escribe trabajo/fase3_resumen.txt y PNG en trabajo/capturas/.
 
 Uso:
-  blender.exe --background --python scripts/fase3_comprobar.py
+  blender.exe --background --python scripts/fase3_comprobar.py                 (v2: boxeador.blend)
+  blender.exe --background --python scripts/fase3_comprobar.py -- b --sin-renders   (boxeador_b.blend)
+  blender.exe --background --python scripts/fase3_comprobar.py -- c --sin-renders   (boxeador_c.blend)
+Con variante escribe trabajo/fase3_resumen_<variante>.txt y las capturas con prefijo fase3<variante>.
+Guantes: si son piezas convexas rígidas (v2) la penetración es exacta; si no (B: con pesos;
+C: rígidos pero no convexos) se mide con la superficie del guante (BVH, punto más cercano + normal).
 """
 import os
 import sys
@@ -21,7 +26,11 @@ from mathutils.bvhtree import BVHTree
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import comun as C  # noqa: E402
 
-BLEND = os.path.join(C.TRABAJO, "boxeador.blend")
+ARGS = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
+VARIANTE = next((a for a in ARGS if not a.startswith("-")), "")
+RENDERS = "--sin-renders" not in ARGS
+BLEND = os.path.join(C.TRABAJO, f"boxeador_{VARIANTE}.blend" if VARIANTE else "boxeador.blend")
+SUFIJO = f"_{VARIANTE}" if VARIANTE else ""
 P = "mixamorig:"
 FPS = 30.0
 VISTAS = {"frente": Vector((0, -1, 0)), "lado": Vector((1, 0, 0))}  # lado = desde su izquierda
@@ -100,13 +109,14 @@ def coords_eval(ob, normales=False):
 
 
 # ---------------------------------------------------------------- preparación (solo en memoria)
-mod_mask = next(m for m in cuerpo.modifiers if m.type == "MASK")
-mod_solid = [next(m for m in o.modifiers if m.type == "SOLIDIFY") for o in prendas]
+mod_mask = next((m for m in cuerpo.modifiers if m.type == "MASK"), None)
+mod_solid = [m for o in prendas for m in o.modifiers if m.type == "SOLIDIFY"]
 
 
 def modo_analisis(activo):
     """Sin Mask (índices completos del cuerpo) y sin Solidify (cara interior de la ropa)."""
-    mod_mask.show_viewport = not activo
+    if mod_mask:
+        mod_mask.show_viewport = not activo
     for m in mod_solid:
         m.show_viewport = not activo
 
@@ -126,13 +136,14 @@ for v in cuerpo.data.vertices:
     dominante.append(nombre or "")
 dominante = np.array(dominante)
 # lo que esconde el Mask (manos y, con la ropa v2, también los pies dentro de las botas)
-g_mask = cuerpo.vertex_groups[mod_mask.vertex_group].index
 peso_mask = np.zeros(len(cuerpo.data.vertices))
-for v in cuerpo.data.vertices:
-    for e in v.groups:
-        if e.group == g_mask:
-            peso_mask[v.index] = e.weight
-oculto = peso_mask > mod_mask.threshold
+if mod_mask:
+    g_mask = cuerpo.vertex_groups[mod_mask.vertex_group].index
+    for v in cuerpo.data.vertices:
+        for e in v.groups:
+            if e.group == g_mask:
+                peso_mask[v.index] = e.weight
+oculto = peso_mask > (mod_mask.threshold if mod_mask else 1.0)
 CABEZA = np.isin(dominante, ["Head", "Neck", "HeadTop_End"]) & ~oculto
 region_cuerpo = {lado: ~np.isin(dominante, ["Head", "Neck", "HeadTop_End", "LeftHand", "RightHand",
                                             lado + "ForeArm"]) & ~oculto
@@ -145,7 +156,7 @@ for e in cuerpo.data.edges:
         vis, osc = (a, b) if not oculto[a] else (b, a)
         if dominante[osc] in ("LeftHand", "RightHand"):   # solo el borde de las manos (guantes)
             borde["Left" if dominante[osc] == "LeftHand" else "Right"].add(vis)
-borde = {k: np.array(sorted(v)) for k, v in borde.items()}
+borde = {k: np.array(sorted(v), dtype=int) for k, v in borde.items()}
 
 
 # ropa: vértices VISIBLES del cuerpo que en reposo quedan dentro de cada prenda; en cada
@@ -157,10 +168,32 @@ def bvh_prenda(o):
     oe = o.evaluated_get(dg)
     me = oe.to_mesh()
     M = oe.matrix_world
-    polys = [p.vertices[:] for p in me.polygons if o.name != "Pantalon" or p.material_index == 0]
+    solo_perneras = o.name == "Pantalon" and len(o.data.materials) > 1
+    polys = [p.vertices[:] for p in me.polygons if not solo_perneras or p.material_index == 0]
     t = BVHTree.FromPolygons([M @ v.co for v in me.vertices], polys)
     oe.to_mesh_clear()
     return t
+
+
+def cortes_rayo(arbol, p, d, maxd=1.0):
+    """Número de veces que el rayo desde p en la dirección d atraviesa la superficie."""
+    n, o = 0, Vector(p)
+    for _ in range(16):
+        loc, _, _, dist = arbol.ray_cast(o, d, maxd)
+        if loc is None:
+            break
+        n += 1
+        o = loc + d * 1e-5
+    return n
+
+
+DIRS_3D = [Vector((0.577, 0.577, 0.577)), Vector((-0.6, 0.48, -0.64)), Vector((0.36, -0.8, -0.48))]
+
+
+def dentro_paridad(arbol, p, dirs):
+    """Dentro por paridad de cortes (mayoría de direcciones): robusto con bordes abiertos."""
+    votos = sum(cortes_rayo(arbol, p, d) % 2 for d in dirs)
+    return votos * 2 > len(dirs)
 
 
 def fuera_de_prenda(pts, arbol, maxd=0.06):
@@ -171,16 +204,22 @@ def fuera_de_prenda(pts, arbol, maxd=0.06):
         if loc is not None and (Vector(p) - loc).dot(nor) > 0:
             res[i] = dist
     return res
+# Nota B/C: el pantalón de B es una capa doble con bordes abiertos; en C la piel de debajo está
+# oculta con el Mask salvo una franja de 2 cm sobre el bajo, donde el punto más cercano es el
+# borde abierto y la medida da un valor fijo en todas las acciones (falso positivo).
 
 
-mod_mask.show_viewport = False
-for m in [next(m for m in o.modifiers if m.type == "SOLIDIFY") for o in prendas]:
-    m.show_viewport = False
+modo_analisis(True)
 arm.data.pose_position = "REST"
 bpy.context.view_layer.update()
 _cu_rest = np.array([cuerpo.matrix_world @ v.co for v in cuerpo.data.vertices])
 DENTRO_ROPA = []
-Z_PRENDA = [(0.735, 0.975), (-1.0, 0.29)]   # pantalón (entre el bajo y la cinturilla), botas (caña)
+if not VARIANTE:
+    Z_PRENDA = [(0.735, 0.975), (-1.0, 0.29)]   # pantalón (entre el bajo y la cinturilla), botas (caña)
+else:   # B y C: del tamaño de cada prenda en reposo (2 cm sobre el bajo, sin la cinturilla)
+    _zp = coords_eval(prendas[0])[0][:, 2]
+    _zb = coords_eval(prendas[1])[0][:, 2]
+    Z_PRENDA = [(_zp.min() + 0.02, _zp.max() - 0.06), (-1.0, _zb.max() - 0.02)]
 for o, (z0, z1) in zip(prendas, Z_PRENDA):
     arbol = bvh_prenda(o)
     idx = []
@@ -214,15 +253,81 @@ def piezas(ob):
 
 PIEZAS = {lado: piezas(ob) for lado, ob in guantes.items()}
 VERTS_G = {lado: np.array([v.co[:] for v in ob.data.vertices]) for lado, ob in guantes.items()}
+RIGIDO = {lado: ob.parent_type == "BONE" and not any(m.type == "ARMATURE" for m in ob.modifiers)
+          for lado, ob in guantes.items()}
+POLIS_G = {lado: [p.vertices[:] for p in ob.data.polygons] for lado, ob in guantes.items()}
+
+
+def es_convexo(lado, tol=0.001):
+    """Cada pieza suelta del guante es convexa (todos sus vértices detrás de todas sus caras)."""
+    vs = VERTS_G[lado]
+    for tri in PIEZAS[lado]:
+        a, b, c = vs[tri[:, 0]], vs[tri[:, 1]], vs[tri[:, 2]]
+        n = np.cross(b - a, c - a)
+        ok = np.linalg.norm(n, axis=1) > 1e-12
+        n = n[ok] / np.linalg.norm(n[ok], axis=1, keepdims=True)
+        a = a[ok]
+        pts = vs[np.unique(tri)]
+        cen = pts.mean(axis=0)
+        n *= -np.sign(((cen - a) * n).sum(axis=1))[:, None]
+        for i in range(0, len(a), 500):
+            s = ((pts[None, :, :] - a[i:i + 500, None, :]) * n[i:i + 500, None, :]).sum(axis=2)
+            if s.max() > tol:
+                return False
+    return True
+
+
+CONVEXO = {lado: RIGIDO[lado] and es_convexo(lado) for lado in guantes}
+
+
+def envolvente_local(lado):
+    """Planos (locales) de la envolvente convexa del guante: para el hueco con puños en anillo
+    (la muñeca pasa por dentro del puño: está tapada aunque quede fuera del sólido)."""
+    import bmesh
+    bm = bmesh.new()
+    for p in VERTS_G[lado]:
+        bm.verts.new(p)
+    res = bmesh.ops.convex_hull(bm, input=bm.verts)
+    caras = [f for f in res["geom"] if isinstance(f, bmesh.types.BMFace)]
+    bm.normal_update()
+    cen = VERTS_G[lado].mean(axis=0)
+    pl = []
+    for f in caras:
+        a, n = np.array(f.verts[0].co), np.array(f.normal)
+        if (cen - a) @ n > 0:
+            n = -n
+        pl.append((a, n))
+    bm.free()
+    return np.array([x[0] for x in pl]), np.array([x[1] for x in pl])
+
+
+ENV = {lado: envolvente_local(lado) for lado in guantes if RIGIDO[lado] and not CONVEXO[lado]}
+
+
+def fuera_envolvente(pts, lado):
+    """Distancia con signo de cada punto a la envolvente convexa (negativo = dentro)."""
+    M = np.array(guantes[lado].matrix_world)
+    a, n = ENV[lado]
+    aw = a @ M[:3, :3].T + M[:3, 3]
+    nw = n @ M[:3, :3].T
+    nw /= np.linalg.norm(nw, axis=1, keepdims=True)
+    return ((pts[:, None, :] - aw[None]) * nw[None]).sum(axis=2).max(axis=1)
+print("[GUANTES] rígido:", RIGIDO, "convexo:", CONVEXO)
 
 
 def verts_guante(lado):
+    if not RIGIDO[lado]:
+        return coords_eval(guantes[lado])[0]
     M = np.array(guantes[lado].matrix_world)
     return VERTS_G[lado] @ M[:3, :3].T + M[:3, 3]
 
 
 def planos(lado):
     vw = verts_guante(lado)
+    if not CONVEXO[lado]:   # superficie (BVH), centro y radio para descartar puntos lejanos
+        cen = vw.mean(axis=0)
+        return ("bvh", BVHTree.FromPolygons([Vector(p) for p in vw], POLIS_G[lado]), cen,
+                float(np.linalg.norm(vw - cen, axis=1).max()))
     res = []
     for tri in PIEZAS[lado]:
         a, b, c = vw[tri[:, 0]], vw[tri[:, 1]], vw[tri[:, 2]]
@@ -240,6 +345,13 @@ def dist_signo(pts, pl):
     if len(pts) == 0:
         return np.zeros(0)
     d = np.full(len(pts), np.inf)
+    if pl[0] == "bvh":
+        _, arbol, cen, rad = pl
+        for i in np.where(np.linalg.norm(pts - cen, axis=1) < rad + 0.03)[0]:
+            loc, nor, _, dist = arbol.find_nearest(Vector(pts[i]), 0.15)
+            if loc is not None:
+                d[i] = -dist if dentro_paridad(arbol, pts[i], DIRS_3D) else dist
+        return d
     for a, n, cen, rad in pl:
         cerca = np.linalg.norm(pts - cen, axis=1) < rad + 0.15
         if not cerca.any():
@@ -293,7 +405,9 @@ for accion in ACCIONES:
                                       penetra(verts_guante("Right"), pl["Left"]))
         hueco = 0.0
         for l in guantes:
-            d = dist_signo(cu[borde[l]], pl[l])
+            if len(borde[l]) == 0:     # sin Mask (B): el guante va soldado, no hay borde oculto
+                continue
+            d = fuera_envolvente(cu[borde[l]], l) if l in ENV else dist_signo(cu[borde[l]], pl[l])
             hueco = max(hueco, float(d.max()))
         reg["hueco_guante_antebrazo"][f] = max(hueco, 0.0)
     datos[accion] = reg
@@ -330,6 +444,8 @@ for accion in ACCIONES:
 # ---------------------------------------------------------------- 2. impactos
 def centro_guante(lado):
     vw = verts_guante(lado)
+    if not CONVEXO[lado]:
+        return vw.mean(axis=0)
     return vw[np.unique(PIEZAS[lado][0])].mean(axis=0)   # centro del puño
 
 
@@ -452,13 +568,14 @@ def serie(accion, fotos, vistas, prefijo):
         bpy.data.objects.remove(cam)
 
 
-for golpe, im in impactos.items():
-    f = im["f"]
-    serie(golpe, {"1antes": f - 1, "2impacto": f, "3despues": f + 1}, ["frente", "lado"], "fase3")
-for accion in OTRAS:
-    f0, f1 = rango(accion)
-    serie(accion, {"1ini": f0, "2medio": (f0 + f1) // 2, "3fin": f1}, ["frente", "lado"], "fase3")
+if RENDERS:
+    for golpe, im in impactos.items():
+        f = im["f"]
+        serie(golpe, {"1antes": f - 1, "2impacto": f, "3despues": f + 1}, ["frente", "lado"], "fase3" + VARIANTE)
+    for accion in OTRAS:
+        f0, f1 = rango(accion)
+        serie(accion, {"1ini": f0, "2medio": (f0 + f1) // 2, "3fin": f1}, ["frente", "lado"], "fase3" + VARIANTE)
 
-with open(os.path.join(C.TRABAJO, "fase3_resumen.txt"), "w", encoding="utf-8") as fh:
+with open(os.path.join(C.TRABAJO, f"fase3_resumen{SUFIJO}.txt"), "w", encoding="utf-8") as fh:
     fh.write("\n".join(out) + "\n")
 print("FIN FASE 3 (el .blend no se ha guardado)")

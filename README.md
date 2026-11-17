@@ -99,6 +99,31 @@ Blender 5.x ya no tiene: hay que usar la 4.5.
 
 Resultados y comprobaciones: `trabajo/fase2_resumen.txt`.
 
+## Variantes B y C (modelo nuevo)
+
+Modelo B: "Boxer" de **Creazilla** (licencia Creazilla Open-Source; al redistribuir hay que
+citar a Creazilla.com), en `modelos/` (no se sube; licencia por confirmar):
+`boxeador_b.fbx` (malla sin rig), `boxeador_b_rig.fbx` (la misma malla rigeada en Mixamo,
+25 huesos sin dedos: el `Animations/Idle.fbx` de la descarga) y `Boxer_texture.png`.
+
+```
+blender.exe --background --python scripts/b_analizar.py     # trabajo/b_analisis.txt
+blender.exe --background --python scripts/b_montar.py       # trabajo/boxeador_b.blend
+blender.exe --background --python scripts/c_montar.py       # trabajo/boxeador_c.blend
+blender.exe --background --python scripts/comparativa_render.py
+blender.exe --background --python scripts/fase3_comprobar.py -- b --sin-renders
+blender.exe --background --python scripts/fase3_comprobar.py -- c --sin-renders
+python scripts/comparar_choques.py                          # trabajo/choques_v2_b_c.txt
+```
+
+- **B**: malla y esqueleto de B (mismos 25 huesos que la v2) con las 15 acciones copiadas
+  (traslación escalada por la altura de la cadera). Separada en Cuerpo / Pantalon / Botas /
+  Guante_* (el guante va soldado al brazo y se corta bajo el puño de velcro). Shape key
+  `reforzado`: hombros, deltoides, brazo y antebrazo (escalado radial desde el eje del hueso).
+- **C**: cuerpo y botas rojas de la v2 + pantalón y guantes de B. Guantes rígidos en el hueso
+  Hand; pantalón ajustado con Shrinkwrap, pesos del cuerpo y la piel de debajo oculta con el Mask.
+- Comparativas: `trabajo/capturas/comparativa_v2_b_c.png` y `comparativa_impacto_*_v2_b_c.png`.
+
 ## Pendiente
 
 - **Guardia: REVISAR CON ENTRENADOR.** Las manos no llegan a la barbilla, la

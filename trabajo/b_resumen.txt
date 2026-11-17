@@ -1,0 +1,21 @@
+=== VARIANTE B ===
+  acciones copiadas de boxeador.blend: 15 (bloqueo, crochet_adelantado, crochet_trasero, crochet_trasero_cuerpo, esquiva_avanzando, esquiva_retrocediendo, flexion, gancho_adelantado_cuerpo, gancho_trasero_cuerpo, guardia, guardia_alt, jab, paso_atras, recto, rueda)
+  traslación escalada x0.00837 (cadera B 0.864 m / cadera A 103.3 unidades de A)
+  Cuerpo       :   8279 vért.,   8981 caras
+  Pantalon     :    387 vért.,    412 caras
+  Botas        :   1100 vért.,   1052 caras
+  Guante_Left  :   3952 vért.,   7723 caras
+  Guante_Right :   3949 vért.,   7719 caras
+  islas: pantalón [49], botas 24 piezas (zapatilla + cordones), puños de velcro {'Left': [3, 4, 5], 'Right': [0, 1, 2]}; la manopla del guante iba soldada al brazo (isla 21): cortada a mitad del puño
+  refuerzo LeftShoulder  :    48 vért. (peso > 0,5), desplazamiento medio 5.8 mm, máx. 8.0 mm
+  refuerzo LeftArm       :   144 vért. (peso > 0,5), desplazamiento medio 5.8 mm, máx. 9.2 mm
+  refuerzo LeftForeArm   :   529 vért. (peso > 0,5), desplazamiento medio 0.6 mm, máx. 4.5 mm
+  refuerzo RightShoulder :    35 vért. (peso > 0,5), desplazamiento medio 6.6 mm, máx. 8.7 mm
+  refuerzo RightArm      :   143 vért. (peso > 0,5), desplazamiento medio 5.8 mm, máx. 10.1 mm
+  refuerzo RightForeArm  :   519 vért. (peso > 0,5), desplazamiento medio 0.6 mm, máx. 4.5 mm
+  refuerzo total: 1592 vért. movidos, máx. 10.1 mm; guantes/puños/pantalón: 0 (otros objetos)
+  contorno aprox. LeftArm al 15 %: 36.6 -> 43.2 cm
+  contorno aprox. LeftArm al 50 %: 31.2 -> 34.5 cm
+  contorno aprox. LeftForeArm al 40 %: 23.1 -> 25.6 cm
+  contorno aprox. LeftForeArm al 80 %: 18.2 -> 18.2 cm
+GUARDADO trabajo\boxeador_b.blend

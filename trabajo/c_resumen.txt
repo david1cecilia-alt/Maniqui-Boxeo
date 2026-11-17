@@ -1,0 +1,10 @@
+=== VARIANTE C ===
+  cuerpo, cabeza, ojos y botas rojas de boxeador.blend (v2); pantalón y guantes de B
+  Guante_Left: 7723 caras, escala x1.063 (altura A/B), puño de velcro ensanchado x1.124 en radial (puño B r=4.6 cm, muñeca A r=4.5 cm), caja [31.3 20.3 15.6] cm, emparentado a mixamorig:LeftHand, sin pesos
+  Guante_Right: 7719 caras, escala x1.063 (altura A/B), puño de velcro ensanchado x1.045 en radial (puño B r=4.6 cm, muñeca A r=4.5 cm), caja [31.2 20.2 15.6] cm, emparentado a mixamorig:RightHand, sin pesos
+  Pantalon: alturas x0.902 sobre la cadera y x1.215 en el muslo; ancho x0.941 (muslo x1.142), fondo x0.897; z 0.565-1.131 m
+  Pantalon: Shrinkwrap fuera (6 mm): 84 de 387 vért. empujados hacia fuera, máx. 8.3 cm
+  Pantalon: pesos del cuerpo (Data Transfer) suavizados x10, modificador Armature
+  Cuerpo: Mask amplía 'ocultar' con 681 vért. de piel dentro del pantalón (desde 4 cm sobre el bajo)
+  objetos: ['Botas', 'Boxeador', 'Cuerpo', 'Eyebrows', 'Eyes', 'Guante_Left', 'Guante_Right', 'Pantalon']
+GUARDADO trabajo\boxeador_c.blend
