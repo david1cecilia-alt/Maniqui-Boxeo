@@ -1,7 +1,7 @@
 """Variante B – modelo nuevo (Creazilla "Boxer", rig de Mixamo) reforzado.
 
 1. Carga modelos/boxeador_b_rig.fbx (metros, escala 1, sin la animación Idle).
-2. Copia las 15 acciones de trabajo/boxeador.blend (mismos nombres de huesos). La
+2. Copia las 15 acciones de trabajo/taller/boxeador_v2.blend (mismos nombres de huesos). La
    traslación (location) se escala por la altura de la cadera B/A (y las unidades).
 3. Separa la malla en objetos como en la v2 (Cuerpo, Pantalon, Botas, Guante_Left/Right)
    para poder pasarle los mismos scripts; la geometría y los pesos no cambian. El guante
@@ -17,8 +17,8 @@
 7. Pies: la rotación de Foot/ToeBase se rehace para que giren respecto a su reposo igual que
    en la v2 (con la copia directa quedaban ~14° girados, porque el reposo de los pies de B es
    distinto), y la cadera se sube/baja en cada fotograma para que la suela apoye en Z=0.
-Modelo principal: guarda trabajo/boxeador.blend y trabajo/b_resumen.txt (acciones de
-trabajo/boxeador_v2.blend).
+Modelo principal: guarda trabajo/taller/boxeador_taller.blend y trabajo/b_resumen.txt (acciones de
+trabajo/taller/boxeador_v2.blend).
 
 Uso:
   blender.exe --background --python scripts/b_montar.py
@@ -35,8 +35,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import comun as C  # noqa: E402
 import modelo_b as MB  # noqa: E402
 
-BLEND_A = os.path.join(C.TRABAJO, "boxeador_v2.blend")
-BLEND_B = os.path.join(C.TRABAJO, "boxeador.blend")
+BLEND_A = C.BLEND_V2
+BLEND_B = C.BLEND_TALLER
 P = "mixamorig:"
 # refuerzo radial (fracción de la distancia al eje del hueso) a lo largo del hueso: [(t, s)]
 REFUERZO = {
@@ -102,7 +102,7 @@ for a in bpy.data.actions:
                 kp.handle_left.y *= k_loc
                 kp.handle_right.y *= k_loc
 r("=== VARIANTE B ===")
-r(f"  acciones copiadas de boxeador.blend: {len(bpy.data.actions)} ({', '.join(sorted(a.name for a in bpy.data.actions))})")
+r(f"  acciones copiadas de boxeador_v2.blend: {len(bpy.data.actions)} ({', '.join(sorted(a.name for a in bpy.data.actions))})")
 r(f"  traslación escalada x{k_loc:.5f} (cadera B {cad_b:.3f} m / cadera A {cad_a:.1f} unidades de A)")
 
 # ---------------------------------------------------------------- 2. separar en objetos

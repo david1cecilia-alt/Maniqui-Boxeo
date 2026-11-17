@@ -9,6 +9,13 @@ RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FBX_DIR = os.path.join(RAIZ, "fbx")
 TRABAJO = os.path.join(RAIZ, "trabajo")
 CAPTURAS = os.path.join(TRABAJO, "capturas")
+# trabajo/boxeador.blend = EL BUENO (solo las acciones de la app, lo hace final_b.py);
+# trabajo/taller/ = donde trabajan los scripts (originales, _v2 e intermedias) y el modelo v2 del que sale
+BLEND_FINAL = os.path.join(TRABAJO, "boxeador.blend")
+TALLER_DIR = os.path.join(TRABAJO, "taller")
+BLEND_TALLER = os.path.join(TALLER_DIR, "boxeador_taller.blend")
+BLEND_V2 = os.path.join(TALLER_DIR, "boxeador_v2.blend")
+os.makedirs(TALLER_DIR, exist_ok=True)
 
 # sin copias .blend1 al guardar (boxeador.blend es el taller; lo antiguo está en archivo/)
 bpy.context.preferences.filepaths.save_version = 0

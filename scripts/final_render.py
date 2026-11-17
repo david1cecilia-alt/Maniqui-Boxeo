@@ -1,4 +1,4 @@
-"""Láminas de las acciones de la app (trabajo/boxeador_final.blend, la de final_b.py).
+"""Láminas de las acciones de la app (trabajo/boxeador.blend, el bueno, de final_b.py).
 
 trabajo/capturas/app/NN_<acción>.png, una por acción, numerada como en la app: 5 fotogramas (inicio, a
 medio camino, CLAVE, a medio camino y final), fila de arriba de frente y abajo de lado desde su izquierda.
@@ -18,7 +18,7 @@ from mathutils import Vector
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import comun as C  # noqa: E402
 
-BLEND = os.path.join(C.TRABAJO, "boxeador_final.blend")
+BLEND = C.BLEND_FINAL
 DEST = os.path.join(C.CAPTURAS, "app")
 os.makedirs(DEST, exist_ok=True)
 P = "mixamorig:"

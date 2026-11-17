@@ -12,7 +12,7 @@ Ejecutar después de b_montar.py y b_brazo.py y antes de fase4_b.py (que les hac
    traslación se escala por la altura de la cadera, los pies se rehacen para que giren respecto a su
    reposo igual que en el FBX (el reposo de los pies de B es distinto) y la cadera se sube/baja en
    cada fotograma para que la suela más baja apoye en Z=0.
-Guarda trabajo/boxeador.blend y trabajo/b_mixamo_nuevas.txt.
+Guarda trabajo/taller/boxeador_taller.blend y trabajo/b_mixamo_nuevas.txt.
 
 Uso:
   blender.exe --background --python scripts/b_mixamo_nuevas.py
@@ -27,7 +27,7 @@ from mathutils import Matrix, Vector
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import comun as C  # noqa: E402
 
-BLEND = os.path.join(C.TRABAJO, "boxeador.blend")
+BLEND = C.BLEND_TALLER
 P = "mixamorig:"
 PIES = ["LeftFoot", "LeftToeBase", "RightFoot", "RightToeBase"]
 RENOMBRES = [("paso_atras", "paso_atras_mano"), ("gancho_adelantado_cuerpo", "gancho_adelantado_mixamo"),

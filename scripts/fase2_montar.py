@@ -1,4 +1,4 @@
-"""Fase 2 – monta trabajo/boxeador_v2.blend (modelo v2) a partir de los FBX de Mixamo.
+"""Fase 2 – monta trabajo/taller/boxeador_v2.blend (modelo v2) a partir de los FBX de Mixamo.
 
 - Un esqueleto, una malla de cuerpo (+ Eyes y Eyebrows); se borra Cube.
 - Cada FBX -> una acción con Fake User, con nombre limpio.
@@ -24,7 +24,7 @@ from mathutils.bvhtree import BVHTree
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import comun as C  # noqa: E402
 
-BLEND = os.path.join(C.TRABAJO, "boxeador_v2.blend")
+BLEND = C.BLEND_V2
 P = "mixamorig:"
 
 # nombre lógico del FBX (comun.FBX) -> nombre de la acción en el .blend

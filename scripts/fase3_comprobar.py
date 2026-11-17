@@ -1,4 +1,4 @@
-"""Fase 3 – comprobación de trabajo/boxeador.blend (NO se guarda: solo se lee).
+"""Fase 3 – comprobación de trabajo/taller/boxeador_taller.blend (NO se guarda: solo se lee).
 
 1. Fotograma de impacto de cada golpe (+ los 2 de alrededor): renders frente/lado.
 2. Choques por acción y fotograma: ropa vs cuerpo, guante vs cabeza / cuerpo /
@@ -8,7 +8,7 @@
 Escribe trabajo/fase3_resumen.txt y PNG en trabajo/capturas/.
 
 Uso:
-  blender.exe --background --python scripts/fase3_comprobar.py [--sin-renders]   (B, modelo principal: boxeador.blend)
+  blender.exe --background --python scripts/fase3_comprobar.py [--sin-renders]   (B, modelo principal: taller/boxeador_taller.blend)
   blender.exe --background --python scripts/fase3_comprobar.py -- v2 --sin-renders   (boxeador_v2.blend)
   blender.exe --background --python scripts/fase3_comprobar.py -- c --sin-renders    (boxeador_c.blend)
 B escribe trabajo/fase3_resumen.txt; con variante, trabajo/fase3_resumen_<variante>.txt y las
@@ -30,7 +30,7 @@ import comun as C  # noqa: E402
 ARGS = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
 VARIANTE = next((a for a in ARGS if not a.startswith("-")), "")
 RENDERS = "--sin-renders" not in ARGS
-BLEND = os.path.join(C.TRABAJO, f"boxeador_{VARIANTE}.blend" if VARIANTE else "boxeador.blend")
+BLEND = os.path.join(C.TALLER_DIR, f"boxeador_{VARIANTE}.blend") if VARIANTE else C.BLEND_TALLER
 SUFIJO = f"_{VARIANTE}" if VARIANTE else ""
 P = "mixamorig:"
 FPS = 30.0

@@ -1,7 +1,7 @@
 # Archivo (lo antiguo, no se usa)
 
 Versiones y pruebas anteriores, guardadas por si hacen falta. **Nada de esto es lo bueno.**
-Lo bueno está en `trabajo/boxeador_final.blend` y `trabajo/capturas/app/` (ver el README principal).
+Lo bueno está en `trabajo/boxeador.blend` y `trabajo/capturas/app/` (ver el README principal).
 
 - `blend/` (no se sube a GitHub): `boxeador_v1.blend` (ropa v1), `boxeador_c.blend` (variante C,
   descartada) y copias automáticas `.blend1`. Se pueden borrar.

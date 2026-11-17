@@ -19,7 +19,7 @@ Ver archivo/trabajo/fase4_propuesta.md. Las acciones originales no se tocan.
   la cadera no se toca y el muñeco acaba desplazado.
 - bloqueo (ahora reaccion_golpe) y rueda no tienen _v2: fase5_b.py crea a mano los bloqueos y
   las ruedas (y arregla los pies de las esquivas). Ejecutar fase5_b.py después de este script.
-Guarda trabajo/boxeador.blend y trabajo/fase4_resumen.txt.
+Guarda trabajo/taller/boxeador_taller.blend y trabajo/fase4_resumen.txt.
 
 Uso:
   blender.exe --background --python scripts/fase4_b.py
@@ -36,7 +36,7 @@ from mathutils.kdtree import KDTree
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import comun as C  # noqa: E402
 
-BLEND = os.path.join(C.TRABAJO, "boxeador.blend")
+BLEND = C.BLEND_TALLER
 P = "mixamorig:"
 NECK_DEG, HEAD_DEG = 6.0, 10.0
 DELANTE, ALTURA = 0.13, -0.03      # centro del guante respecto al centro de la cabeza (m)
@@ -53,7 +53,8 @@ DESPLAZA = {"paso_atras", "paso_atras_mano", "pivote"}   # acaban desplazadas: l
 SIN_RAMPA = {"pivote_der", "pivote_izq"}   # acaban girados: no se fuerza que el último fot. sea el primero
 # sin _v2: la reacción a un golpe de Mixamo, la rueda antigua, la flexión (David prefiere la original:
 # la _v2 separa demasiado las manos) y las acciones hechas a mano (fase5_b.py)
-SIN_V2 = {"bloqueo", "reaccion_golpe", "rueda", "flexion", "jab_cuerpo", "recto_cuerpo", "crochet_adelantado_cuerpo", "gancho_adelantado", "gancho_trasero", "esquiva_der", "esquiva_izq", "ballesteo", "parada", "pivote_mano", "gancho_adelantado_cuerpo"}
+SIN_V2 = {"bloqueo", "reaccion_golpe", "rueda", "flexion", "jab_cuerpo", "recto_cuerpo", "crochet_adelantado_cuerpo", "gancho_adelantado", "gancho_trasero", "esquiva_der", "esquiva_izq", "ballesteo", "parada", "pivote_mano", "gancho_adelantado_cuerpo",
+          "gancho_trasero_cuerpo_mano", "jab_cara", "recto_cara", "crochet_trasero_pies"}
 
 out = []
 
@@ -70,8 +71,10 @@ cuerpo = bpy.data.objects["Cuerpo"]
 assert arm.matrix_world == Matrix(), "se espera el esqueleto con las transformaciones aplicadas"
 for a in [a for a in bpy.data.actions if a.name.endswith("_v2")]:
     bpy.data.actions.remove(a)
+# las de fase5_b.py llevan la propiedad "clave": tampoco tienen _v2
 ORIGINALES = sorted(a.name for a in bpy.data.actions
-                    if a.name not in SIN_V2 and not a.name.startswith(("bloqueo_", "rueda_", "paso_adelante", "paso_lateral_")))
+                    if a.name not in SIN_V2 and "clave" not in a
+                    and not a.name.startswith(("bloqueo_", "rueda_", "paso_adelante", "paso_lateral_")))
 pb = {n.split(":")[-1]: b for n, b in arm.pose.bones.items()}
 REST = {n.split(":")[-1]: b.matrix_local.copy() for n, b in arm.data.bones.items()}
 REST_INV = {k: m.inverted() for k, m in REST.items()}

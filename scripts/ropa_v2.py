@@ -1,4 +1,4 @@
-"""Ropa v2 – rehace pantalón, botas y guantes en trabajo/boxeador.blend.
+"""Ropa v2 – rehace pantalón, botas y guantes en trabajo/taller/boxeador_v2.blend.
 
 Mallas NUEVAS (no son caras duplicadas del cuerpo):
 - Pantalón corto de boxeo: secciones (anillos) sacadas lanzando rayos desde dentro
@@ -27,7 +27,7 @@ from mathutils.bvhtree import BVHTree
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import comun as C  # noqa: E402
 
-BLEND = os.path.join(C.TRABAJO, "boxeador_v2.blend")
+BLEND = C.BLEND_V2
 P = "mixamorig:"
 
 GRIS_OSCURO = (0.10, 0.10, 0.11, 1.0)

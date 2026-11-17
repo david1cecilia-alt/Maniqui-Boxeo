@@ -1,17 +1,17 @@
-=== FICHERO FINAL PARA LA APP: trabajo/boxeador_final.blend ===
+=== EL BUENO: trabajo/boxeador.blend (solo las acciones de la app) ===
 (REVISAR CON ENTRENADOR: toda la técnica)
-   1 Jab                            jab                        <- jab_v2                     fot. 1-53 (1.7 s), clave 16
-   2 Recto                          recto                      <- recto_v2                   fot. 1-65 (2.1 s), clave 21
+   1 Jab                            jab                        <- jab_cara                   fot. 1-53 (1.7 s), clave 16
+   2 Recto                          recto                      <- recto_cara                 fot. 1-65 (2.1 s), clave 21
    3 Crochet adelantado             crochet_adelantado         <- crochet_adelantado_v2      fot. 1-61 (2.0 s), clave 16
-   4 Crochet trasero                crochet_trasero            <- crochet_trasero_v2         fot. 1-47 (1.5 s), clave 19
+   4 Crochet trasero                crochet_trasero            <- crochet_trasero_pies       fot. 1-31 (1.0 s), clave 11
    5 Gancho adelantado              gancho_adelantado          <- gancho_adelantado          fot. 1-67 (2.2 s), clave 20
-   6 Gancho trasero                 gancho_trasero             <- gancho_trasero             fot. 1-30 (1.0 s), clave 13
+   6 Gancho trasero                 gancho_trasero             <- gancho_trasero             fot. 1-30 (1.0 s), clave 14
    7 Jab al cuerpo                  jab_cuerpo                 <- jab_cuerpo                 fot. 1-53 (1.7 s), clave 16
    8 Recto al cuerpo                recto_cuerpo               <- recto_cuerpo               fot. 1-65 (2.1 s), clave 21
    9 Crochet adelantado al cuerpo   crochet_adelantado_cuerpo  <- crochet_adelantado_cuerpo  fot. 1-61 (2.0 s), clave 16
   10 Crochet trasero al cuerpo      crochet_trasero_cuerpo     <- crochet_trasero_cuerpo_v2  fot. 1-66 (2.2 s), clave 24
-  11 Gancho adelantado al cuerpo    gancho_adelantado_cuerpo   <- gancho_adelantado_cuerpo   fot. 1-67 (2.2 s), clave 20
-  12 Gancho trasero al cuerpo       gancho_trasero_cuerpo      <- gancho_trasero_cuerpo_v2   fot. 1-67 (2.2 s), clave 19
+  11 Gancho adelantado al cuerpo    gancho_adelantado_cuerpo   <- gancho_adelantado_cuerpo   fot. 1-30 (1.0 s), clave 14
+  12 Gancho trasero al cuerpo       gancho_trasero_cuerpo      <- gancho_trasero_cuerpo_mano fot. 1-30 (1.0 s), clave 14
   13 Guardia                        guardia                    <- guardia_v2                 fot. 1-67 (2.2 s), clave 34
   13 Guardia (alternativa)          guardia_alt                <- guardia_alt_v2             fot. 1-90 (3.0 s), clave 45
   14 Bloqueo cerrado                bloqueo_cerrado            <- bloqueo_cerrado            fot. 1-28 (0.9 s), clave 14
@@ -33,5 +33,5 @@
   25 Pivote (ida y vuelta)          pivote                     <- pivote_v2                  fot. 1-136 (4.5 s), clave 68
   25 Pivote derecha                 pivote_der                 <- pivote_der_v2              fot. 1-38 (1.2 s), clave 19
   25 Pivote izquierda               pivote_izq                 <- pivote_izq_v2              fot. 1-39 (1.3 s), clave 20
-  Quitadas del fichero final (22; siguen en boxeador.blend): crochet_adelantado, crochet_trasero, crochet_trasero_cuerpo, futuro_esquiva_avanzando, futuro_esquiva_avanzando_v2, futuro_esquiva_retrocediendo, futuro_esquiva_retrocediendo_v2, gancho_adelantado_mixamo, gancho_adelantado_mixamo_v2, gancho_trasero_cuerpo, guardia, guardia_alt, jab, paso_atras, paso_atras_mano, paso_atras_mano_v2, pivote, pivote_der, pivote_izq, pivote_mano, reaccion_golpe, recto
-  GUARDADO trabajo\boxeador_final.blend (33 acciones)
+  Quitadas del fichero final (25; siguen en el taller): crochet_adelantado, crochet_trasero, crochet_trasero_cuerpo, crochet_trasero_v2, futuro_esquiva_avanzando, futuro_esquiva_avanzando_v2, futuro_esquiva_retrocediendo, futuro_esquiva_retrocediendo_v2, gancho_adelantado_mixamo, gancho_adelantado_mixamo_v2, gancho_trasero_cuerpo, gancho_trasero_cuerpo_v2, guardia, guardia_alt, jab, jab_v2, paso_atras, paso_atras_mano, paso_atras_mano_v2, pivote, pivote_der, pivote_izq, reaccion_golpe, recto, recto_v2
+  GUARDADO trabajo\boxeador.blend (33 acciones)

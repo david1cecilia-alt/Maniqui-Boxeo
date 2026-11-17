@@ -1,12 +1,12 @@
-"""Fichero final para la app: trabajo/boxeador_final.blend, solo con las acciones buenas y nombres limpios.
+"""EL BUENO: trabajo/boxeador.blend, solo con las acciones de la app y nombres limpios.
 
-trabajo/boxeador.blend es el TALLER: guarda las acciones originales de Mixamo, las _v2 de la Fase 4 y las
+trabajo/taller/boxeador_taller.blend es el TALLER: guarda las acciones originales de Mixamo, las _v2 de la Fase 4 y las
 intermedias, porque fase4_b.py y fase5_b.py las necesitan para rehacerse. Este script lo abre, borra todo
-lo que no usa la app, renombra lo bueno (jab_v2 -> jab, etc.) y lo guarda aparte. boxeador.blend no se toca.
+lo que no usa la app, renombra lo bueno (jab_v2 -> jab, etc.) y lo guarda como trabajo/boxeador.blend. El taller no se toca.
 
 Cada acción final lleva las propiedades:
   app      "Nº nombre en la app" (p. ej. "1 Jab")
-  origen   nombre de la acción en boxeador.blend de la que sale
+  origen   nombre de la acción del taller de la que sale
   clave    fotograma clave (impacto / punto máximo): el que ya tenía, en los golpes de Mixamo el de impacto
            de fase3_comprobar.py; en el resto, la mitad.
 
@@ -23,17 +23,17 @@ import bpy
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import comun as C  # noqa: E402
 
-TALLER = os.path.join(C.TRABAJO, "boxeador.blend")
-FINAL = os.path.join(C.TRABAJO, "boxeador_final.blend")
+TALLER = C.BLEND_TALLER
+FINAL = C.BLEND_FINAL
 P = "mixamorig:"
 
 # (nº, nombre en la app, acción final, acción en el taller, fotograma de impacto si es golpe de Mixamo sin clave:
-#  el de trabajo/fase3_resumen.txt; crochet_trasero +8 por la transición desde la guardia de fase5_b.py)
+#  el de trabajo/fase3_resumen.txt)
 ACCIONES = [
-    (1, "Jab", "jab", "jab_v2", 16),
-    (2, "Recto", "recto", "recto_v2", 21),
+    (1, "Jab", "jab", "jab_cara", None),
+    (2, "Recto", "recto", "recto_cara", None),
     (3, "Crochet adelantado", "crochet_adelantado", "crochet_adelantado_v2", 16),
-    (4, "Crochet trasero", "crochet_trasero", "crochet_trasero_v2", 19),
+    (4, "Crochet trasero", "crochet_trasero", "crochet_trasero_pies", None),
     (5, "Gancho adelantado", "gancho_adelantado", "gancho_adelantado", None),
     (6, "Gancho trasero", "gancho_trasero", "gancho_trasero", None),
     (7, "Jab al cuerpo", "jab_cuerpo", "jab_cuerpo", None),
@@ -41,7 +41,7 @@ ACCIONES = [
     (9, "Crochet adelantado al cuerpo", "crochet_adelantado_cuerpo", "crochet_adelantado_cuerpo", None),
     (10, "Crochet trasero al cuerpo", "crochet_trasero_cuerpo", "crochet_trasero_cuerpo_v2", 24),
     (11, "Gancho adelantado al cuerpo", "gancho_adelantado_cuerpo", "gancho_adelantado_cuerpo", None),
-    (12, "Gancho trasero al cuerpo", "gancho_trasero_cuerpo", "gancho_trasero_cuerpo_v2", 19),
+    (12, "Gancho trasero al cuerpo", "gancho_trasero_cuerpo", "gancho_trasero_cuerpo_mano", None),
     (13, "Guardia", "guardia", "guardia_v2", None),
     (13, "Guardia (alternativa)", "guardia_alt", "guardia_alt_v2", None),
     (14, "Bloqueo cerrado", "bloqueo_cerrado", "bloqueo_cerrado", None),
@@ -87,7 +87,7 @@ def poner(a):
         arm.animation_data.action_slot = a.slots[0]
 
 
-p("=== FICHERO FINAL PARA LA APP: trabajo/boxeador_final.blend ===")
+p("=== EL BUENO: trabajo/boxeador.blend (solo las acciones de la app) ===")
 p("(REVISAR CON ENTRENADOR: toda la técnica)")
 datos = {}
 for n, app, final, taller, impacto in ACCIONES:
@@ -119,7 +119,7 @@ for n, app, final, taller, _m in ACCIONES:
     a = acc[final]
     f0, f1 = (int(x) for x in a.frame_range)
     p(f"  {n:2} {app:30} {final:26} <- {taller:26} fot. {f0}-{f1} ({(f1 - f0) / 30:.1f} s), clave {a['clave']}")
-p(f"  Quitadas del fichero final ({len(borradas)}; siguen en boxeador.blend): {', '.join(borradas)}")
+p(f"  Quitadas del fichero final ({len(borradas)}; siguen en el taller): {', '.join(borradas)}")
 
 poner(acc["guardia"])
 esc.frame_set(1)

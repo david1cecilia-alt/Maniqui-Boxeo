@@ -6,17 +6,20 @@
   borrada bloqueo_bajo_izq
   borrada bloqueo_cerrado
   borrada crochet_adelantado_cuerpo
+  borrada crochet_trasero_pies
   borrada esquiva_der
   borrada esquiva_izq
   borrada gancho_adelantado
   borrada gancho_adelantado_cuerpo
   borrada gancho_trasero
+  borrada gancho_trasero_cuerpo_mano
+  borrada jab_cara
   borrada jab_cuerpo
   borrada parada
   borrada paso_adelante
   borrada paso_lateral_der
   borrada paso_lateral_izq
-  borrada pivote_mano
+  borrada recto_cara
   borrada recto_cuerpo
   borrada rueda_der
   borrada rueda_izq
@@ -45,17 +48,23 @@
   paso_lateral_izq   25 fot. (0.80 s) | sale el pie izq (fot. 1-11) y le sigue el der (fot. 11-21) | desplazamiento 25.0 cm | pose final vs inicial (quitando el desplazamiento) 0.0 mm | suela de los pies apoyados Z -0.00/+0.01 cm | aire guante-cabeza mín. 2.8 cm
   paso_lateral_der   25 fot. (0.80 s) | sale el pie der (fot. 1-11) y le sigue el izq (fot. 11-21) | desplazamiento 25.0 cm | pose final vs inicial (quitando el desplazamiento) 0.0 mm | suela de los pies apoyados Z -0.00/+0.00 cm | aire guante-cabeza mín. 2.8 cm
 
-=== GOLPES NUEVOS (7, 8, 9 al cuerpo bajando con las piernas; 5 y 6 ganchos a la cara) ===
+=== GOLPES NUEVOS (1 y 2 a la cara; 7, 8, 9 al cuerpo bajando con las piernas; 5 el de Mixamo) ===
   objetivos (rival del mismo tamaño): plexo/estómago 1.17 m, costillas 1.15 m, barbilla 1.45 m
-  jab_cuerpo                 desde jab_v2, impacto fot. 16 | baja la cadera 8 cm (+0.0 para llegar) y la pierna de delante avanza 10 cm | en el impacto: hombro 1.06 m (antes 1.14), puño 0.84 m (antes 0.92), objetivo 1.17 m | la otra mano a 4.9 cm de la cara
-  recto_cuerpo               desde recto_v2, impacto fot. 21 | baja la cadera 8 cm (+1.5 para llegar) y la pierna de delante avanza 10 cm | en el impacto: hombro 1.13 m (antes 1.21), puño 0.93 m (antes 1.01), objetivo 1.17 m | la otra mano a 4.0 cm de la cara
-  crochet_adelantado_cuerpo  desde crochet_adelantado_v2, impacto fot. 16 | baja la cadera 19 cm (+1.2 para llegar) y la pierna de delante avanza 10 cm | en el impacto: hombro 1.15 m (antes 1.34), puño 1.25 m (antes 1.44), objetivo 1.15 m | la otra mano a 4.1 cm de la cara
+  jab_cara                   desde jab_v2, impacto fot. 16 | puño 0.92 -> 1.40 m (cara del rival 1.39) | tronco inclinado 19° -> 15° (guardia 6°) | la otra mano a 4.9 cm de la cara
+  recto_cara                 desde recto_v2, impacto fot. 21 | puño 1.01 -> 1.41 m (cara del rival 1.39) | tronco inclinado 15° -> 12° (guardia 6°) | la otra mano a 4.0 cm de la cara
+  jab_cuerpo                 desde jab_v2, impacto fot. 16 | baja la cadera 8 cm (+0.0 para llegar, suavizado) y la pierna de delante avanza 10 cm | en el impacto: hombro 1.06 m (antes 1.14), puño 0.84 m (antes 0.92), objetivo 1.17 m | la otra mano a 4.9 cm de la cara | rodilla de delante: aceleración máx. 17 mm/fot.² | tobillo fuera del objetivo 0 mm
+  recto_cuerpo               desde recto_v2, impacto fot. 21 | baja la cadera 8 cm (+1.5 para llegar, suavizado) y la pierna de delante avanza 10 cm | en el impacto: hombro 1.13 m (antes 1.21), puño 0.93 m (antes 1.01), objetivo 1.17 m | la otra mano a 4.0 cm de la cara | rodilla de delante: aceleración máx. 17 mm/fot.² | tobillo fuera del objetivo 0 mm
+  crochet_adelantado_cuerpo  desde crochet_adelantado_v2, impacto fot. 16 | baja la cadera 19 cm (+1.2 para llegar, suavizado) y la pierna de delante avanza 10 cm | en el impacto: hombro 1.15 m (antes 1.34), puño 1.25 m (antes 1.44), objetivo 1.15 m | la otra mano a 4.1 cm de la cara | rodilla de delante: aceleración máx. 40 mm/fot.² | tobillo fuera del objetivo 0 mm
   gancho_adelantado          = gancho_adelantado_mixamo_v2 tal cual (el antiguo gancho_adelantado_cuerpo_v2), impacto fot. 20
-  gancho_adelantado_cuerpo   desde gancho_adelantado_mixamo_v2, impacto fot. 20 | baja la cadera 0 cm (+1.4 para llegar) y la pierna de delante avanza 8 cm | en el impacto: hombro 1.12 m (antes 1.24), puño 1.06 m (antes 0.84) | la otra mano a 3.0 cm de la cara | codo doblado 91°, codo +45 cm hacia su lado del eje del pecho, puño +31 cm hacia su lado del centro de la cara (+ = sin cruzar) | objetivo 1.10 m, se agacha 12 cm más | aire guante-cabeza mín. 2.0 cm
 
-=== GANCHO TRASERO A LA CARA (6), hecho de cero ===
-  gancho_trasero        30 fot. (0.97 s) | aire guante-cabeza mín.  2.8 cm (empuje 0.0) | guante-guante mín.  0.3 cm | suelas Z -0.0/+0.3 cm | cabeza: baja hasta 1.37 m, X -9/+0 cm | fot.1 y último vs guardia_v2: 12 / 12 mm
-     impacto fot. 13: puño a 1.34 m (barbilla del rival 1.36; su cabeza llega a 1.45), 17 cm por delante del centro de su cabeza (~7 cm de la cara), +2 cm hacia su lado del centro de la cara; codo doblado 85°, +12 cm hacia su lado del eje del pecho (+ = sin cruzar), 23 cm por debajo del puño
+=== GANCHOS 6, 11 y 12, hechos de cero (carga hacia su lado y salida desde los pies) ===
+  objetivos: barbilla del rival 1.36 m, costillas 1.12 m
+  gancho_trasero        30 fot. (0.97 s) | aire guante-cabeza mín.  2.8 cm (empuje 0.0) | guante-guante mín.  7.7 cm | suelas Z -0.0/+0.3 cm | cabeza: baja hasta 1.36 m, X -16/+0 cm | fot.1 y último vs guardia_v2: 12 / 12 mm
+     impacto fot. 14: puño a 1.38 m (objetivo 1.36), 16 cm por delante de su cara, +11 cm hacia su lado del centro de la cara (+ = sin cruzar); codo doblado 66°, 22 cm por debajo del puño y +8 cm hacia su lado del eje del pecho; la palma mira hacia él (palma·adelante -0.67, palma·arriba +0.73)
+  gancho_adelantado_cuerpo  30 fot. (0.97 s) | aire guante-cabeza mín.  2.8 cm (empuje 0.0) | guante-guante mín. 12.5 cm | suelas Z -0.0/+0.2 cm | cabeza: baja hasta 1.23 m, X -19/+0 cm | fot.1 y último vs guardia_v2: 12 / 12 mm
+     impacto fot. 14: puño a 1.14 m (objetivo 1.12), 32 cm por delante de su cara, +40 cm hacia su lado del centro de la cara (+ = sin cruzar); codo doblado 89°, 22 cm por debajo del puño y +31 cm hacia su lado del eje del pecho; la palma mira hacia él (palma·adelante -0.65, palma·arriba +0.75)
+  gancho_trasero_cuerpo_mano  30 fot. (0.97 s) | aire guante-cabeza mín.  2.8 cm (empuje 0.0) | guante-guante mín.  3.4 cm | suelas Z -0.0/+0.3 cm | cabeza: baja hasta 1.23 m, X -22/+0 cm | fot.1 y último vs guardia_v2: 12 / 12 mm
+     impacto fot. 14: puño a 1.15 m (objetivo 1.12), 11 cm por delante de su cara, +8 cm hacia su lado del centro de la cara (+ = sin cruzar); codo doblado 76°, 21 cm por debajo del puño y +11 cm hacia su lado del eje del pecho; la palma mira hacia él (palma·adelante -0.61, palma·arriba +0.77)
 
 === ESQUIVAS LATERALES (la cabeza se aparta 20-25 cm y vuelve; pie contrario pivota sin moverse) ===
   esquiva_der           25 fot. (0.80 s) | aire guante-cabeza mín.  0.9 cm (empuje 0.0) | guante-guante mín.  9.8 cm | suelas Z -0.0/+0.2 cm | cabeza: baja hasta 1.26 m, X -29/+0 cm | fot.1 y último vs guardia_v2: 12 / 12 mm
@@ -73,22 +82,18 @@
      punto clave -> der: codo -26 cm sobre el hombro, 6 cm delante del hueso Spine1, +21 al lado, +1 de altura; guante (delante, alto, lado) respecto a la cabeza (24, -11, 3) cm, aire con la cabeza 4.5 cm
      la mano se mueve 16 cm desde la guardia (un palmo ~20 cm): hacia dentro, abajo y adelante, desviando con la palma del guante; la cabeza se aparta un poco a su derecha
 
-=== PIVOTE HECHO A MANO, pivote_mano (el principal es el de Mixamo: pivote_v2) ===
-  pivote_mano           25 fot. (0.80 s) | aire guante-cabeza mín.  2.8 cm (empuje 0.0) | guante-guante mín. 12.5 cm | suelas Z -0.0/+3.5 cm | cabeza: baja hasta 1.40 m, X -7/+22 cm | fot.1 y último vs guardia_v2: 12 / 684 mm
-     acaba girado -45° (negativo = hacia su derecha) y desplazado 36 cm; el pie de delante gira sobre su punta y el de atrás describe un arco
-
 === ESQUIVAS: pies fijos en el suelo (IK) en su postura del fot. 1 y paso real ===
   futuro_esquiva_retrocediendo_v2 paso de 22 cm hacia atrás con el pie de atrás (der) fot. 2-9, vuelve fot. 58-66 | giro de la cadera respecto a la guardia en el fot. 1: +49°
      suela de los pies apoyados: Z -0.00/+0.02 cm | cadera bajada para llegar: 1.3 cm máx. | tobillo fuera del objetivo: 0.0 mm | fot.1 y último vs guardia_v2: 543 / 543 mm (el tronco es el de Mixamo)
   futuro_esquiva_avanzando_v2 paso de 22 cm hacia delante con el pie de delante (izq) fot. 2-9, vuelve fot. 61-69 | giro de la cadera respecto a la guardia en el fot. 1: +40°
      suela de los pies apoyados: Z -0.00/+0.01 cm | cadera bajada para llegar: 1.9 cm máx. | tobillo fuera del objetivo: 0.0 mm | fot.1 y último vs guardia_v2: 422 / 422 mm (el tronco es el de Mixamo)
 
-=== crochet_trasero_v2: empieza y acaba en la guardia ===
-  fot. 1 frente a guardia_v2: antes 44 cm (empezaba a mitad del golpe); ahora fot. 1 y último 1.2 / 1.2 cm (pies a Z=0). 8 fot. de transición al principio y al final: 47 fot. en total
+=== CROCHET TRASERO (4): el original, pies hacia delante y un pasito con el de delante ===
+  crochet_trasero_pies desde crochet_trasero (original), impacto fot. 11, fot. 1-31 | pie de delante: pasito de 8 cm (fot. 5-11) y vuelve (fot. 19-28); suela -0.0/+3.0 cm; tobillo fuera del objetivo 0 mm; cadera bajada 5.3 cm máx. para llegar | el de atrás, el de Mixamo
 
 === paso_atras_v2 ===
   desplazamiento de la cadera fot. 1 -> 27: +47.9 cm en Y (hacia atrás), +0.0 cm en Z | pose final vs inicial (quitando el desplazamiento): 0.0 mm
 
-  Acciones: ballesteo, bloqueo_alto_der, bloqueo_alto_izq, bloqueo_bajo_der, bloqueo_bajo_izq, bloqueo_cerrado, crochet_adelantado, crochet_adelantado_cuerpo, crochet_adelantado_v2, crochet_trasero, crochet_trasero_cuerpo, crochet_trasero_cuerpo_v2, crochet_trasero_v2, esquiva_der, esquiva_izq, flexion, futuro_esquiva_avanzando, futuro_esquiva_avanzando_v2, futuro_esquiva_retrocediendo, futuro_esquiva_retrocediendo_v2, gancho_adelantado, gancho_adelantado_cuerpo, gancho_adelantado_mixamo, gancho_adelantado_mixamo_v2, gancho_trasero, gancho_trasero_cuerpo, gancho_trasero_cuerpo_v2, guardia, guardia_alt, guardia_alt_v2, guardia_v2, jab, jab_cuerpo, jab_v2, parada, paso_adelante, paso_atras, paso_atras_mano, paso_atras_mano_v2, paso_atras_v2, paso_lateral_der, paso_lateral_izq, pivote, pivote_der, pivote_der_v2, pivote_izq, pivote_izq_v2, pivote_mano, pivote_v2, reaccion_golpe, recto, recto_cuerpo, recto_v2, rueda_der, rueda_izq
-  GUARDADO trabajo\boxeador.blend
+  Acciones: ballesteo, bloqueo_alto_der, bloqueo_alto_izq, bloqueo_bajo_der, bloqueo_bajo_izq, bloqueo_cerrado, crochet_adelantado, crochet_adelantado_cuerpo, crochet_adelantado_v2, crochet_trasero, crochet_trasero_cuerpo, crochet_trasero_cuerpo_v2, crochet_trasero_pies, crochet_trasero_v2, esquiva_der, esquiva_izq, flexion, futuro_esquiva_avanzando, futuro_esquiva_avanzando_v2, futuro_esquiva_retrocediendo, futuro_esquiva_retrocediendo_v2, gancho_adelantado, gancho_adelantado_cuerpo, gancho_adelantado_mixamo, gancho_adelantado_mixamo_v2, gancho_trasero, gancho_trasero_cuerpo, gancho_trasero_cuerpo_mano, gancho_trasero_cuerpo_v2, guardia, guardia_alt, guardia_alt_v2, guardia_v2, jab, jab_cara, jab_cuerpo, jab_v2, parada, paso_adelante, paso_atras, paso_atras_mano, paso_atras_mano_v2, paso_atras_v2, paso_lateral_der, paso_lateral_izq, pivote, pivote_der, pivote_der_v2, pivote_izq, pivote_izq_v2, pivote_v2, reaccion_golpe, recto, recto_cara, recto_cuerpo, recto_v2, rueda_der, rueda_izq
+  GUARDADO trabajo\taller\boxeador_taller.blend
   REVISAR CON ENTRENADOR: cómo quiere Iván el bloqueo del crochet (guante a la sien, codo arriba...) y qué crochet del rival evita cada rueda.

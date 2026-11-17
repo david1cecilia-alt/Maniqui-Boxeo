@@ -25,7 +25,7 @@ from mathutils import Matrix
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import comun as C  # noqa: E402
 
-BLEND = os.path.join(C.TRABAJO, "boxeador.blend")
+BLEND = C.BLEND_TALLER
 P = "mixamorig:"
 FACTOR = 1.30
 

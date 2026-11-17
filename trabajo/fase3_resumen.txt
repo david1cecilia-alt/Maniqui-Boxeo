@@ -99,7 +99,15 @@ hueco = cuánto queda fuera del guante el borde de la mano oculta por el Mask (a
    guante_guante            OK
    hueco_guante_antebrazo   OK
 
--- crochet_trasero_v2 (47 fot.)
+-- crochet_trasero_pies (31 fot.)
+   pantalon_cuerpo            3 fot. [13-15]  máx. 2.0 cm en fot. 14  -> alta
+   botas_cuerpo             OK
+   guante_cabeza            OK
+   guante_cuerpo            OK
+   guante_guante            OK
+   hueco_guante_antebrazo   OK
+
+-- crochet_trasero_v2 (31 fot.)
    pantalon_cuerpo          OK
    botas_cuerpo             OK
    guante_cabeza            OK
@@ -171,11 +179,11 @@ hueco = cuánto queda fuera del guante el borde de la mano oculta por el Mask (a
    guante_guante            OK
    hueco_guante_antebrazo   OK
 
--- gancho_adelantado_cuerpo (67 fot.)
+-- gancho_adelantado_cuerpo (30 fot.)
    pantalon_cuerpo          OK
    botas_cuerpo             OK
    guante_cabeza            OK
-   guante_cuerpo            OK
+   guante_cuerpo              2 fot. [2-3]  máx. 0.3 cm en fot. 3 (guante L en Spine2)  -> baja
    guante_guante            OK
    hueco_guante_antebrazo   OK
 
@@ -209,6 +217,14 @@ hueco = cuánto queda fuera del guante el borde de la mano oculta por el Mask (a
    guante_cabeza              2 fot. [45-46]  máx. 0.2 cm en fot. 46  -> baja
    guante_cuerpo            OK
    guante_guante             15 fot. [1-8, 53-55, 64-67]  máx. 1.0 cm en fot. 4  -> media
+   hueco_guante_antebrazo   OK
+
+-- gancho_trasero_cuerpo_mano (30 fot.)
+   pantalon_cuerpo          OK
+   botas_cuerpo             OK
+   guante_cabeza            OK
+   guante_cuerpo            OK
+   guante_guante            OK
    hueco_guante_antebrazo   OK
 
 -- gancho_trasero_cuerpo_v2 (67 fot.)
@@ -257,6 +273,14 @@ hueco = cuánto queda fuera del guante el borde de la mano oculta por el Mask (a
    guante_cabeza             49 fot. [1-13, 17-42, 44-53]  máx. 3.3 cm en fot. 10  -> alta
    guante_cuerpo              7 fot. [9-14, 43]  máx. 2.0 cm en fot. 11 (guante R en Spine2)  -> media
    guante_guante              2 fot. [5-6]  máx. 1.1 cm en fot. 6  -> media
+   hueco_guante_antebrazo   OK
+
+-- jab_cara (53 fot.)
+   pantalon_cuerpo          OK
+   botas_cuerpo             OK
+   guante_cabeza            OK
+   guante_cuerpo             31 fot. [1-5, 7, 29-53]  máx. 2.0 cm en fot. 35 (guante L en Spine2)  -> media
+   guante_guante            OK
    hueco_guante_antebrazo   OK
 
 -- jab_cuerpo (53 fot.)
@@ -379,14 +403,6 @@ hueco = cuánto queda fuera del guante el borde de la mano oculta por el Mask (a
    guante_guante            OK
    hueco_guante_antebrazo   OK
 
--- pivote_mano (25 fot.)
-   pantalon_cuerpo          OK
-   botas_cuerpo             OK
-   guante_cabeza            OK
-   guante_cuerpo            OK
-   guante_guante            OK
-   hueco_guante_antebrazo   OK
-
 -- pivote_v2 (136 fot.)
    pantalon_cuerpo          OK
    botas_cuerpo             OK
@@ -408,6 +424,14 @@ hueco = cuánto queda fuera del guante el borde de la mano oculta por el Mask (a
    botas_cuerpo             OK
    guante_cabeza             29 fot. [1, 38-65]  máx. 1.9 cm en fot. 61  -> media
    guante_cuerpo              3 fot. [13-15]  máx. 1.3 cm en fot. 14 (guante R en Spine2)  -> media
+   guante_guante            OK
+   hueco_guante_antebrazo   OK
+
+-- recto_cara (65 fot.)
+   pantalon_cuerpo          OK
+   botas_cuerpo             OK
+   guante_cabeza            OK
+   guante_cuerpo            OK
    guante_guante            OK
    hueco_guante_antebrazo   OK
 
@@ -472,7 +496,8 @@ hueco = cuánto queda fuera del guante el borde de la mano oculta por el Mask (a
      crochet_trasero           23.7 cm
      crochet_trasero_cuerpo    12.5 cm
      crochet_trasero_cuerpo_v2  10.9 cm
-     crochet_trasero_v2        11.9 cm
+     crochet_trasero_pies      23.7 cm
+     crochet_trasero_v2        13.6 cm
      esquiva_der               11.9 cm
      esquiva_izq               11.9 cm
      flexion                    0.0 cm
@@ -481,17 +506,19 @@ hueco = cuánto queda fuera del guante el borde de la mano oculta por el Mask (a
      futuro_esquiva_retrocediendo  31.4 cm
      futuro_esquiva_retrocediendo_v2  22.1 cm
      gancho_adelantado          7.8 cm
-     gancho_adelantado_cuerpo   7.8 cm
+     gancho_adelantado_cuerpo  11.9 cm
      gancho_adelantado_mixamo  10.3 cm
      gancho_adelantado_mixamo_v2   7.8 cm
      gancho_trasero            11.9 cm
      gancho_trasero_cuerpo     10.2 cm
+     gancho_trasero_cuerpo_mano  11.9 cm
      gancho_trasero_cuerpo_v2  11.4 cm
      guardia                    0.0 cm
      guardia_alt               12.7 cm
      guardia_alt_v2             9.7 cm
      guardia_v2                11.9 cm
      jab                        8.5 cm
+     jab_cara                  10.9 cm
      jab_cuerpo                10.9 cm
      jab_v2                    10.9 cm
      parada                    11.9 cm
@@ -507,10 +534,10 @@ hueco = cuánto queda fuera del guante el borde de la mano oculta por el Mask (a
      pivote_der_v2             17.1 cm
      pivote_izq                14.3 cm
      pivote_izq_v2             17.1 cm
-     pivote_mano               11.9 cm
      pivote_v2                 10.6 cm
      reaccion_golpe            25.1 cm
      recto                      5.2 cm
+     recto_cara                13.2 cm
      recto_cuerpo              13.2 cm
      recto_v2                  13.2 cm
      rueda_der                 11.9 cm
@@ -519,6 +546,7 @@ hueco = cuánto queda fuera del guante el borde de la mano oculta por el Mask (a
 === 4. TABLA RESUMEN ===
 acción                   | qué falla                                    | fotogramas                       |     máx. | gravedad
 crochet_adelantado       | guante_cabeza                                | 1-23, 31-61                      |   2.4 cm | alta (peor fot. 8)
+crochet_trasero_pies     | pantalon_cuerpo                              | 13-15                            |   2.0 cm | alta (peor fot. 14)
 gancho_adelantado_mixamo | guante_cabeza                                | 1, 8-16, 61-67                   |   2.5 cm | alta (peor fot. 13)
 guardia                  | guante_cabeza                                | 5-11, 17-23, 28-32, 39-46, 49-55 |   2.2 cm | alta (peor fot. 42)
 jab                      | guante_cabeza                                | 1-13, 17-42, 44-53               |   3.3 cm | alta (peor fot. 10)
@@ -531,6 +559,7 @@ gancho_trasero_cuerpo    | guante_guante                                | 1-8, 5
 guardia                  | guante_guante                                | 1-2, 6-23, 27-46, 48-67          |   2.7 cm | media (peor fot. 34)
 jab                      | guante_cuerpo (guante R en Spine2)           | 9-14, 43                         |   2.0 cm | media (peor fot. 11)
 jab                      | guante_guante                                | 5-6                              |   1.1 cm | media (peor fot. 6)
+jab_cara                 | guante_cuerpo (guante L en Spine2)           | 1-5, 7, 29-53                    |   2.0 cm | media (peor fot. 35)
 jab_cuerpo               | guante_cuerpo (guante L en Spine2)           | 1-5, 27-53                       |   2.0 cm | media (peor fot. 35)
 jab_v2                   | guante_cuerpo (guante L en Spine2)           | 1-5, 27-53                       |   2.0 cm | media (peor fot. 35)
 parada                   | guante_cuerpo (guante R en Spine2)           | 5-13                             |   1.2 cm | media (peor fot. 6)
@@ -543,6 +572,7 @@ recto                    | guante_cuerpo (guante R en Spine2)           | 13-15 
 recto_cuerpo             | guante_cuerpo (guante R en Spine2)           | 13-15                            |   1.3 cm | media (peor fot. 14)
 recto_v2                 | guante_cuerpo (guante R en Spine2)           | 13-15                            |   1.3 cm | media (peor fot. 14)
 flexion                  | guante_guante                                | 1-31                             |   0.8 cm | baja (peor fot. 10)
+gancho_adelantado_cuerpo | guante_cuerpo (guante L en Spine2)           | 2-3                              |   0.3 cm | baja (peor fot. 3)
 gancho_adelantado_mixamo | guante_guante                                | 5-9, 48-55                       |   0.9 cm | baja (peor fot. 54)
 gancho_trasero_cuerpo    | guante_cabeza                                | 45-46                            |   0.2 cm | baja (peor fot. 46)
 guardia_v2               | guante_cuerpo (guante L en Spine2)           | 40-45, 47-50, 59-64              |   0.6 cm | baja (peor fot. 59)
